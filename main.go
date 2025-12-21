@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	server "yaoyao-functions/src/cmd"
 	"yaoyao-functions/src/common"
@@ -32,13 +31,20 @@ func main() {
 		log.Println("WARNING: Error loading .env file: %v", err)
 	}
 
+	_, err := config.ConnectWithEnv()
+	log.Println("[INIT] Database connection established.")
+	
+	if err != nil {
+		log.Fatalf("[INIT] Failed to connect to database: %v", err)
+	}
+
 	if config.GetEnvOr(common.LAMBDA_NAME_ENV, "") != "" {
-		log.Println("[INIT] Starting lambda function...")
+		log.Println("[INIT] Lambda function started.")
 		
 		lambda.Start(Handler)
 		return 
 	}
 
-	fmt.Println("[INIT] Starting in server mode...")
+	log.Println("[INIT] Server started in server mode.")
 	server.Start().Run()
 }

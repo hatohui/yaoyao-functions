@@ -1,0 +1,22 @@
+name: yaoyao-funcs
+
+services:
+  yaoyaodb:
+    image: postgres:17
+    container_name: yaoyaodb
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: yaoyaodb
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - yaoyao-network
+networks:
+  yaoyao-network:
+    driver: bridge
+volumes:
+  yaoyao-volume:
