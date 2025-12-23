@@ -52,6 +52,5 @@ variable "db_sslmode" {
 variable "redis_url" {
   description = "Redis connection URL"
   type        = string
-  default     = ""
   sensitive   = true
 }

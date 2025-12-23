@@ -58,3 +58,12 @@ resource "aws_lambda_permission" "allow_function_url" {
   principal              = "*"
   function_url_auth_type = "NONE"
 }
+
+resource "aws_lambda_permission" "allow_function_url_invoke" {
+  statement_id  = "FunctionURLInvokeAllowPublicAccess"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.yaoyao_function.function_name
+  principal     = "*"
+
+  source_arn = aws_lambda_function.yaoyao_function.arn
+}
