@@ -1,4 +1,3 @@
-# IAM role for Lambda
 resource "aws_iam_role" "yaoyao_lambda_role" {
   name = "${var.function_name}-role"
 

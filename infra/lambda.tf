@@ -4,11 +4,18 @@ resource "aws_lambda_function" "yaoyao_function" {
   role          = aws_iam_role.yaoyao_lambda_role.arn
   handler       = "bootstrap"
   runtime       = "provided.al2023"
-  filename      = "../build/lambda.zip"
   timeout       = 30
   memory_size   = 512
 
-  source_code_hash = filebase64sha256("../build/lambda.zip")
+  filename         = data.archive_file.lambda_placeholder.output_path
+  source_code_hash = data.archive_file.lambda_placeholder.output_base64sha256
+
+  lifecycle {
+    ignore_changes = [
+      filename,
+      source_code_hash
+    ]
+  }
 
   environment {
     variables = {
