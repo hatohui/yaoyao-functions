@@ -1,6 +1,23 @@
 name: yaoyao-funcs
 
 services:
+  yaoyaoapi:
+    build: .
+    container_name: yaoyaoapi
+    restart: always
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    depends_on:
+      - yaoyaodb
+    networks:
+      - yaoyao-network
+    volumes:
+      - .:/app
+      - go-build-cache:/root/.cache/go-build
+      - go-mod-cache:/go/pkg/mod
+
   yaoyaodb:
     image: postgres:17
     container_name: yaoyaodb
@@ -20,3 +37,5 @@ networks:
     driver: bridge
 volumes:
   yaoyao-volume:
+  go-build-cache:
+  go-mod-cache:

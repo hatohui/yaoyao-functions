@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 	server "yaoyao-functions/src/cmd"
 	"yaoyao-functions/src/common"
 	"yaoyao-functions/src/config"
@@ -16,7 +17,9 @@ import (
 var ginLambda *ginadapter.GinLambda
 
 func init() {
-	gin.SetMode(gin.ReleaseMode)
+	if (os.Getenv("GIN_MODE") != "release") {
+		gin.SetMode(gin.ReleaseMode)
+	}
 
 	r := server.Start()
 	ginLambda = ginadapter.New(r)
