@@ -18,6 +18,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
+      - name: Install Doppler CLI
+        uses: dopplerhq/cli-action@v3
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
@@ -42,19 +45,11 @@ jobs:
           zip lambda.zip bootstrap
           cd ..
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
-
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: 1.6.0
           terraform_wrapper: false
-          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Cache Terraform plugins
         uses: actions/cache@v4
@@ -67,21 +62,18 @@ jobs:
 
       - name: Terraform Init
         working-directory: ./infra
-        run: terraform init
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: doppler run -- terraform init
 
       - name: Terraform Plan
         working-directory: ./infra
-        run: |
-          terraform plan \
-            -var="db_host=${{ secrets.DB_HOST }}" \
-            -var="db_port=${{ secrets.DB_PORT }}" \
-            -var="db_user=${{ secrets.DB_USER }}" \
-            -var="db_password=${{ secrets.DB_PASSWORD }}" \
-            -var="db_name=${{ secrets.DB_NAME }}" \
-            -var="db_sslmode=require" \
-            -var="redis_url=${{ secrets.REDIS_URL }}" \
-            -out=tfplan
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: doppler run -- terraform plan
 
       - name: Terraform Apply
         working-directory: ./infra
-        run: terraform apply -auto-approve tfplan
+        env:
+          DOPPLER_TOKEN: ${{ secrets.DOPPLER_TOKEN }}
+        run: doppler run -- terraform apply -auto-approve
