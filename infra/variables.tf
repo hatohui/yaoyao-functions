@@ -52,5 +52,25 @@ variable "db_sslmode" {
 variable "redis_url" {
   description = "Redis connection URL"
   type        = string
+  default     = ""
   sensitive   = true
+}
+
+variable "doppler_token" {
+  type        = string
+  description = "A token to authenticate with Doppler"
+  default     = ""
+  sensitive   = true
+}
+
+variable "doppler_project" {
+  description = "Doppler project name"
+  type        = string
+  default     = ""
+}
+
+variable "doppler_config" {
+  description = "Doppler config name"
+  type        = string
+  default     = ""
 }

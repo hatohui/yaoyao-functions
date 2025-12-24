@@ -19,15 +19,16 @@ resource "aws_lambda_function" "yaoyao_function" {
 
   environment {
     variables = {
-      GIN_MODE    = "release"
+      GIN_MODE        = "release"
       LAMBDA_NAME_ENV = var.function_name
-      DB_HOST     = var.db_host
-      DB_PORT     = var.db_port
-      DB_USER     = var.db_user
-      DB_PASSWORD = var.db_password
-      DB_NAME     = var.db_name
-      DB_SSLMODE  = var.db_sslmode
-      REDIS_URL   = var.redis_url
+      # Using Doppler secrets with fallback to variables
+      DB_HOST     = local.doppler_db_host
+      DB_PORT     = local.doppler_db_port
+      DB_USER     = local.doppler_db_user
+      DB_PASSWORD = local.doppler_db_password
+      DB_NAME     = local.doppler_db_name
+      DB_SSLMODE  = local.doppler_db_sslmode
+      REDIS_URL   = local.doppler_redis_url
     }
   }
 
@@ -59,11 +60,9 @@ resource "aws_lambda_permission" "allow_function_url" {
   function_url_auth_type = "NONE"
 }
 
-resource "aws_lambda_permission" "allow_function_url_invoke" {
-  statement_id  = "FunctionURLInvokeAllowPublicAccess"
+resource "aws_lambda_permission" "allow_function_invoke" {
+  statement_id  = "AllowPublicFunctionInvoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.yaoyao_function.function_name
   principal     = "*"
-
-  source_arn = aws_lambda_function.yaoyao_function.arn
 }

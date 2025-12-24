@@ -69,3 +69,8 @@ override.tf.json
 # CLI configuration files
 .terraformrc
 terraform.rc
+
+# Doppler
+.doppler
+doppler.yaml
+.doppler.yaml
