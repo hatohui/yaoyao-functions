@@ -1,6 +1,7 @@
 name: yaoyao-funcs
 
 services:
+  # Comment this if you don't want to run the API server container
   yaoyaoapi:
     build: .
     container_name: yaoyaoapi
