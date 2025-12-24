@@ -1,4 +1,13 @@
-# Lambda function
+data "archive_file" "lambda_placeholder" {
+  type        = "zip"
+  output_path = "${path.module}/lambda_placeholder.zip"
+
+  source {
+    content  = "placeholder"
+    filename = "bootstrap"
+  }
+}
+
 resource "aws_lambda_function" "yaoyao_function" {
   function_name = var.function_name
   role          = aws_iam_role.yaoyao_lambda_role.arn
@@ -41,7 +50,7 @@ resource "aws_lambda_function" "yaoyao_function" {
 
 resource "aws_lambda_function_url" "yaoyao_function_url" {
   function_name      = aws_lambda_function.yaoyao_function.function_name
-  authorization_type = "NONE"
+  authorization_type = "AWS_IAM"
 
   cors {
     allow_credentials = false
@@ -53,17 +62,18 @@ resource "aws_lambda_function_url" "yaoyao_function_url" {
   }
 }
 
-resource "aws_lambda_permission" "allow_function_url" {
-  statement_id           = "AllowPublicFunctionURLInvoke"
-  action                 = "lambda:InvokeFunctionUrl"
-  function_name          = aws_lambda_function.yaoyao_function.function_name
-  principal              = "*"
-  function_url_auth_type = "NONE"
+resource "aws_lambda_permission" "allow_cloudfront" {
+  statement_id  = "AllowCloudFrontInvoke"
+  action        = "lambda:InvokeFunctionUrl"
+  function_name = aws_lambda_function.yaoyao_function.function_name
+  principal     = "cloudfront.amazonaws.com"
+  source_arn    = var.cloudfront_distribution_arn
 }
 
-resource "aws_lambda_permission" "allow_function_invoke" {
-  statement_id  = "AllowPublicFunctionInvoke"
+resource "aws_lambda_permission" "allow_cloudfront_invoke" {
+  statement_id  = "AllowCloudFrontInvokeFunction"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.yaoyao_function.function_name
-  principal     = "*"
+  principal     = "cloudfront.amazonaws.com"
+  source_arn    = var.cloudfront_distribution_arn
 }

@@ -74,3 +74,13 @@ variable "doppler_config" {
   type        = string
   default     = ""
 }
+
+variable "cloudfront_distribution_arn" {
+  description = "CloudFront distribution ARN allowed to invoke Lambda"
+  type        = string
+}
+
+variable "cloudfront_url" {
+  description = "CloudFront distribution URL"
+  type        = string
+}
