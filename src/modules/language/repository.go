@@ -4,7 +4,7 @@ import (
 	"time"
 	"yaoyao-functions/src/common"
 	"yaoyao-functions/src/database"
-	"yaoyao-functions/src/redisClient"
+	redisClient "yaoyao-functions/src/redis-client"
 
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"

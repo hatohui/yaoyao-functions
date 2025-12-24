@@ -29,6 +29,21 @@ func Connect(connectionString string) (*gorm.DB, error) {
 	return db, nil
 }
 
+
+func ConnectWithEnvForMigration() (*gorm.DB, error) {
+	host := "localhost"
+	port := GetEnvOr("DB_PORT", "5432")
+	user := GetEnvOr("DB_USER", "admin")
+	password := GetEnvOr("DB_PASSWORD", "password")
+	dbname := GetEnvOr("DB_NAME", "authorizationdb")
+	sslmode := GetEnvOr("DB_SSLMODE", "disable")
+
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
+		host, port, user, password, dbname, sslmode)
+
+	return Connect(dsn)
+}
+
 func ConnectWithEnv() (*gorm.DB, error) {
 	host := GetEnvOr("DB_HOST", "localhost")
 	port := GetEnvOr("DB_PORT", "5432")

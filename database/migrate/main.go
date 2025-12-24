@@ -8,7 +8,7 @@ import (
 func main() {
 	config.LoadEnv()
 
-	db, err := config.ConnectWithEnv()
+	db, err := config.ConnectWithEnvForMigration()
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
