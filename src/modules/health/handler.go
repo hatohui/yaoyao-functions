@@ -7,15 +7,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Handler struct {
+type HealthHandler struct {
 	service Service
 }
 
-func NewHandler(s Service) *Handler {
-	return &Handler{service: s}
+func NewHandler(s Service) *HealthHandler {
+	return &HealthHandler{service: s}
 }
 
-func (h *Handler) GET(res *gin.Context) {
+func (h *HealthHandler) GET(res *gin.Context) {
 	res.JSON(200, gin.H{
 		"status":  "running",
 		"version": "1.0.0",
@@ -26,7 +26,7 @@ func (h *Handler) GET(res *gin.Context) {
 }
 
 
-func (h *Handler) CheckDatabaseConnection(res *gin.Context) {
+func (h *HealthHandler) CheckDatabaseConnection(res *gin.Context) {
 	err := h.service.CheckDatabaseConnection()
 	
 	if err != nil {
@@ -44,7 +44,7 @@ func (h *Handler) CheckDatabaseConnection(res *gin.Context) {
 	})
 }
 
-func (h *Handler) CheckRedisConnection(res *gin.Context) {
+func (h *HealthHandler) CheckRedisConnection(res *gin.Context) {
 	err := h.service.CheckRedisConnection()
 	
 	if err != nil {
