@@ -172,7 +172,9 @@ air
 
 After starting the database service, you need to run migrations to set up the database schema.
 
-If you're running the API locally with Air or directly with Go:
+### Migrate (Non-destructive)
+
+Run migrations to create/update database schema:
 
 ```bash
 go run cmd/migrate/main.go
@@ -182,7 +184,36 @@ This command will:
 
 - Connect to the database using your environment variables
 - Auto-migrate all database models (accounts, categories, foods, orders, etc.)
-- Seed initial data if configured
+- Seed initial data (languages, categories, tables, sample accounts)
+- Safe to run multiple times - won't delete existing data
+
+### Seed Data Only
+
+Run only the seeding process (without migration):
+
+```bash
+go run cmd/seed/main.go
+```
+
+This command will:
+
+- Seed languages, categories, tables, accounts, and sample people
+- Safe to run multiple times - uses `FirstOrCreate` (idempotent)
+- Useful when you only want to add initial data without re-running migrations
+
+### Reset Database (Destructive)
+
+⚠️ **WARNING: This will delete ALL data!** Use only in development.
+
+```bash
+go run cmd/reset/main.go
+```
+
+This command will:
+
+- Prompt for confirmation (type 'yes')
+- Drop all tables and delete all data
+- Re-run migrations and seed fresh data
 
 **Note:** Ensure your `DATABASE_URL` environment variable is correctly set before running migrations.
 
