@@ -5,7 +5,7 @@ output "function_url" {
 
 output "api_endpoint" {
   description = "API Endpoint URL (with /api path)"
-  value       = "${aws_lambda_function_url.yaoyao_function_url.function_url}api"
+  value       = "${var.cloudfront_url}api"
 }
 
 output "function_arn" {
