@@ -1,23 +1,17 @@
 package main
 
 import (
-	"context"
+	"fmt"
 	"log"
 	"os"
 	server "yaoyao-functions/src/cmd"
-	"yaoyao-functions/src/common"
 	"yaoyao-functions/src/config"
 
-	"github.com/aws/aws-lambda-go/events"
-	"github.com/aws/aws-lambda-go/lambda"
-	ginadapter "github.com/awslabs/aws-lambda-go-api-proxy/gin"
 	"github.com/gin-gonic/gin"
 )
 
-var ginLambda *ginadapter.GinLambda
-
-func init() {
-	if (os.Getenv("GIN_MODE") == "release") {
+func main() {
+	if os.Getenv("GIN_MODE") == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
@@ -37,21 +31,15 @@ func init() {
 		log.Println("[INIT] Redis connection established.")
 	}
 
-	r := server.Start(config.DB, config.RedisClient)
-	ginLambda = ginadapter.New(r)
-}
-
-func Handler(ctx context.Context, req events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	return ginLambda.ProxyWithContext(ctx, req)
-}
-
-func main() {
-	if config.GetEnvOr(common.LAMBDA_NAME_ENV, "") != "" {
-		log.Println("[INIT] Lambda function started.")
-		lambda.Start(Handler)
-		return 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
 
-	log.Println("[INIT] Server started in server mode.")
-	server.Start(config.DB, config.RedisClient).Run()
+	r := server.Start(config.DB, config.RedisClient)
+	
+	log.Printf("[INIT] Server starting on port %s", port)
+	if err := r.Run(fmt.Sprintf(":%s", port)); err != nil {
+		log.Fatalf("[INIT] Failed to start server: %v", err)
+	}
 }

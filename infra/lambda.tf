@@ -9,6 +9,8 @@ resource "aws_lambda_function" "yaoyao_function" {
 
   filename         = data.archive_file.lambda_placeholder.output_path
   source_code_hash = data.archive_file.lambda_placeholder.output_base64sha256
+  
+  layers = ["arn:aws:lambda:${var.aws_region}:753240598075:layer:LambdaAdapterLayerX86:25"]
 
   lifecycle {
     ignore_changes = [
@@ -20,8 +22,7 @@ resource "aws_lambda_function" "yaoyao_function" {
   environment {
     variables = {
       GIN_MODE        = "release"
-      LAMBDA_NAME_ENV = var.function_name
-      # Using Doppler secrets with fallback to variables
+      PORT            = "8080" 
       DB_HOST     = local.doppler_db_host
       DB_PORT     = local.doppler_db_port
       DB_USER     = local.doppler_db_user
