@@ -168,6 +168,24 @@ In a separate terminal, start the API with Air:
 air
 ```
 
+## Running Database Migrations
+
+After starting the database service, you need to run migrations to set up the database schema.
+
+If you're running the API locally with Air or directly with Go:
+
+```bash
+go run cmd/migrate/main.go
+```
+
+This command will:
+
+- Connect to the database using your environment variables
+- Auto-migrate all database models (accounts, categories, foods, orders, etc.)
+- Seed initial data if configured
+
+**Note:** Ensure your `DATABASE_URL` environment variable is correctly set before running migrations.
+
 ## Environment Variables
 
 Key environment variables (see `.env.example` for full list):

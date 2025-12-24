@@ -1,0 +1,101 @@
+Table People {
+  id string [PK]
+  name string
+  tableId string [ref: > Table.id]
+}
+
+Table Account {
+  userId string [PK, ref: > People.id, unique, not null, note: "delete: cascade"] 
+  username string [not null, unique]
+  password string [not null]
+}
+
+Table Food {
+  id string [PK]
+  name string [not null]
+  imageUrl string
+  description string
+  categoryId string [ref: > Category.id, not null]
+  isAvailable boolean [default: true]
+  isChecked boolean [default: true]
+}
+
+Table FoodVariant {
+  id string [pk, not null]
+  foodId string [not null, ref: > Food.id, note: "delete: cascade"]
+  label string [not null]
+  price float 
+  currency string [default: "RM"]
+  isSeasonal boolean [default: false]
+  isAvailable boolean [default: false]  
+}
+
+Table Language {
+  code string [pk]
+  name string [not null]
+  direction string [default: "LTR", not null]
+}
+
+Table FoodTranslation {
+  foodId string [ref: > Food.id, not null, note: "delete: cascade"]
+  language string [ref: > Language.code, not null, note: "delete: cascade"]
+  name string [not null]
+  description string
+}
+
+Table Category {
+  id String [pk, not null]
+  name String [not null, unique]
+  description String
+}
+
+Table CategoryTranslation {
+  categoryId string [pk, ref: > Category.id, not null, note: "delete: cascade"]
+  language string [ref: > Language.code, not null, note: "delete: cascade"]
+  name string [not null]
+  description string
+}
+
+Table Table {
+  id string [pk]
+  name string [not null]
+  capacity int [default: 1, not null]
+  tableLeaderId string [ref: - People.id]
+  isStaging boolean [default: false, not null]
+}
+
+Table Order {
+  id string [pk, not null]
+  tableId string [not null, ref: > Table.id, note: "delete: cascade"]
+  variantId string [not null, ref: > FoodVariant.id, note: "delete: cascade"]
+  quantity int [not null, default: 1, note: "quantity > 0"]
+  price float [not null, note: "price > 0"]
+  orderedBy string [ref: > People.id] 
+  updatedAt datetime [not null, note: "default: now()"]
+  createdAt datetime [not null, note: "default: now()"]
+}
+
+Table PresetMenu {
+  id string [pk, not null]
+  price float [not null, default: 1, note: "price > 0"]
+}
+
+Table PresetMenuFood {
+  presetId string [pk, not null, ref: > PresetMenu.id]
+  variantId string [pk, not null, ref: > FoodVariant.id]
+  quantity int [not null, default: 1, note: "quantity > 0"]
+}
+
+Table FeedBack {
+  id        String   [pk, not null]
+  by        string   [ref: > People.id]
+  content   string
+  updatedAt datetime [not null, note: "default: now()"]
+  createdAt datetime [not null, note: "default: now()"]
+}
+
+Table PersonalNote {
+  id string [pk, not null]
+  personId string [ref: > People.id, not null, note: "The person this note belongs to"]
+  content string [not null, note: "Allergy info or personal preference"]
+}
