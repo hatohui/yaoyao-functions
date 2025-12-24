@@ -22,7 +22,7 @@ func main() {
 
 	log.Println("🔄 Starting database migration...")
 
-	if err := cmd.MigrateAndSeed(db); err != nil {
+	if err := cmd.AutoMigrate(db); err != nil {
 		log.Fatal("[DATABASE] Failed to migrate database:", err)
 	}
 

@@ -1,11 +1,7 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"log"
-	"os"
-	"strings"
 	"yaoyao-functions/src/cmd"
 	"yaoyao-functions/src/config"
 	"yaoyao-functions/src/modules/account"
@@ -38,25 +34,7 @@ func main() {
 	}
 	defer sqlDB.Close()
 
-	// Confirmation prompt
-	fmt.Println("⚠️  WARNING: This will DROP ALL TABLES and DELETE ALL DATA!")
-	fmt.Print("Are you sure you want to continue? (type 'yes' to confirm): ")
-	
-	reader := bufio.NewReader(os.Stdin)
-	response, err := reader.ReadString('\n')
-	if err != nil {
-		log.Fatal("Failed to read input:", err)
-	}
-	
-	response = strings.TrimSpace(strings.ToLower(response))
-	if response != "yes" {
-		log.Println("❌ Reset cancelled.")
-		return
-	}
-
 	log.Println("🔥 Starting database reset...")
-
-	// Drop tables in reverse order (to handle foreign key constraints)
 	log.Println("Dropping all tables...")
 	
 	if err := db.Migrator().DropTable(
@@ -78,6 +56,7 @@ func main() {
 	); err != nil {
 		log.Printf("Warning: Failed to drop some tables: %v", err)
 	}
+	
 	log.Println("✓ Dropped: Account, FoodVariant, FoodTranslation, CategoryTranslation, PersonalNote, Feedback")
 
 	if err := db.Migrator().DropTable(
@@ -95,14 +74,12 @@ func main() {
 	); err != nil {
 		log.Printf("Warning: Failed to drop some tables: %v", err)
 	}
+
 	log.Println("✓ Dropped: Language, Category")
-
 	log.Println("✅ All tables dropped successfully!")
-
-	// Re-run migrations and seeds
 	log.Println("🔄 Running migrations and seeding data...")
 	
-	if err := cmd.MigrateAndSeed(db); err != nil {
+	if err := cmd.AutoMigrate(db); err != nil {
 		log.Fatal("[DATABASE] Failed to migrate database:", err)
 	}
 
