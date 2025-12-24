@@ -3,6 +3,7 @@ package health
 import "yaoyao-functions/src/status"
 
 type Service interface {
+	CheckHealth() error
 	CheckDatabaseConnection() error
 	CheckRedisConnection() error
 }
@@ -36,6 +37,18 @@ func (s *service) CheckRedisConnection() error {
 			Code:    status.ServiceUnavailable,
 			Message: "Failed to connect to Redis",
 		}
+	}
+
+	return nil
+}
+
+func (s *service) CheckHealth() error {
+	if err := s.CheckDatabaseConnection(); err != nil {
+		return err
+	}
+
+	if err := s.CheckRedisConnection(); err != nil {
+		return err
 	}
 
 	return nil

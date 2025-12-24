@@ -25,6 +25,46 @@ func (h *HealthHandler) GET(res *gin.Context) {
 	})
 }
 
+func (h *HealthHandler) CheckHealth(res *gin.Context) {
+	dbErr := h.service.CheckDatabaseConnection()
+	redisErr := h.service.CheckRedisConnection()
+	
+	services := gin.H{
+		"database": gin.H{
+			"status": "healthy",
+		},
+		"redis": gin.H{
+			"status": "healthy",
+		},
+	}
+	
+	overallStatus := status.OK
+	httpStatus := http.StatusOK
+	
+	if dbErr != nil {
+		services["database"] = gin.H{
+			"status":  "unhealthy",
+			"message": dbErr.Error(),
+		}
+		overallStatus = status.ServiceUnavailable
+		httpStatus = http.StatusServiceUnavailable
+	}
+	
+	if redisErr != nil {
+		services["redis"] = gin.H{
+			"status":  "unhealthy",
+			"message": redisErr.Error(),
+		}
+		overallStatus = status.ServiceUnavailable
+		httpStatus = http.StatusServiceUnavailable
+	}
+	
+	res.JSON(httpStatus, gin.H{
+		"status":   overallStatus,
+		"services": services,
+	})
+}
+
 
 func (h *HealthHandler) CheckDatabaseConnection(res *gin.Context) {
 	err := h.service.CheckDatabaseConnection()
