@@ -1,0 +1,206 @@
+{
+  "key": "Noodles",
+  "items": [
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/fried-flat-rice-noodle-'huang-di'-noodle-cantonese-style-1767402158.png",
+      "variants": [
+        {
+          "price": 16.9,
+          "currency": "RM",
+          "isSeasonal": false
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Fried Flat Rice Noodle / 'Huang Di' Noodle Cantonese Style",
+          "description": "Stir-fried flat rice noodle or 'Huang Di' noodle with egg, bean sprouts, chives, and your choice of chicken, beef, seafood, or vegetable."
+        },
+        "th": {
+          "name": "ก๋วยเตี๋ยวเส้นใหญ่หรือบะหมี่ฮวางตี้แบบกวางตุ้ง",
+          "description": "ก๋วยเตี๋ยวเส้นใหญ่หรือบะหมี่ฮวางตี้แบบกวางตุ้ง"
+        },
+        "vi": {
+          "name": "Phở xào / Mì Hoàng Đế kiểu Quảng Đông",
+          "description": "Phở xào / Mì Hoàng Đế kiểu Quảng Đông."
+        },
+        "zh": {
+          "name": "滑蛋河粉/皇帝面",
+          "description": "滑蛋河粉/皇帝面"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/braised-noodles-with-fresh-water-prawn,-ginger-and-spring-onion-(cantonese-style)-1767402159.png",
+      "variants": [
+        {
+          "price": 72,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "per portion"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Braised Noodles with Fresh Water Prawn, Ginger & Spring Onion (Cantonese Style)",
+          "description": "Braised noodles with fresh water prawn, ginger & spring onion (Cantonese style)."
+        },
+        "th": {
+          "name": "บะหมี่กุ้งน้ำจืดผัดขิงและต้นหอมแบบกวางตุ้ง",
+          "description": "บะหมี่กุ้งน้ำจืดผัดขิงและต้นหอมแบบกวางตุ้ง"
+        },
+        "vi": {
+          "name": "Mì tôm sông xào gừng và hành lá kiểu Quảng Đông",
+          "description": "Mì tôm sông xào gừng và hành lá kiểu Quảng Đông"
+        },
+        "zh": {
+          "name": "姜葱生虾面",
+          "description": "姜葱生虾面"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/hk-noodle-with-sliced-mushrooms,-shredded-pork-and-crab-stick-1767402161.png",
+      "variants": [
+        {
+          "price": 16.9,
+          "currency": "RM",
+          "isSeasonal": false
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "HK Noodle with Sliced Mushrooms, Shredded Pork & Crab Stick",
+          "description": "Hong Kong style noodle with sliced mushrooms, shredded pork & crab stick."
+        },
+        "th": {
+          "name": "บะหมี่ฮ่องกงกับเห็ด หมูเส้น และปูอัด",
+          "description": "บะหมี่ฮ่องกงกับเห็ด หมูเส้น และปูอัด"
+        },
+        "vi": {
+          "name": "Mì Hong Kong với nấm, thịt heo xé và thanh cua",
+          "description": "Mì Hong Kong với nấm, thịt heo xé và thanh cua"
+        },
+        "zh": {
+          "name": "三丝干烧港伊面",
+          "description": "三丝干烧港伊面"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/fried-'huang-di'-noodle-1767402162.png",
+      "variants": [
+        {
+          "price": 16.9,
+          "currency": "RM",
+          "isSeasonal": false
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Fried 'Huang Di' Noodle",
+          "description": "Fried 'Huang Di' noodle."
+        },
+        "th": {
+          "name": "บะหมี่ฮวางตี้ผัด",
+          "description": "บะหมี่ฮวางตี้ผัด"
+        },
+        "vi": {
+          "name": "Mì Hoàng Đế xào",
+          "description": "Mì Hoàng Đế xào"
+        },
+        "zh": {
+          "name": "干炒皇帝面",
+          "description": "干炒皇帝面"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/fried-glass-noodle-1767402163.png",
+      "variants": [
+        {
+          "price": 16.9,
+          "currency": "RM",
+          "isSeasonal": false
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Fried Glass Noodle",
+          "description": "Fried glass noodle."
+        },
+        "th": {
+          "name": "วุ้นเส้นผัด",
+          "description": "วุ้นเส้นผัด"
+        },
+        "vi": {
+          "name": "Miến xào",
+          "description": "Miến xào"
+        },
+        "zh": {
+          "name": "炒冬粉",
+          "description": "炒冬粉"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/seafood-fried-rice-noodle-1767402165.png",
+      "variants": [
+        {
+          "price": 18.9,
+          "currency": "RM",
+          "isSeasonal": false
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Seafood Fried Rice Noodle",
+          "description": "Seafood fried rice noodle."
+        },
+        "th": {
+          "name": "เส้นข้าวผัดซีฟู้ด",
+          "description": "เส้นข้าวผัดซีฟู้ด"
+        },
+        "vi": {
+          "name": "Bún gạo xào hải sản",
+          "description": "Bún gạo xào hải sản"
+        },
+        "zh": {
+          "name": "海鲜炒米粉",
+          "description": "海鲜炒米粉"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/singapore-fried-noodle-1767402166.png",
+      "variants": [
+        {
+          "price": 16.9,
+          "currency": "RM",
+          "isSeasonal": false
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Singapore Fried Noodle",
+          "description": "Singapore fried noodle."
+        },
+        "th": {
+          "name": "บะหมี่ผัดสิงคโปร์",
+          "description": "บะหมี่ผัดสิงคโปร์"
+        },
+        "vi": {
+          "name": "Mì xào Singapore",
+          "description": "Mì xào Singapore"
+        },
+        "zh": {
+          "name": "星洲炒米粉",
+          "description": "星洲炒米粉"
+        }
+      }
+    }
+  ]
+}

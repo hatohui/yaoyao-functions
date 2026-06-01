@@ -1,34 +1,6 @@
-# Exclude everything by default
-**
-
-# Include only what's needed
-!go.mod
-!go.sum
-!main.go
-!src/
-!src/**
-
-# Explicitly exclude these even if in src/
+node_modules
+build
 .env
 .env.*
-*.log
-*.test
-
-# Netlify local state
-.netlify/
-.netlify/*
-
-# Frontend / Node (if present)
-node_modules/
-npm-debug.log
-yarn-error.log
-public/
-dist/
-
-# DB / dev artifacts
-*.sqlite
-*.db
-infra
-docs
-.vscode
-.github
+*.md
+package-lock.json

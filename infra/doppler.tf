@@ -11,7 +11,10 @@ locals {
   doppler_db_name     = lookup(data.doppler_secrets.yaoyao.map, "DB_NAME", var.db_name)
   doppler_db_sslmode  = lookup(data.doppler_secrets.yaoyao.map, "DB_SSLMODE", var.db_sslmode)
   doppler_redis_url   = lookup(data.doppler_secrets.yaoyao.map, "REDIS_URL", var.redis_url)
+  doppler_database_url = lookup(data.doppler_secrets.yaoyao.map, "DATABASE_URL", "")
+  doppler_jwt_secret     = lookup(data.doppler_secrets.yaoyao.map, "JWT_SECRET", "")
+  doppler_jwt_expires_in = lookup(data.doppler_secrets.yaoyao.map, "JWT_EXPIRES_IN", "7d")
   doppler_cloudflare_account_id        = lookup(data.doppler_secrets.yaoyao.map, "CLOUDFLARE_ACCOUNT_ID", "")
   doppler_cloudflare_access_key        = lookup(data.doppler_secrets.yaoyao.map, "CLOUDFLARE_ACCESS_KEY_ID", "")
-  doppler_cloudflare_secret_key       = lookup(data.doppler_secrets.yaoyao.map, "CLOUDFLARE_SECRET_ACCESS_KEY", "")
+  doppler_cloudflare_secret_key        = lookup(data.doppler_secrets.yaoyao.map, "CLOUDFLARE_SECRET_ACCESS_KEY", "")
 }

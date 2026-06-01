@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Language {
+  code      String @id @db.VarChar(10)
+  name      String @db.VarChar(100)
+  direction String @default("LTR") @db.VarChar(10)
+
+  categoryTranslations    CategoryTranslation[]
+  foodTranslations        FoodTranslation[]
+  foodVariantTranslations FoodVariantTranslation[]
+
+  @@map("language")
+}
+
+model Category {
+  id          String  @id @db.VarChar(255)
+  key         String  @unique @db.VarChar(255)
+  isAvailable Boolean @default(true) @map("is_available")
+
+  translations CategoryTranslation[]
+  foods        Food[]
+
+  @@map("category")
+}
+
+model CategoryTranslation {
+  categoryId  String  @map("category_id") @db.VarChar(255)
+  language    String  @db.VarChar(10)
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  lang     Language @relation(fields: [language], references: [code], onDelete: Cascade)
+
+  @@id([categoryId, language])
+  @@map("category_translation")
+}
+
+model Food {
+  id          String  @id @db.VarChar(255)
+  imageUrl    String? @map("image_url") @db.VarChar(500)
+  categoryId  String  @map("category_id") @db.VarChar(255)
+  isAvailable Boolean @default(true) @map("is_available")
+
+  category     Category          @relation(fields: [categoryId], references: [id])
+  variants     FoodVariant[]
+  translations FoodTranslation[]
+
+  @@map("food")
+}
+
+model FoodTranslation {
+  foodId      String  @map("food_id") @db.VarChar(255)
+  language    String  @db.VarChar(10)
+  name        String  @db.VarChar(255)
+  description String? @db.Text
+
+  food Food     @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  lang Language @relation(fields: [language], references: [code], onDelete: Cascade)
+
+  @@id([foodId, language])
+  @@map("food_translation")
+}
+
+model FoodVariant {
+  id          String   @id @db.VarChar(255)
+  foodId      String   @map("food_id") @db.VarChar(255)
+  price       Decimal? @db.Decimal(10, 2)
+  currency    String   @default("RM") @db.VarChar(10)
+  isSeasonal  Boolean  @default(false) @map("is_seasonal")
+  isAvailable Boolean  @default(false) @map("is_available")
+
+  food         Food                    @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  orders       Order[]
+  presetFoods  PresetMenuFood[]
+  translations FoodVariantTranslation[]
+
+  @@map("food_variant")
+}
+
+model FoodVariantTranslation {
+  variantId String @map("variant_id") @db.VarChar(255)
+  language  String @db.VarChar(10)
+  label     String @db.VarChar(255)
+
+  variant FoodVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  lang    Language    @relation(fields: [language], references: [code], onDelete: Cascade)
+
+  @@id([variantId, language])
+  @@map("food_variant_translation")
+}
+
+model Table {
+  id            String  @id @db.VarChar(255)
+  name          String  @unique @db.VarChar(255)
+  capacity      Int     @default(1)
+  tableLeaderId String? @unique @map("table_leader_id") @db.VarChar(255)
+  isStaging     Boolean @default(false) @map("is_staging")
+  no            Int     @default(-1)
+
+  people People[]
+  orders Order[]
+
+  @@map("table")
+}
+
+model People {
+  id      String  @id @db.VarChar(255)
+  name    String  @db.VarChar(255)
+  tableId String? @map("table_id") @db.VarChar(255)
+
+  table         Table?         @relation(fields: [tableId], references: [id])
+  personalNotes PersonalNote[]
+
+  @@map("people")
+}
+
+model PersonalNote {
+  id       String @id @db.VarChar(255)
+  personId String @map("person_id") @db.VarChar(255)
+  content  String @db.Text
+
+  person People @relation(fields: [personId], references: [id])
+
+  @@map("personal_note")
+}
+
+model Account {
+  userId   String @id @map("user_id") @db.VarChar(255)
+  username String @unique @db.VarChar(255)
+  password String @db.VarChar(255)
+
+  feedbacks Feedback[]
+
+  @@map("account")
+}
+
+model Order {
+  id        String   @id @db.VarChar(255)
+  tableId   String   @map("table_id") @db.VarChar(255)
+  variantId String   @map("variant_id") @db.VarChar(255)
+  quantity  Int      @default(1)
+  price     Decimal  @db.Decimal(10, 2)
+  orderedBy String?  @map("ordered_by") @db.VarChar(255)
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  table   Table       @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  variant FoodVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("order")
+}
+
+model Feedback {
+  id        String   @id @db.VarChar(255)
+  by        String?  @map("by") @db.VarChar(255)
+  content   String?  @db.Text
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  account Account? @relation(fields: [by], references: [userId])
+
+  @@map("feedback")
+}
+
+model PresetMenu {
+  id       String  @id @db.VarChar(255)
+  price    Decimal @db.Decimal(10, 2)
+  isActive Boolean @default(true) @map("is_active")
+
+  foods PresetMenuFood[]
+
+  @@map("preset_menu")
+}
+
+model PresetMenuFood {
+  presetId  String @map("preset_id") @db.VarChar(255)
+  variantId String @map("variant_id") @db.VarChar(255)
+  quantity  Int    @default(1)
+
+  preset  PresetMenu  @relation(fields: [presetId], references: [id])
+  variant FoodVariant @relation(fields: [variantId], references: [id])
+
+  @@id([presetId, variantId])
+  @@map("preset_menu_food")
+}

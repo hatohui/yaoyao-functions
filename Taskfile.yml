@@ -1,0 +1,57 @@
+version: '3'
+
+vars:
+  COMPOSE: docker compose -f backend/docker-compose.yaml
+  EXEC: docker exec yaoyao-api
+  REDIS_EXEC: docker exec yaoyao-redis redis-cli -a pass
+
+tasks:
+  # ── Docker ───────────────────────────────────────────────────────────────────
+
+  up:
+    desc: Start all containers
+    cmd: "{{.COMPOSE}} up -d"
+
+  down:
+    desc: Stop all containers
+    cmd: "{{.COMPOSE}} down"
+
+  build:
+    desc: Rebuild the api image and restart
+    cmds:
+      - "{{.COMPOSE}} build api"
+      - "{{.COMPOSE}} up -d api"
+
+  # ── Database ─────────────────────────────────────────────────────────────────
+
+  db:migrate:
+    desc: Apply pending migrations
+    cmd: "{{.EXEC}} bunx prisma migrate deploy"
+
+  db:reset:
+    desc: Reset DB and re-apply all migrations (destroys data)
+    cmd: "{{.EXEC}} bunx prisma migrate reset --force"
+
+  db:seed:
+    desc: Seed the database with initial data
+    cmd: "{{.EXEC}} bun run prisma/seed.ts"
+
+  db:fresh:
+    desc: Reset DB, apply migrations, and seed
+    cmds:
+      - task: db:reset
+      - task: db:seed
+
+  db:create-migration:
+    desc: Create a new migration (usage: task db:create-migration NAME=my_migration)
+    cmd: "{{.EXEC}} bunx prisma migrate dev --name {{.NAME}}"
+
+  # ── Redis ────────────────────────────────────────────────────────────────────
+
+  redis:flush:
+    desc: Flush all Redis cache
+    cmd: "{{.REDIS_EXEC}} FLUSHALL"
+
+  redis:keys:
+    desc: List all Redis keys
+    cmd: "{{.REDIS_EXEC}} KEYS '*'"

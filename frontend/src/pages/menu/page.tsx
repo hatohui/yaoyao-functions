@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { useFoods } from '@/hooks/food/useFoods'
+import { useGetFoods } from '@/api/foods/foods'
 import { usePagination } from '@/hooks/usePagination'
 import { useMenuSearchParams } from '@/utils/searchParams'
 import { FoodCard } from './@FoodCard'
@@ -24,12 +24,11 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Label } from '@/components/ui/label'
-import type { Food } from '@/types/models/Food'
+import type { FoodItemDto } from '@/api/model'
 
 export default function MenuPage() {
 	const { i18n } = useTranslation()
 
-	// Get search params from URL
 	const {
 		page: urlPage,
 		count: urlCount,
@@ -56,7 +55,7 @@ export default function MenuPage() {
 		onCountChange: setUrlCount,
 	})
 
-	const { data, isLoading, isError, error, refetch } = useFoods({
+	const { data, isLoading, isError, error, refetch } = useGetFoods({
 		lang: i18n.language,
 		page,
 		count,
@@ -79,7 +78,7 @@ export default function MenuPage() {
 		return (
 			<Container>
 				<div className='py-8'>
-					<ErrorView error={error} onRetry={() => refetch()} />
+					<ErrorView error={error as Error} onRetry={() => refetch()} />
 				</div>
 			</Container>
 		)
@@ -88,7 +87,6 @@ export default function MenuPage() {
 	return (
 		<Container>
 			<div className='space-y-8 py-8'>
-				{/* Header */}
 				<div className='flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between'>
 					<div>
 						<h1 className='text-3xl font-bold tracking-tight'>Menu</h1>
@@ -99,7 +97,6 @@ export default function MenuPage() {
 					</div>
 
 					<div className='flex items-center gap-4'>
-						{/* Items per page */}
 						<div className='flex items-center gap-2'>
 							<Label htmlFor='count' className='whitespace-nowrap text-sm'>
 								Per page:
@@ -122,21 +119,18 @@ export default function MenuPage() {
 					</div>
 				</div>
 
-				{/* Content */}
 				{isLoading ? (
 					<LoadingSpinner />
 				) : !data?.foods || data.foods.length === 0 ? (
 					<EmptyView />
 				) : (
 					<>
-						{/* Food Grid */}
 						<div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-							{data.foods.map((food: Food) => (
+							{data.foods.map((food: FoodItemDto) => (
 								<FoodCard key={food.id} food={food} />
 							))}
 						</div>
 
-						{/* Pagination */}
 						{actualTotalPages > 1 && (
 							<div className='flex justify-center'>
 								<Pagination>
@@ -187,7 +181,6 @@ export default function MenuPage() {
 							</div>
 						)}
 
-						{/* Page Info */}
 						<div className='text-center text-sm text-muted-foreground'>
 							Showing {(page - 1) * count + 1} to{' '}
 							{Math.min(page * count, data.total)} of {data.total} items

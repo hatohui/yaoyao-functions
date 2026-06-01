@@ -1,4 +1,4 @@
-import type { Food } from '@/types/models/Food'
+import type { FoodItemDto } from '@/api/model'
 import {
 	Card,
 	CardContent,
@@ -9,7 +9,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 
 interface FoodCardProps {
-	food: Food
+	food: FoodItemDto
 }
 
 export function FoodCard({ food }: FoodCardProps) {

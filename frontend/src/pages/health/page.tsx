@@ -1,4 +1,4 @@
-import { useHealth } from '@/hooks/useHealth'
+import { useGetHealth } from '@/api/health/health'
 import { ThemeToggle } from '@/components/common/ThemeToggle'
 import { BackButton } from '@/components/common/BackButton'
 import { useTranslation } from 'react-i18next'
@@ -10,14 +10,14 @@ import SystemInfoCard from './@SystemInfoCard'
 
 const HealthPage = () => {
 	const { t } = useTranslation()
-	const { data, isLoading, error } = useHealth()
+	const { data, isLoading, error } = useGetHealth({ query: { retry: false, refetchOnWindowFocus: false } })
 
 	if (isLoading) {
 		return <LoadingView />
 	}
 
 	if (error) {
-		return <HealthErrorView error={error} />
+		return <HealthErrorView error={error as Error} />
 	}
 
 	const isHealthy = data?.status === 'ok'

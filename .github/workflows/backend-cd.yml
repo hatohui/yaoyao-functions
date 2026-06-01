@@ -5,13 +5,10 @@ on:
     branches:
       - main
     paths:
-      - "**.go"
-      - "go.mod"
-      - "go.sum"
+      - "backend/**"
   workflow_dispatch:
 
 env:
-  GO_VERSION: "1.21.x"
   AWS_REGION: "ap-southeast-1"
   LAMBDA_FUNCTION_NAME: "yaoyao-function"
 
@@ -21,61 +18,63 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
-          go-version: ${{ env.GO_VERSION }}
-          cache: true
-          cache-dependency-path: go.sum
+          bun-version: latest
 
-      - name: Build Go binary for Lambda
+      - name: Install all dependencies
+        working-directory: backend
+        run: bun install --frozen-lockfile
+
+      - name: Generate Prisma client and build
+        working-directory: backend
+        run: |
+          bun x prisma generate
+          bun run build
+
+      - name: Install production dependencies
+        working-directory: backend
+        run: |
+          cp -r node_modules/.prisma /tmp/prisma-generated
+          bun install --frozen-lockfile --production
+          cp -r /tmp/prisma-generated node_modules/.prisma
+
+      - name: Package Lambda artifact
         working-directory: backend
         run: |
           mkdir -p build
-          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -ldflags="-s -w" -o build/bootstrap .
-          cd build
-          zip lambda.zip bootstrap
-          cd ..
+          cp bootstrap build/
+          chmod +x build/bootstrap
+          cp -r dist build/
+          cp -r node_modules build/
+          cd build && zip -r lambda.zip bootstrap dist node_modules
 
       - name: Upload Lambda artifact
         uses: actions/upload-artifact@v4
         with:
           name: lambda-zip-${{ github.sha }}
           path: backend/build/lambda.zip
-          retention-days: 7
+          retention-days: 3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Update Lambda function code
-        working-directory: backend
         run: |
           aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --zip-file fileb://build/lambda.zip \
+            --zip-file fileb://backend/build/lambda.zip \
             --region ${{ env.AWS_REGION }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - name: Wait for Lambda update to complete
-        working-directory: backend
         run: |
           aws lambda wait function-updated \
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
             --region ${{ env.AWS_REGION }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      - name: Publish new version
-        working-directory: backend
-        id: publish
-        run: |
-          VERSION=$(aws lambda publish-version \
-            --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --region ${{ env.AWS_REGION }} \
-            --query 'Version' \
-            --output text)
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

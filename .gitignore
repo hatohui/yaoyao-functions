@@ -73,6 +73,12 @@ terraform.rc
 .doppler
 doppler.yaml
 .doppler.yaml
+
+# Generated OpenAPI spec (root copy only — frontend/openapi.json is committed)
+/openapi.json
+
+# Orval-generated API client
+frontend/src/api/
 # Database data
 data/db/
 build

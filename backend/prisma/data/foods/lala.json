@@ -1,0 +1,220 @@
+{
+  "key": "La-la",
+  "items": [
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/'la-la'-with-soup-1767402150.png",
+      "variants": [
+        {
+          "price": 32,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 46,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "'La-La' with Soup",
+          "description": "Fresh 'La-La' cooked in a flavorful broth."
+        },
+        "th": {
+          "name": "หอยลาลาต้มซุป",
+          "description": "หอยลาลาต้มในน้ำซุปที่มีรสชาติกลมกล่อม."
+        },
+        "vi": {
+          "name": "Nghêu nấu súp",
+          "description": "Nghêu tươi nấu trong nước dùng thơm ngon."
+        },
+        "zh": {
+          "name": "上汤啦啦",
+          "description": "新鲜的啦啦在美味的高汤中烹煮."
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/stir-fried-'la-la'-with-garlic-1767402152.png",
+      "variants": [
+        {
+          "price": 32,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 46,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Stir-Fried 'La-La' with Garlic",
+          "description": "Fresh 'La-La' stir-fried with aromatic garlic."
+        },
+        "th": {
+          "name": "หอยลาลาผัดกระเทียม",
+          "description": "หอยลาลาผัดกับกระเทียม."
+        },
+        "vi": {
+          "name": "Nghêu xào tỏi",
+          "description": "Nghêu tươi xào với tỏi thơm."
+        },
+        "zh": {
+          "name": "蒜蓉炒啦啦",
+          "description": "蒜蓉炒新鲜啦啦."
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/stir-fried-'la-la'-with-dried-shrimp-and-chillies-1767402153.png",
+      "variants": [
+        {
+          "price": 32,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 46,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Stir-Fried 'La-La' with Dried Shrimp & Chillies",
+          "description": "Fresh 'La-La' stir-fried with dried shrimp and spicy chillies."
+        },
+        "th": {
+          "name": "หอยลาลาผัดกุ้งแห้งและพริก",
+          "description": "หอยลาลาผัดกับกุ้งแห้งและพริกเผ็ด."
+        },
+        "vi": {
+          "name": "Nghêu xào tôm khô và ớt",
+          "description": "Nghêu tươi xào với tôm khô và ớt cay."
+        },
+        "zh": {
+          "name": "虾米辣椒炒啦啦",
+          "description": "虾米和辣椒炒新鲜啦啦."
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/stir-fried-'la-la'-'kam-heong'-style-1767402155.png",
+      "variants": [
+        {
+          "price": 32,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 46,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Stir-Fried 'La-La' 'Kam Heong' Style",
+          "description": "Fresh 'La-La' stir-fried in a rich 'Kam Heong' sauce."
+        },
+        "th": {
+          "name": "หอยลาลาผัดสไตล์คำเฮียง",
+          "description": "หอยลาลาผัดในซอสคำเฮียงรสเข้มข้น."
+        },
+        "vi": {
+          "name": "Nghêu xào kiểu Kim Hương",
+          "description": "Nghêu tươi xào trong sốt Kim Hương đậm đà."
+        },
+        "zh": {
+          "name": "金香炒啦啦",
+          "description": "新鲜的啦啦在浓郁的金香酱中翻炒."
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/stir-fried-sweet-and-hot-'la-la'-1767402156.png",
+      "variants": [
+        {
+          "price": 32,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 46,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Stir-Fried Sweet & Hot 'La-La'",
+          "description": "Fresh 'La-La' stir-fried in a sweet, sour, and spicy sauce."
+        },
+        "th": {
+          "name": "หอยลาลาผัดเปรี้ยวหวานเผ็ด",
+          "description": "หอยลาลาผัดในซอสเปรี้ยวหวานเผ็ด."
+        },
+        "vi": {
+          "name": "Nghêu xào chua cay",
+          "description": "Nghêu tươi xào trong sốt chua cay."
+        },
+        "zh": {
+          "name": "酸辣炒啦啦",
+          "description": "酸辣炒新鲜啦啦."
+        }
+      }
+    }
+  ]
+}

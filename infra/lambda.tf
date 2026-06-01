@@ -18,7 +18,7 @@ resource "aws_lambda_function" "yaoyao_function" {
 
   filename         = data.archive_file.lambda_placeholder.output_path
   source_code_hash = data.archive_file.lambda_placeholder.output_base64sha256
-  
+
   layers = ["arn:aws:lambda:${var.aws_region}:753240598075:layer:LambdaAdapterLayerX86:25"]
 
   lifecycle {
@@ -30,20 +30,16 @@ resource "aws_lambda_function" "yaoyao_function" {
 
   environment {
     variables = {
-      GIN_MODE        = "release"
-      PORT            = "8080" 
-      DB_HOST     = local.doppler_db_host
-      DB_PORT     = local.doppler_db_port
-      DB_USER     = local.doppler_db_user
-      DB_PASSWORD = local.doppler_db_password
-      DB_NAME     = local.doppler_db_name
-      DB_SSLMODE  = local.doppler_db_sslmode
-      REDIS_URL   = local.doppler_redis_url
-      BUCKET_NAME = var.bucket_name
+      PORT           = "8080"
+      NODE_ENV       = "production"
+      DATABASE_URL   = local.doppler_database_url
+      REDIS_URL      = local.doppler_redis_url
+      JWT_SECRET     = local.doppler_jwt_secret
+      JWT_EXPIRES_IN               = local.doppler_jwt_expires_in
+      BUCKET_NAME                  = var.bucket_name
       CLOUDFLARE_ACCOUNT_ID        = local.doppler_cloudflare_account_id
       CLOUDFLARE_ACCESS_KEY_ID     = local.doppler_cloudflare_access_key
       CLOUDFLARE_SECRET_ACCESS_KEY = local.doppler_cloudflare_secret_key
-      
     }
   }
 

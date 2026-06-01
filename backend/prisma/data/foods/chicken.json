@@ -1,0 +1,769 @@
+{
+  "key": "Chicken",
+  "items": [
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/black-pepper-honey-chicken-1767402028.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Black Pepper Honey Chicken",
+          "description": "Chicken cooked with black pepper and honey sauce."
+        },
+        "th": {
+          "name": "ไก่น้ำผึ้งพริกไทยดำ",
+          "description": "ไก่ปรุงด้วยพริกไทยดำและซอสน้ำผึ้ง"
+        },
+        "vi": {
+          "name": "Gà Mật Ong Tiêu Đen",
+          "description": "Gà nấu với tiêu đen và sốt mật ong."
+        },
+        "zh": {
+          "name": "黑椒蜜汁鸡",
+          "description": "黑椒蜜汁鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/braised-salted-chicken-with-ginger-1767402030.png",
+      "variants": [
+        {
+          "price": 48,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 92,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Braised Salted Chicken with Ginger",
+          "description": "Chicken braised with salted sauce, ginger and dried chili."
+        },
+        "th": {
+          "name": "ไก่เค็มตุ๋นขิง",
+          "description": "ไก่ตุ๋นกับซอสเค็ม ขิง และพริกแห้ง"
+        },
+        "vi": {
+          "name": "Gà Kho Muối Gừng",
+          "description": "Gà kho với muối, gừng và ớt khô."
+        },
+        "zh": {
+          "name": "特色醉香鸡",
+          "description": "特色醉香鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/marmite-chicken-1767402032.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Marmite Chicken",
+          "description": "Chicken cooked with Marmite sauce."
+        },
+        "th": {
+          "name": "ไก่มาร์ไมต์",
+          "description": "ไก่ปรุงด้วยซอสมาร์ไมต์"
+        },
+        "vi": {
+          "name": "Gà Sốt Marmite",
+          "description": "Gà nấu với sốt Marmite."
+        },
+        "zh": {
+          "name": "媽蜜鸡块",
+          "description": "媽蜜鸡块"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/crispy-nam-yu-chicken-wing-1767402033.png",
+      "variants": [
+        {
+          "price": 26,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "4 pairs"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Crispy Nam Yu Chicken Wing",
+          "description": "Deep-fried chicken wings marinated with Nam Yu (fermented red tofu) sauce."
+        },
+        "th": {
+          "name": "ปีกไก่ทอดน้ำยูกรอบ",
+          "description": "ปีกไก่ทอดหมักซอสน้ำยู (เต้าหู้แดงหมัก)"
+        },
+        "vi": {
+          "name": "Cánh Gà Chiên Nam Yu Giòn",
+          "description": "Cánh gà chiên giòn ướp sốt Nam Yu (đậu hũ lên men)."
+        },
+        "zh": {
+          "name": "南乳鸡翅",
+          "description": "南乳鸡翅"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-chicken-with-mushrooms-and-chinese-sausage-1767402035.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Chicken with Mushrooms & Chinese Sausage",
+          "description": "Chicken steamed with mushrooms and Chinese sausage."
+        },
+        "th": {
+          "name": "ไก่นึ่งไส้กรอกจีนและเห็ดหอม",
+          "description": "ไก่นึ่งกับไส้กรอกจีนและเห็ดหอม"
+        },
+        "vi": {
+          "name": "Gà Hấp Lạp Xưởng & Nấm Đông Cô",
+          "description": "Gà hấp với lạp xưởng và nấm đông cô."
+        },
+        "zh": {
+          "name": "冬菇腊肠蒸鸡肉",
+          "description": "冬菇腊肠蒸鸡肉"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-chicken-with-dry-day-lily-and-fungus-1767402037.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Chicken with Dry Day Lily & Fungus",
+          "description": "Chicken steamed with dry day lily and fungus in light soy sauce."
+        },
+        "th": {
+          "name": "ไก่นึ่งดอกไม้จีนและหูหนู",
+          "description": "ไก่นึ่งกับดอกไม้จีนและหูหนู"
+        },
+        "vi": {
+          "name": "Gà Hấp Kim Châm & Mộc Nhĩ",
+          "description": "Gà hấp với kim châm và mộc nhĩ."
+        },
+        "zh": {
+          "name": "金针云耳蒸鸡肉",
+          "description": "金针云耳蒸鸡肉"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/chicken-drumstick-with-ginger-and-rice-wine-1767402038.png",
+      "variants": [
+        {
+          "price": 40,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 75,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Chicken Drumstick with Ginger & Rice Wine",
+          "description": "Chicken drumstick cooked with ginger and rice wine."
+        },
+        "th": {
+          "name": "น่องไก่ขิงและเหล้าข้าว",
+          "description": "น่องไก่ขิงและเหล้าข้าว"
+        },
+        "vi": {
+          "name": "Đùi Gà Sốt Gừng & Rượu Nếp",
+          "description": "Đùi gà nấu với gừng và rượu nếp."
+        },
+        "zh": {
+          "name": "煎蛋黄酒鸡腿",
+          "description": "煎蛋黄酒鸡腿"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/braised-chicken-with-mushrooms-and-young-ginger-1767402040.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 56,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Braised Chicken with Mushrooms & Young Ginger",
+          "description": "Chicken braised with mushrooms and young ginger."
+        },
+        "th": {
+          "name": "ไก่ตุ๋นเห็ดและขิงอ่อน",
+          "description": "ไก่ตุ๋นเห็ดและขิงอ่อน"
+        },
+        "vi": {
+          "name": "Gà Kho Nấm & Gừng Non",
+          "description": "Gà kho với nấm và gừng non."
+        },
+        "zh": {
+          "name": "子姜冬菇焖鸡",
+          "description": "子姜冬菇焖鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/stir-fried-chicken-cube-'gong-bo'-style-1767402042.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Stir-Fried Chicken Cube 'Gong-Bo' Style",
+          "description": "Stir-fried chicken cube with peanuts in spicy 'Gong-Bo' sauce."
+        },
+        "th": {
+          "name": "ไก่ผัดกงเปา",
+          "description": "ไก่ผัดกงเปา"
+        },
+        "vi": {
+          "name": "Gà Xào Kiểu Cung Bảo",
+          "description": "Gà xào kiểu Cung Bảo"
+        },
+        "zh": {
+          "name": "宮保鸡丁",
+          "description": "宫保鸡丁"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/salad-chicken-1767402043.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 56,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Salad Chicken",
+          "description": "Chicken served with special salad dressing."
+        },
+        "th": {
+          "name": "ไก่สลัด",
+          "description": "ไก่สลัด"
+        },
+        "vi": {
+          "name": "Gà Sốt Salad",
+          "description": "Gà ăn kèm với sốt salad đặc biệt."
+        },
+        "zh": {
+          "name": "沙汁鸡",
+          "description": "沙汁鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/salted-egg-butter-chicken-1767402044.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Salted Egg Butter Chicken",
+          "description": "Chicken cooked with salted egg and butter sauce."
+        },
+        "th": {
+          "name": "ไก่ไข่เค็มเนย",
+          "description": "ไก่ไข่เค็มเนย"
+        },
+        "vi": {
+          "name": "Gà Sốt Trứng Muối Bơ",
+          "description": "Gà nấu với trứng muối và sốt bơ."
+        },
+        "zh": {
+          "name": "成蛋渥奶油鸡柳",
+          "description": "成蛋渥奶油鸡柳"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/sesame-chicken-1767402046.png",
+      "variants": [
+        {
+          "price": 28,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 42,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Sesame Chicken",
+          "description": "Chicken cooked with sesame sauce."
+        },
+        "th": {
+          "name": "ไก่งา",
+          "description": "ไก่งา"
+        },
+        "vi": {
+          "name": "Gà Sốt Mè",
+          "description": "Gà nấu với sốt mè."
+        },
+        "zh": {
+          "name": "芝麻鸡柳",
+          "description": "芝麻鸡柳"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-village-chicken-with-dry-day-lily-and-fungus-1767402048.png",
+      "variants": [
+        {
+          "price": 45,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 90,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Village Chicken with Dry Day Lily & Fungus",
+          "description": "Chicken steamed with dry day lily and fungus."
+        },
+        "th": {
+          "name": "ไก่บ้านนึ่งดอกไม้จีนและหูหนู",
+          "description": null
+        },
+        "vi": {
+          "name": "Gà Ta Hấp Kim Châm & Mộc Nhĩ",
+          "description": null
+        },
+        "zh": {
+          "name": "金针云耳蒸菜园鸡",
+          "description": null
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-village-chicken-with-garlic-oil-1767402049.png",
+      "variants": [
+        {
+          "price": 48,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 92,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Village Chicken with Garlic Oil",
+          "description": "Chicken steamed with garlic oil."
+        },
+        "th": {
+          "name": "ไก่บ้านนึ่งน้ำมันกระเทียม",
+          "description": "ไก่บ้านนึ่งน้ำมันกระเทียม"
+        },
+        "vi": {
+          "name": "Gà Ta Hấp Dầu Tỏi",
+          "description": "Gà hấp với dầu tỏi."
+        },
+        "zh": {
+          "name": "葱油菜国鸡",
+          "description": "葱油菜国鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-village-chicken-drumstick-with-shao-hsing-wine-1767402051.png",
+      "variants": [
+        {
+          "price": 25,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 50,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Village Chicken Drumstick with Shao Hsing Wine",
+          "description": "Chicken drumstick steamed with Shao Hsing wine."
+        },
+        "th": {
+          "name": "น่องไก่บ้านนึ่งเหล้าเซ้าซิง",
+          "description": "น่องไก่บ้านนึ่งเหล้าเซ้าซิง"
+        },
+        "vi": {
+          "name": "Đùi Gà Ta Hấp Rượu Thiệu Hưng",
+          "description": "Đùi gà hấp với rượu Thiệu Hưng."
+        },
+        "zh": {
+          "name": "陈年花雕蒸菜园鸡腿",
+          "description": "陈年花雕蒸菜园鸡腿"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-village-chicken-with-ginger-paste-1767402052.png",
+      "variants": [
+        {
+          "price": 45,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 90,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Village Chicken with Ginger Paste",
+          "description": "Chicken steamed with ginger paste."
+        },
+        "th": {
+          "name": "ไก่บ้านนึ่งขิงบด",
+          "description": "ไก่บ้านนึ่งขิงบด"
+        },
+        "vi": {
+          "name": "Gà Ta Hấp Sốt Gừng",
+          "description": "Gà hấp với sốt gừng."
+        },
+        "zh": {
+          "name": "姜蓉蒸菜国鸡",
+          "description": "姜蓉蒸菜国鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/steamed-village-chicken-with-chinese-herbs-1767402054.png",
+      "variants": [
+        {
+          "price": 45,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 90,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Steamed Village Chicken with Chinese Herbs",
+          "description": "Chicken steamed with Chinese herbs."
+        },
+        "th": {
+          "name": "ไก่บ้านนึ่งสมุนไพรจีน",
+          "description": "ไก่บ้านนึ่งสมุนไพรจีน"
+        },
+        "vi": {
+          "name": "Gà Ta Hấp Thảo Mộc Trung Hoa",
+          "description": "Gà hấp với thảo mộc Trung Hoa."
+        },
+        "zh": {
+          "name": "当归枸杞蒸菜园鸡",
+          "description": "当归枸杞蒸菜园鸡"
+        }
+      }
+    },
+    {
+      "imageUrl": "https://assets.yaoyaodinner.party/menu/village-chicken-with-ginger-and-rice-wine-1767402055.png",
+      "variants": [
+        {
+          "price": 60,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "S"
+            }
+          }
+        },
+        {
+          "price": 110,
+          "currency": "RM",
+          "isSeasonal": false,
+          "translations": {
+            "en": {
+              "label": "L"
+            }
+          }
+        }
+      ],
+      "translations": {
+        "en": {
+          "name": "Village Chicken with Ginger & Rice Wine",
+          "description": "Village chicken cooked with ginger and rice wine."
+        },
+        "th": {
+          "name": "ไก่บ้านเหล้าขิง",
+          "description": "ไก่บ้านเหล้าขิง"
+        },
+        "vi": {
+          "name": "Gà Ta Nấu Rượu Gừng",
+          "description": "Gà nấu với gừng và rượu nếp."
+        },
+        "zh": {
+          "name": "黄酒菜园鸡",
+          "description": "黄酒菜园鸡"
+        }
+      }
+    }
+  ]
+}

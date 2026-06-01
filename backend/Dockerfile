@@ -1,12 +1,15 @@
-FROM golang:1.25-alpine
+FROM oven/bun:1-alpine
+
+RUN apk add --no-cache python3 make g++
 
 WORKDIR /app
 
-RUN go install github.com/air-verse/air@latest
-
-COPY go.mod go.sum ./
-RUN go mod download
+COPY package.json bun.lock ./
+RUN bun install
 
 COPY . .
+RUN bun x prisma generate
 
-CMD ["air", "-c", ".air.toml"]
+EXPOSE 8080
+
+CMD ["bun", "run", "start:dev"]
