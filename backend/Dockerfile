@@ -15,7 +15,7 @@ RUN cp -r node_modules/.prisma /tmp/prisma-generated \
 
 # ──────────────────────────────────────────────────────────────────
 
-FROM public.ecr.aws/lambda/nodejs:20
+FROM node:20-slim
 
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:1.0.1 /lambda-adapter /opt/extensions/lambda-adapter
 
