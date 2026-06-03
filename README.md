@@ -1,289 +1,175 @@
-# Yaoyao-functions
+# Yaoyao Dinner
 
 [![backend-cd](https://github.com/hatohui/yaoyao-functions/actions/workflows/backend-cd.yml/badge.svg)](https://github.com/hatohui/yaoyao-functions/actions/workflows/backend-cd.yml)
+[![frontend-cd](https://github.com/hatohui/yaoyao-functions/actions/workflows/frontend-cd.yml/badge.svg)](https://github.com/hatohui/yaoyao-functions/actions/workflows/frontend-cd.yml)
 
-## General details
+## General Details
 
-- Endpoint for [yaoyaoapi](https://api.yaoyaodinner.party)
-- API for [yaoyao-dinner](https://yaoyaodinner.party)
-- Runs on: Lambda serverless with gin http adapter
+- API endpoint: [api.yaoyaodinner.party](https://api.yaoyaodinner.party)
+- Frontend: [yaoyaodinner.party](https://yaoyaodinner.party)
+- Runtime: AWS Lambda (serverless) — kept warm by a cron job pinging the health endpoint every 5 minutes
 - Region: `ap-southeast-1`
 
-## Project Architecture
+## Architecture
 
-### System Architecture
+A serverless web app split into three layers: static frontend (SPA), API (edge + Lambda), and media delivery (S3).
 
-A serverless web app split into three layers: static frontend (SPA), API (edge + Lambda), and media delivery (Cloudinary).
+### Components
 
-Components
+- **Frontend** — Static SPA on Cloudflare Pages; serves static assets and calls the API over HTTPS.
+- **API** — CloudFront (with AWS WAF) → AWS Lambda (NestJS + TypeScript) in `ap-southeast-1`.
+- **Datastores** — NeonDB (Postgres) for relational data; Upstash Redis for caching and fast KV.
+- **Media** — Cloudflare R2 for uploads; backend issues presigned URLs and clients upload directly.
+- **Warmup** — A cron job runs every 5 minutes to keep the Lambda warm and avoid cold starts.
 
-- Frontend: Static SPA on Cloudflare Pages; serves only static assets and calls APIs over HTTPS.
-- API: CloudFront (with AWS WAF) as API CDN -> forwards to AWS Lambda (Go + Gin) in `ap-southeast-1`.
-- Datastores: NeonDB (Postgres) for persistent relational data; Upstash Redis for cache/fast KV.
-- Media: Cloudinary for uploads and CDN; backend provides signed upload params and clients upload directly.
+### Design principles
 
-Design principles
+- Separate delivery networks (Cloudflare Pages for frontend, CloudFront + WAF for API, S3 CDN for media) to minimize latency, reduce backend load, and simplify scaling.
+- Direct client uploads to R2 via presigned URLs so media never proxies through the backend.
+- Serverless Lambda with a warmup cron avoids provisioned concurrency costs while keeping response times acceptable.
 
-- Clear separation of delivery networks (Cloudflare Pages for frontend, CloudFront+WAF for API, Cloudinary CDN for images) to minimize latency, reduce backend load, and simplify scaling.
-- Direct client uploads to Cloudinary (signed params) so media does not proxy through the backend.
-
-### Diagram
+### Diagrams
 
 ![System Architecture](docs/architecture.png)
+![Cron Warmup](docs/cron-job.png)
 
 ## Project Structure
 
-```yaml
+```text
 .
-├── backend/            # API (Go + Gin)
-│   ├── build/          # Compiled binaries
+├── backend/               # API (NestJS + TypeScript)
 │   ├── src/
-│   │   ├── cmd/        # CLI commands (migrate, seed, server)
-│   │   ├── common/     # Common constants and utilities
-│   │   ├── config/     # Configuration files (database, redis, modules)
-│   │   ├── modules/    # Feature modules
-│   │   │   └── health/ # Health check module
-│   │   └── status/     # HTTP status codes and responses
-│   ├── .air.toml       # Air configuration for hot-reload
-│   ├── docker-compose.yaml # Docker services configuration
-│   ├── Dockerfile      # Application container definition
-│   ├── go.mod          # Go module dependencies
-│   └── main.go         # Application entry point
-├── frontend/           # Vite + React + TypeScript SPA
-│   ├── src/            # Application source
-│   ├── public/         # Static assets
-│   ├── package.json    # Scripts & deps
-│   └── wrangler.toml   # Cloudflare Pages/Workers config
-├── infra/              # Terraform infrastructure code
-├── docs/               # Design & architecture docs
-└── README.md           # This file
+│   │   ├── auth/          # JWT auth guards and strategies
+│   │   ├── common/        # Shared utilities and decorators
+│   │   ├── libs/          # Internal libraries (Prisma, Redis)
+│   │   ├── modules/       # Feature modules
+│   │   │   ├── account/
+│   │   │   ├── category/
+│   │   │   ├── feedback/
+│   │   │   ├── food/
+│   │   │   ├── health/
+│   │   │   ├── images/
+│   │   │   ├── language/
+│   │   │   ├── order/
+│   │   │   ├── people/
+│   │   │   ├── personal-note/
+│   │   │   ├── preset-menu/
+│   │   │   └── table/
+│   │   └── server/        # Lambda adapter and bootstrap
+│   ├── prisma/            # Schema and migrations
+│   ├── docker-compose.yaml
+│   └── Dockerfile
+├── frontend/              # Vite + React + TypeScript SPA
+│   ├── src/
+│   ├── public/
+│   └── wrangler.toml      # Cloudflare Pages config
+├── infra/                 # Terraform (Lambda, CloudFront, ECR, IAM)
+├── docs/                  # Architecture diagrams and API reference
+├── Taskfile.yml           # Dev task runner
+└── README.md
 ```
-
-## Frontend (Vite + React + TypeScript)
-
-The frontend is a Vite-powered React + TypeScript single-page application (uses Tailwind, GSAP, React Query, and i18n). It lives in the `frontend/` folder and is built into static assets (`dist/`) which are deployed to Cloudflare Pages/Workers (see `frontend/wrangler.toml`).
-
-Key files and notes:
-
-- `frontend/index.html` — SPA entry
-- `frontend/src/` — application source (React + TypeScript)
-- `frontend/package.json` — scripts and dependencies
-- `frontend/wrangler.toml` — Cloudflare Pages / Workers asset config (`assets.directory = "dist"`) and production env vars (e.g. `VITE_API_URL`).
-
-Useful scripts:
-
-- `npm install` — install dependencies
-- `npm run dev` — start Vite dev server (local development)
-- `npm run build` — TypeScript build + Vite production build (outputs `dist/`)
-- `npm run preview` — preview the production build locally
-
-Running locally:
-
-```bash
-cd frontend
-npm install
-npm run dev
-# To build and preview:
-npm run build
-npm run preview
-```
-
-Environment variables:
-
-- Use Vite env vars prefixed with `VITE_` for runtime configuration (for example `VITE_API_URL`). Production values are set in `frontend/wrangler.toml` or your CI/CD pipeline.
 
 ## Prerequisites
 
-Required for development:
+- [Bun](https://bun.sh/) (package manager for both frontend and backend)
+- Docker (for local Postgres, Redis, and MinIO)
+- [Task](https://taskfile.dev/) — task runner (`task --list` to see all commands)
 
-- Go 1.20+ (GOPATH/GOBIN configured)
-- Docker (You can also directly use this without go installed)
+Optional (production infra):
 
-Optional (Production):
+- AWS CLI v2 configured for `ap-southeast-1`
+- Terraform 1.5+
+- Doppler CLI (secrets management)
 
-- AWS CLI v2 configured with credentials and region (`ap-southeast-1`)
-- Git and access to the repository on GitHub
-- Terraform 1.5+ for infrastructure provisioning
+## Getting Started
 
-## Development prep
-
-### 1. Clone the repository
-
-Clone this repository to your device, then open this in your favored IDE
-
-### 2. Create environment variables
-
-Open the `.env.example`, copy everything into `.env` in the same root directory. If you don't have, create one.
-
-Alternatively, you can use these commands:
-
-- Linux / macOS:
+### 1. Clone and install
 
 ```bash
-cp .env.example .env
+task setup
 ```
 
-- Windows (PowerShell):
+This installs frontend and backend dependencies, copies `.env.example` files, and initialises Terraform.
 
-```powershell
-Copy-Item -Path .env.example -Destination .env
-```
+### 2. Configure environment variables
 
-- Windows (Command Prompt):
+Edit `backend/.env` and `frontend/.env` with your local values. The `.env.example` files document every required variable.
 
-```cmd
-copy .env.example .env
-```
-
-- Git Bash / WSL:
+### 3. Start local services
 
 ```bash
-cp .env.example .env
+task backend        # starts Postgres, Redis, and MinIO via Docker Compose
 ```
 
-Next, you only need to do the one that's more suitable for your operating system.
-
-### Windows
-
-If your operating system is Windows, you have two options for running the app locally:
-
-- By Docker
-- By Air (hot-reload development)
-
-**Option 1: Using Docker**
-
-Simply run:
-
-```powershell
-docker compose up
-```
-
-This will start all services (API, PostgreSQL, Redis) in containers.
-
-**Option 2: Using Air (Hot-reload)**
-
-First, ensure you have Air installed:
-
-```powershell
-go install github.com/air-verse/air@latest
-```
-
-Edit `.air.toml` so the build produces a Windows executable (main.exe). For example:
-
-```toml
-[build]
-  cmd = "go build -o ./main.exe ./..."
-  bin = "main.exe"
-```
-
-Then run the database and Redis services with Docker:
-
-```powershell
-docker compose up yaoyaodb yaoyaoredis
-```
-
-Or comment out the `yaoyaoapi` service and run:
+The API runs outside Docker Compose. Start it separately after the services are up:
 
 ```bash
-docker compose up
+cd backend
+bun run dev
 ```
 
-In a separate terminal, start the API with Air:
-
-```powershell
-air
-```
-
-Air will watch for file changes, rebuild to `main.exe`, and restart your application automatically.
-
-### Linux / macOS
-
-Similar to Windows, you have two options:
-
-**Option 1: Using Docker**
+### 4. Start the frontend dev server
 
 ```bash
-docker compose up
+task frontend       # or: task f
 ```
 
-**Option 2: Using Air (Hot-reload)**
+## Database
 
-Install Air:
+All schema changes are managed with Prisma.
+
+| Command | Description |
+| --- | --- |
+| `task db:apply` | Apply pending migrations and regenerate the client |
+| `task db:migrate NAME=<name>` | Create a new migration |
+| `task db:seed` | Seed with initial data (idempotent) |
+| `task db:reset` | Drop all tables and re-apply migrations |
+| `task db:fresh` | Reset + seed |
+
+## Redis
+
+| Command | Description |
+| --- | --- |
+| `task redis:flush` | Flush all cache keys |
+| `task redis:keys` | List all keys |
+
+## Frontend
+
+Vite + React + TypeScript SPA using Tailwind, GSAP, React Query, and i18n. Deployed to Cloudflare Pages.
 
 ```bash
-go install github.com/air-verse/air@latest
+cd frontend
+bun install
+bun run dev        # dev server
+bun run build      # TypeScript check + production build → dist/
+bun run preview    # preview the production build locally
 ```
 
-Start database and Redis:
+Use `VITE_`-prefixed env vars for runtime configuration (e.g. `VITE_API_URL`). Production values live in `frontend/wrangler.toml` or your CI pipeline.
+
+## Infrastructure
+
+Terraform manages Lambda, CloudFront, ECR, and IAM. Secrets are injected at deploy time via Doppler.
 
 ```bash
-docker compose up yaoyaodb yaoyaoredis
+task infra:apply    # doppler run — terraform apply
 ```
 
-Or comment out the `yaoyaoapi` service and run:
+## API Reference
 
-```bash
-docker compose up
-```
+See [docs/api.md](docs/api.md) for the full endpoint list. A live Swagger/Scalar UI is served at `/api/docs` when the server is running.
 
-In a separate terminal, start the API with Air:
+## Key Environment Variables
 
-```bash
-air
-```
-
-## Running Database Migrations
-
-After starting the database service, you need to run migrations to set up the database schema.
-
-### Migrate (Non-destructive)
-
-Run migrations to create/update database schema:
-
-```bash
-go run cmd/migrate/main.go
-```
-
-This command will:
-
-- Connect to the database using your environment variables
-- Auto-migrate all database models (accounts, categories, foods, orders, etc.)
-- Seed initial data (languages, categories, tables, sample accounts)
-- Safe to run multiple times - won't delete existing data
-
-### Seed Data Only
-
-Run only the seeding process (without migration):
-
-```bash
-go run cmd/seed/main.go
-```
-
-This command will:
-
-- Seed languages, categories, tables, accounts, and sample people
-- Safe to run multiple times - uses `FirstOrCreate` (idempotent)
-- Useful when you only want to add initial data without re-running migrations
-
-### Reset Database (Destructive)
-
-```bash
-go run cmd/reset/main.go
-```
-
-This command will:
-
-- Prompt for confirmation (type 'yes')
-- Drop all tables and delete all data
-- Re-run migrations and seed fresh data
-
-**Note:** Ensure your `DATABASE_URL` environment variable is correctly set before running migrations.
-
-## Environment Variables
-
-Key environment variables (see `.env.example` for full list):
-
-- `DATABASE_URL` - PostgreSQL connection string
-- `REDIS_URL` - Redis connection string
-- `AWS_REGION` - AWS region for Lambda deployment
-- `PORT` - API server port (default: 8080)
+| Variable | Description |
+| --- | --- |
+| `DATABASE_URL` | NeonDB (Postgres) connection string |
+| `REDIS_URL` | Upstash Redis connection string |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare API token for R2 access |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
+| `CLOUDFLARE_ACCESS_KEY_ID` | R2 access key (MinIO root user locally) |
+| `CLOUDFLARE_SECRET_ACCESS_KEY` | R2 secret key (MinIO root password locally) |
+| `BUCKET_NAME` | R2 / MinIO bucket name |
+| `S3_ENDPOINT` | Override endpoint for local MinIO dev |
+| `PORT` | API server port (default: `8080`) |
+| `NODE_ENV` | `development` or `production` |
