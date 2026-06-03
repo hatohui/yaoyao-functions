@@ -13,7 +13,7 @@ resource "aws_lambda_function" "yaoyao_function" {
   role          = aws_iam_role.yaoyao_lambda_role.arn
   handler       = "bootstrap"
   runtime       = "provided.al2023"
-  timeout       = 30
+  timeout       = 10
   memory_size   = 512
 
   filename         = data.archive_file.lambda_placeholder.output_path
@@ -30,14 +30,15 @@ resource "aws_lambda_function" "yaoyao_function" {
 
   environment {
     variables = {
-      PORT           = "8080"
-      NODE_ENV       = "production"
-      DATABASE_URL   = local.doppler_database_url
-      REDIS_URL      = local.doppler_redis_url
-      JWT_SECRET     = local.doppler_jwt_secret
-      JWT_EXPIRES_IN               = local.doppler_jwt_expires_in
-      BUCKET_NAME                  = var.bucket_name
+      PORT     = "8080"
+      NODE_ENV = "production"
+
+      DATABASE_URL = local.doppler_database_url
+      REDIS_URL    = local.doppler_redis_url
+
+      BUCKET_NAME                  = local.doppler_bucket_name
       CLOUDFLARE_ACCOUNT_ID        = local.doppler_cloudflare_account_id
+      CLOUDFLARE_API_TOKEN         = local.doppler_cloudflare_api_token
       CLOUDFLARE_ACCESS_KEY_ID     = local.doppler_cloudflare_access_key
       CLOUDFLARE_SECRET_ACCESS_KEY = local.doppler_cloudflare_secret_key
     }
@@ -59,13 +60,5 @@ resource "aws_lambda_permission" "allow_cloudfront" {
   action        = "lambda:InvokeFunctionUrl"
   function_name = aws_lambda_function.yaoyao_function.function_name
   principal     = "cloudfront.amazonaws.com"
-  source_arn    = var.cloudfront_distribution_arn
-}
-
-resource "aws_lambda_permission" "allow_cloudfront_invoke" {
-  statement_id  = "AllowCloudFrontInvokeFunction"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.yaoyao_function.function_name
-  principal     = "cloudfront.amazonaws.com"
-  source_arn    = var.cloudfront_distribution_arn
+  source_arn    = aws_cloudfront_distribution.main.arn
 }

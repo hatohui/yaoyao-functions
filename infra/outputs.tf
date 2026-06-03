@@ -10,15 +10,15 @@ output "function_arn" {
 
 output "cloudfront_url" {
   description = "CloudFront Distribution URL"
-  value       = var.cloudfront_url
+  value       = "https://${aws_cloudfront_distribution.main.domain_name}"
 }
 
 output "cloudfront_distribution_arn" {
   description = "CloudFront Distribution ARN"
-  value       = var.cloudfront_distribution_arn
+  value       = aws_cloudfront_distribution.main.arn
 }
 
 output "cloudfront_oac_id" {
-  description = "CloudFront Origin Access Control ID - Use this in your CloudFront distribution origin settings"
+  description = "CloudFront Origin Access Control ID"
   value       = aws_cloudfront_origin_access_control.lambda_oac.id
 }

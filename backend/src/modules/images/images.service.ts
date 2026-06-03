@@ -14,12 +14,13 @@ export class ImagesService {
     const secret = this.config.get<string>('CLOUDFLARE_SECRET_ACCESS_KEY');
     const bucket = this.config.get<string>('BUCKET_NAME');
 
-    if (!accessKey || !secret || !bucket) {
-      throw new InternalServerErrorException('Missing S3 storage configuration');
+    const s3Endpoint = this.config.get<string>('S3_ENDPOINT');
+
+    if (!accessKey || !secret || !bucket || (!s3Endpoint && !accountId)) {
+      throw new InternalServerErrorException('Missing storage configuration: set S3_ENDPOINT (local) or CLOUDFLARE_ACCOUNT_ID (R2)');
     }
 
-    const endpoint = this.config.get<string>('S3_ENDPOINT')
-      ?? `https://${accountId}.r2.cloudflarestorage.com`;
+    const endpoint = s3Endpoint ?? `https://${accountId}.r2.cloudflarestorage.com`;
 
     const client = new S3Client({
       region: this.config.get<string>('S3_REGION') ?? 'auto',

@@ -6,17 +6,41 @@ vars:
   REDIS_EXEC: docker exec yaoyao-redis redis-cli -a pass
 
 tasks:
+  setup:
+    desc: Install dependencies for both frontend and backend
+    cmds:
+      - "cd frontend && bun install"
+      - "cd backend && bun install"
+      - "cp backend/.env.example backend/.env"
+      - "cp frontend/.env.example frontend/.env"
+      - "cd infra && terraform init"
+
+  frontend:
+    aliases:
+      - f
+    desc: Start the frontend development server
+    cmd: "cd frontend && bun run dev"
   # ── Docker ───────────────────────────────────────────────────────────────────
 
-  up:
+  generate:
+    desc: Generate orval code from OpenAPI spec
+    cmd: "cd frontend && bun run api:generate"
+
+  backend:
+    aliases:
+      - b
     desc: Start all containers
     cmd: "{{.COMPOSE}} up -d"
 
-  down:
+  backend:stop:
+    aliases:
+      - bs
     desc: Stop all containers
     cmd: "{{.COMPOSE}} down"
 
   build:
+    aliases:
+      - build
     desc: Rebuild the api image and restart
     cmds:
       - "{{.COMPOSE}} build api"
@@ -24,9 +48,11 @@ tasks:
 
   # ── Database ─────────────────────────────────────────────────────────────────
 
-  db:migrate:
+  db:apply:
     desc: Apply pending migrations
-    cmd: "{{.EXEC}} bunx prisma migrate deploy"
+    cmds:
+      - "{{.EXEC}} bunx prisma migrate deploy"
+      - "cd backend && bunx prisma generate"
 
   db:reset:
     desc: Reset DB and re-apply all migrations (destroys data)
@@ -42,7 +68,7 @@ tasks:
       - task: db:reset
       - task: db:seed
 
-  db:create-migration:
+  db:migrate:
     desc: Create a new migration
     cmd: "{{.EXEC}} bunx prisma migrate dev --name {{.NAME}}"
 
@@ -55,3 +81,7 @@ tasks:
   redis:keys:
     desc: List all Redis keys
     cmd: "{{.REDIS_EXEC}} KEYS '*'"
+
+  infra:apply:
+    desc: Apply Terraform configuration
+    cmd: "cd infra && doppler run terraform apply"
