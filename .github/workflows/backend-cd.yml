@@ -14,51 +14,12 @@ env:
   LAMBDA_FUNCTION_NAME: "yaoyao-function"
 
 jobs:
-  deploy-code:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Install all dependencies
-        working-directory: backend
-        run: bun install --frozen-lockfile
-
-      - name: Generate Prisma client and build
-        working-directory: backend
-        run: |
-          bun x prisma generate
-          bun run build
-
-      - name: Install production dependencies
-        working-directory: backend
-        run: |
-          cp -r node_modules/.prisma /tmp/prisma-generated
-          bun install --frozen-lockfile --production
-          cp -r /tmp/prisma-generated node_modules/.prisma
-
-      - name: Package Lambda artifact
-        working-directory: backend
-        run: |
-          mkdir -p build
-          printf '#!/bin/sh\nexec node dist/main.js\n' > build/bootstrap
-          chmod +x build/bootstrap
-          cp -r dist build/
-          cp -r node_modules build/
-          cd build && zip -r lambda.zip bootstrap dist node_modules
-
-      - name: Upload Lambda artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: lambda-zip-${{ github.sha }}
-          path: backend/build/lambda.zip
-          retention-days: 3
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -67,14 +28,35 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image
+        id: build
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            --cache-from $ECR_REGISTRY/${{ env.LAMBDA_FUNCTION_NAME }}:latest \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            -f backend/Dockerfile \
+            -t $ECR_REGISTRY/${{ env.LAMBDA_FUNCTION_NAME }}:$IMAGE_TAG \
+            -t $ECR_REGISTRY/${{ env.LAMBDA_FUNCTION_NAME }}:latest \
+            backend/
+          docker push $ECR_REGISTRY/${{ env.LAMBDA_FUNCTION_NAME }}:$IMAGE_TAG
+          docker push $ECR_REGISTRY/${{ env.LAMBDA_FUNCTION_NAME }}:latest
+          echo "image=$ECR_REGISTRY/${{ env.LAMBDA_FUNCTION_NAME }}:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
       - name: Update Lambda function code
         run: |
           aws lambda update-function-code \
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \
-            --zip-file fileb://backend/build/lambda.zip \
+            --image-uri ${{ steps.build.outputs.image }} \
             --region ${{ env.AWS_REGION }}
 
-      - name: Wait for Lambda update to complete
+      - name: Wait for Lambda update
         run: |
           aws lambda wait function-updated \
             --function-name ${{ env.LAMBDA_FUNCTION_NAME }} \

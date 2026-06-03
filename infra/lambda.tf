@@ -1,31 +1,13 @@
-data "archive_file" "lambda_placeholder" {
-  type        = "zip"
-  output_path = "${path.module}/lambda_placeholder.zip"
-
-  source {
-    content  = "placeholder"
-    filename = "bootstrap"
-  }
-}
-
 resource "aws_lambda_function" "yaoyao_function" {
   function_name = var.function_name
   role          = aws_iam_role.yaoyao_lambda_role.arn
-  handler       = "bootstrap"
-  runtime       = "provided.al2023"
+  package_type  = "Image"
+  image_uri     = "${aws_ecr_repository.lambda.repository_url}:latest"
   timeout       = 10
   memory_size   = 512
 
-  filename         = data.archive_file.lambda_placeholder.output_path
-  source_code_hash = data.archive_file.lambda_placeholder.output_base64sha256
-
-  layers = ["arn:aws:lambda:${var.aws_region}:753240598075:layer:LambdaAdapterLayerX86:25"]
-
   lifecycle {
-    ignore_changes = [
-      filename,
-      source_code_hash
-    ]
+    ignore_changes = [image_uri]
   }
 
   environment {

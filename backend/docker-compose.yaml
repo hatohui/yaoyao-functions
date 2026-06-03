@@ -1,27 +1,6 @@
 name: yaoyao
 
 services:
-  # api:
-  #   build:
-  #     context: ../backend
-  #     dockerfile: Dockerfile
-  #   container_name: yaoyao-api
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
-  #   env_file:
-  #     - ../backend/.env
-  #   environment:
-  #     DATABASE_URL: "postgresql://root:root@yaoyao-db:5432/yaoyao?schema=public"
-  #     REDIS_URL: "redis://:pass@yaoyao-redis:6379/0"
-  #   volumes:
-  #     - ../backend/src:/app/src
-  #   depends_on:
-  #     - db
-  #     - redis
-  #   networks:
-  #     - yaoyao-network
-
   db:
     image: postgres:18
     container_name: yaoyao-db

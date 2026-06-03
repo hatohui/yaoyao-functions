@@ -22,3 +22,8 @@ output "cloudfront_oac_id" {
   description = "CloudFront Origin Access Control ID"
   value       = aws_cloudfront_origin_access_control.lambda_oac.id
 }
+
+output "ecr_repository_url" {
+  description = "ECR Repository URL"
+  value       = aws_ecr_repository.lambda.repository_url
+}
