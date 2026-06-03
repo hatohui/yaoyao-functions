@@ -12,6 +12,9 @@
 *.html text eol=lf
 *.md text eol=lf
 
+# Orval-generated API client — collapse in GitHub diffs
+frontend/src/api/** linguist-generated=true
+
 # Lock binary files
 *.png binary
 *.jpg binary

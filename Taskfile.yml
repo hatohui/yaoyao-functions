@@ -29,18 +29,24 @@ tasks:
   backend:
     aliases:
       - b
+    desc: Start the backend development server
+    cmd: "cd backend && bun run dev"
+
+  backend:infra:
+    aliases:
+      - b:infra
     desc: Start all containers
     cmd: "{{.COMPOSE}} up -d"
 
   backend:stop:
     aliases:
-      - bs
+      - bs:infra
     desc: Stop all containers
     cmd: "{{.COMPOSE}} down"
 
   build:
     aliases:
-      - build
+      - b:infra
     desc: Rebuild the api image and restart
     cmds:
       - "{{.COMPOSE}} build api"
