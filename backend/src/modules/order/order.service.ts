@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { prisma } from '../../prisma';
-import { v4 as uuidv4 } from 'uuid';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreateOrderDto } from "./dto/create-order.dto";
+import { prisma } from "../../libs/prisma";
+import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class OrderService {
@@ -9,14 +9,14 @@ export class OrderService {
     return prisma.order.findMany({
       where: { tableId },
       include: { variant: { include: { food: true } } },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
   }
 
   findAll() {
     return prisma.order.findMany({
       include: { variant: { include: { food: true } } },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
   }
 
@@ -35,7 +35,7 @@ export class OrderService {
 
   async remove(id: string) {
     const order = await prisma.order.findUnique({ where: { id } });
-    if (!order) throw new NotFoundException('Order not found');
+    if (!order) throw new NotFoundException("Order not found");
     await prisma.order.delete({ where: { id } });
   }
 }

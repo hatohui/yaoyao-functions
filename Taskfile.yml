@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 vars:
   COMPOSE: docker compose -f backend/docker-compose.yaml
@@ -43,7 +43,7 @@ tasks:
       - task: db:seed
 
   db:create-migration:
-    desc: Create a new migration (usage: task db:create-migration NAME=my_migration)
+    desc: Create a new migration
     cmd: "{{.EXEC}} bunx prisma migrate dev --name {{.NAME}}"
 
   # ── Redis ────────────────────────────────────────────────────────────────────

@@ -12,4 +12,4 @@ RUN bun x prisma generate
 
 EXPOSE 8080
 
-CMD ["bun", "run", "start:dev"]
+CMD ["bun", "run", "dev"]

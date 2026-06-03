@@ -5,7 +5,7 @@
   "scripts": {
     "build": "nest build",
     "start": "node dist/main",
-    "start:dev": "nest start --watch",
+    "dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -26,9 +26,11 @@
     "@prisma/adapter-pg": "^7.0.0",
     "@prisma/client": "^7.0.0",
     "@scalar/nestjs-api-reference": "^0.4.2",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
+    "dotenv": "^17.4.2",
+    "figlet": "^1.11.0",
     "ioredis": "^5.3.2",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -39,13 +41,13 @@
   },
   "devDependencies": {
     "@nestjs/cli": "^10.4.9",
-    "@types/bcryptjs": "^2.4.6",
+    "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.0",
+    "@types/figlet": "^1.7.0",
     "@types/node": "^22.10.10",
     "@types/passport-jwt": "^4.0.1",
     "@types/pg": "^8.11.11",
     "@types/uuid": "^10.0.0",
-    "dotenv": "^16.4.7",
     "prisma": "^7.0.0",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
@@ -53,6 +55,7 @@
   },
   "trustedDependencies": [
     "@nestjs/core",
+    "bcrypt",
     "prisma"
   ]
 }

@@ -1,17 +1,32 @@
-import { Injectable } from '@nestjs/common';
-import { RedisService } from '@Redis/redis.service';
-import { prisma } from '../../prisma';
+import { Injectable } from "@nestjs/common";
+import { prisma } from "@libs/prisma";
+import { CacheService } from "@libs/redis";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class HealthService {
-  constructor(private redis: RedisService) {}
-
-  async checkDatabase(): Promise<void> {
-    await prisma.$queryRaw`SELECT 1`;
+  async checkDatabase(): Promise<{ latency: number }> {
+    const start = Date.now();
+    await prisma.$queryRaw(Prisma.sql`SELECT 1`);
+    return { latency: Date.now() - start };
   }
 
-  async checkRedis(): Promise<void> {
-    const result = await this.redis.ping();
-    if (result !== 'PONG') throw new Error('Redis ping failed');
+  async checkRedis(): Promise<{ latency: number }> {
+    const start = Date.now();
+    const result = await CacheService.ping();
+    if (result !== "PONG") throw new Error("Redis ping failed");
+    return { latency: Date.now() - start };
+  }
+
+  getSystemMetrics() {
+    const mem = process.memoryUsage();
+    return {
+      uptime: Math.floor(process.uptime()),
+      memory: {
+        heapUsed: mem.heapUsed,
+        heapTotal: mem.heapTotal,
+        rss: mem.rss,
+      },
+    };
   }
 }

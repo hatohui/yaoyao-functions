@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreatePresetDto } from './dto/create-preset.dto';
-import { prisma } from '../../prisma';
-import { v4 as uuidv4 } from 'uuid';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { CreatePresetDto } from "./dto/create-preset.dto";
+import { prisma } from "../../libs/prisma";
+import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class PresetMenuService {
@@ -16,7 +16,7 @@ export class PresetMenuService {
       where: { id },
       include: { foods: { include: { variant: { include: { food: true } } } } },
     });
-    if (!preset) throw new NotFoundException('Preset menu not found');
+    if (!preset) throw new NotFoundException("Preset menu not found");
     return preset;
   }
 

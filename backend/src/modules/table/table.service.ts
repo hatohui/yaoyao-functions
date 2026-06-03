@@ -1,32 +1,29 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { RedisService } from '@Redis/redis.service';
-import { prisma } from '../../prisma';
-
-const CACHE_TTL = 1800;
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { prisma } from "../../libs/prisma";
+import { CacheService } from "@libs/redis";
+import { CacheSettings } from "@common/cache/constants";
 
 @Injectable()
 export class TableService {
-  constructor(private redis: RedisService) {}
-
   async findAll() {
-    const cacheKey = 'tables:all';
-    const cached = await this.redis.get(cacheKey);
-    if (cached) return JSON.parse(cached);
+    const cacheKey = CacheSettings.tables.all.key;
+    const cached = await CacheService.get(cacheKey);
+    if (cached) return cached;
 
-    const tables = await prisma.table.findMany({ orderBy: { no: 'asc' } });
-    await this.redis.set(cacheKey, JSON.stringify(tables), CACHE_TTL);
+    const tables = await prisma.table.findMany({ orderBy: { no: "asc" } });
+    await CacheService.set(cacheKey, tables, CacheSettings.tables.all.ttl);
     return tables;
   }
 
   async findOne(id: string) {
-    const cacheKey = `tables:${id}`;
-    const cached = await this.redis.get(cacheKey);
-    if (cached) return JSON.parse(cached);
+    const cacheKey = CacheSettings.tables.one.key(id);
+    const cached = await CacheService.get(cacheKey);
+    if (cached) return cached;
 
     const table = await prisma.table.findUnique({ where: { id } });
-    if (!table) throw new NotFoundException('Table not found');
+    if (!table) throw new NotFoundException("Table not found");
 
-    await this.redis.set(cacheKey, JSON.stringify(table), CACHE_TTL);
+    await CacheService.set(cacheKey, table, CacheSettings.tables.one.ttl);
     return table;
   }
 }

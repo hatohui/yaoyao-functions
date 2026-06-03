@@ -1,44 +1,53 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { RedisService } from '@Redis/redis.service';
-import { prisma } from '../../prisma';
-
-const CACHE_TTL = 3600;
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { prisma } from "@libs/prisma";
+import { CacheSettings } from "@common/cache/constants";
+import { CacheService } from "@libs/redis";
 
 @Injectable()
 export class CategoryService {
-  constructor(private redis: RedisService) {}
+  async findAll(lang = "en") {
+    const cacheKey = CacheSettings.categories.all.key(lang);
+    const cached = await CacheService.get(cacheKey);
+    if (cached) return cached;
 
-  async findAll(lang = 'en') {
-    const cacheKey = `categories:all:${lang}`;
-    const cached = await this.redis.get(cacheKey);
-    if (cached) return JSON.parse(cached);
+    const categories = await prisma.category.findMany({
+      include: {
+        translations: {
+          where: {
+            language: lang,
+          },
+        },
+      },
+    });
 
-    const categories = await prisma.$queryRaw<any[]>`
-      SELECT c.id, COALESCE(ct.name, c.name) AS name, COALESCE(ct.description, c.description) AS description
-      FROM category c
-      LEFT JOIN category_translation ct ON c.id = ct.category_id AND ct.language = ${lang}
-    `;
-
-    await this.redis.set(cacheKey, JSON.stringify(categories), CACHE_TTL);
+    await CacheService.set(
+      cacheKey,
+      categories,
+      CacheSettings.categories.all.ttl,
+    );
     return categories;
   }
 
-  async findOne(id: string, lang = 'en') {
-    const cacheKey = `categories:${id}:${lang}`;
-    const cached = await this.redis.get(cacheKey);
-    if (cached) return JSON.parse(cached);
+  async findOne(id: string, lang = "en") {
+    const cacheKey = CacheSettings.categories.one.key(id, lang);
+    const cached = await CacheService.get(cacheKey);
 
-    const rows = await prisma.$queryRaw<any[]>`
-      SELECT c.id, COALESCE(ct.name, c.name) AS name, COALESCE(ct.description, c.description) AS description
-      FROM category c
-      LEFT JOIN category_translation ct ON c.id = ct.category_id AND ct.language = ${lang}
-      WHERE c.id = ${id}
-      LIMIT 1
-    `;
+    if (cached) return cached;
 
-    if (!rows.length) throw new NotFoundException('Category not found');
+    const rows = await prisma.category.findUnique({
+      where: { id },
+      include: {
+        translations: {
+          where: {
+            language: lang,
+          },
+        },
+      },
+    });
 
-    await this.redis.set(cacheKey, JSON.stringify(rows[0]), CACHE_TTL);
-    return rows[0];
+    if (!rows) throw new NotFoundException("Category not found");
+
+    await CacheService.set(cacheKey, rows, CacheSettings.categories.one.ttl);
+    return rows;
   }
 }

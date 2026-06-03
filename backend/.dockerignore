@@ -4,3 +4,7 @@ build
 .env.*
 *.md
 package-lock.json
+dist
+.env.example
+docker-compose.yaml
+Dockerfile
