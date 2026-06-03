@@ -21,6 +21,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  CategoryItemDto,
   GetCategoriesParams,
   GetCategoryByIdParams
 } from '../model';
@@ -36,7 +37,7 @@ export const getCategories = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<CategoryItemDto[]>(
       {url: `/api/categories`, method: 'GET',
         params, signal
     },
@@ -124,7 +125,7 @@ export const getCategoryById = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<CategoryItemDto>(
       {url: `/api/categories/${id}`, method: 'GET',
         params, signal
     },

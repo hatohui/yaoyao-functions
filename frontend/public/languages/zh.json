@@ -47,6 +47,31 @@
 		"last_checked": "最后检查",
 		"loading": "正在加载系统健康状态..."
 	},
+	"nav": {
+		"menu": "菜单",
+		"dev": "Dev"
+	},
+	"menu": {
+		"our_menu": "菜单",
+		"restaurant_name": "高人馆",
+		"restaurant_en": "Gao Ren Guan",
+		"restaurant_location": "Puchong Jaya · 家庭式餐厅",
+		"tagline": "新鲜食材 · 正宗口味",
+		"dishes_available": "共 {{count}} 道菜",
+		"search_placeholder": "搜索菜肴…",
+		"all_categories": "全部",
+		"no_dishes_title": "未找到菜肴",
+		"no_dishes_desc": "请尝试调整筛选条件或搜索其他内容。",
+		"menu_empty_title": "菜单为空",
+		"menu_empty_desc": "目前没有可用的菜单项目，请稍后再来。",
+		"clear_filters": "清除筛选",
+		"error_title": "出错了",
+		"error_desc": "菜单加载失败，请重试。",
+		"try_again": "重试",
+		"showing": "显示第 {{from}}–{{to}} 项，共 {{total}} 道菜",
+		"verified": "已验证",
+		"unavailable": "暂不可用"
+	},
 	"dev": {
 		"title": "开发测试",
 		"subtitle": "测试各种组件和实用工具",

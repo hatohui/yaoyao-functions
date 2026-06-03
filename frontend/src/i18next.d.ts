@@ -5,18 +5,33 @@ declare module 'react-i18next' {
 		defaultNS: 'translation'
 		resources: {
 			translation: {
-				welcome: string
-				login: string
-				logout: string
-				signup: string
-				username: string
-				password: string
-				email: string
-				submit: string
-				cancel: string
-				profile: string
-				settings: string
-				home: string
+				config: { select_language: string }
+				errors: Record<string, string>
+				common: { back: string; confirm: string; cancel: string }
+				nav: { menu: string; dev: string }
+				menu: {
+					our_menu: string
+					restaurant_name: string
+					restaurant_en: string
+					restaurant_location: string
+					tagline: string
+					dishes_available: string
+					search_placeholder: string
+					all_categories: string
+					no_dishes_title: string
+					no_dishes_desc: string
+					menu_empty_title: string
+					menu_empty_desc: string
+					clear_filters: string
+					error_title: string
+					error_desc: string
+					try_again: string
+					showing: string
+					verified: string
+					unavailable: string
+				}
+				health: Record<string, string>
+				dev: Record<string, unknown>
 			}
 		}
 	}

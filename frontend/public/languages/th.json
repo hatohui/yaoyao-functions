@@ -47,6 +47,31 @@
 		"last_checked": "ตรวจสอบล่าสุด",
 		"loading": "กำลังโหลดสุขภาพระบบ..."
 	},
+	"nav": {
+		"menu": "เมนู",
+		"dev": "Dev"
+	},
+	"menu": {
+		"our_menu": "เมนู",
+		"restaurant_name": "高人馆",
+		"restaurant_en": "Gao Ren Guan",
+		"restaurant_location": "Puchong Jaya · ร้านอาหารครอบครัว",
+		"tagline": "วัตถุดิบสด · รสชาติแท้",
+		"dishes_available": "มี {{count}} เมนู",
+		"search_placeholder": "ค้นหาเมนู…",
+		"all_categories": "ทั้งหมด",
+		"no_dishes_title": "ไม่พบเมนู",
+		"no_dishes_desc": "ลองปรับตัวกรองหรือค้นหาสิ่งอื่น",
+		"menu_empty_title": "เมนูว่างเปล่า",
+		"menu_empty_desc": "ขณะนี้ไม่มีรายการเมนู โปรดกลับมาใหม่ภายหลัง",
+		"clear_filters": "ล้างตัวกรอง",
+		"error_title": "เกิดข้อผิดพลาด",
+		"error_desc": "โหลดเมนูไม่สำเร็จ โปรดลองอีกครั้ง",
+		"try_again": "ลองอีกครั้ง",
+		"showing": "แสดง {{from}}–{{to}} จาก {{total}} เมนู",
+		"verified": "ยืนยันแล้ว",
+		"unavailable": "ไม่พร้อมให้บริการ"
+	},
 	"dev": {
 		"title": "การทดสอบการพัฒนา",
 		"subtitle": "ทดสอบคอมโพเนนต์และยูทิลิตี้ต่างๆ",

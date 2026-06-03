@@ -10,6 +10,12 @@
 }
 
 @theme inline {
+	--color-brand: var(--primary);
+	--color-brand-foreground: var(--primary-foreground);
+	--color-brand-muted: color-mix(in oklch, var(--primary) 15%, transparent);
+}
+
+@theme inline {
 	--radius-sm: calc(var(--radius) - 4px);
 
 	--radius-md: calc(var(--radius) - 2px);
@@ -231,6 +237,12 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+		background-image: radial-gradient(
+			circle,
+			color-mix(in oklch, var(--primary) 9%, transparent) 1px,
+			transparent 0
+		);
+		background-size: 28px 28px;
 	}
 
 	::selection {

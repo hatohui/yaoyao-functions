@@ -1,1 +1,916 @@
-{"openapi":"3.0.0","paths":{"/api":{"get":{"operationId":"getInfo","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["health"]}},"/api/health":{"get":{"operationId":"getHealth","parameters":[],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HealthResponseDto"}}}}},"summary":"","tags":["health"]}},"/api/database":{"get":{"operationId":"checkDatabase","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["health"]}},"/api/redis":{"get":{"operationId":"checkRedis","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["health"]}},"/api/languages":{"get":{"operationId":"getLanguages","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["languages"]}},"/api/languages/codes":{"get":{"operationId":"getLanguageCodes","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["languages"]}},"/api/categories":{"get":{"operationId":"getCategories","parameters":[{"name":"lang","required":false,"in":"query","schema":{"example":"en","type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["categories"]}},"/api/categories/{id}":{"get":{"operationId":"getCategoryById","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}},{"name":"lang","required":false,"in":"query","schema":{"example":"en","type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["categories"]}},"/api/foods":{"get":{"operationId":"getFoods","parameters":[{"name":"category","required":false,"in":"query","schema":{"example":"all","type":"string"}},{"name":"count","required":false,"in":"query","schema":{"example":20,"type":"number"}},{"name":"page","required":false,"in":"query","schema":{"example":1,"type":"number"}},{"name":"lang","required":false,"in":"query","schema":{"example":"en","type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/GetFoodsResponseDto"}}}}},"summary":"","tags":["foods"]},"post":{"operationId":"createFood","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateFoodDto"}}}},"responses":{"201":{"description":""}},"summary":"","tags":["foods"]}},"/api/tables":{"get":{"operationId":"getTables","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["tables"]}},"/api/tables/{id}":{"get":{"operationId":"getTableById","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["tables"]}},"/api/tables/{id}/people":{"get":{"operationId":"getTablePeople","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["tables"]}},"/api/people":{"get":{"operationId":"getPeople","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["people"]}},"/api/account":{"get":{"operationId":"getAccounts","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["account"]}},"/api/orders":{"get":{"operationId":"getOrders","parameters":[{"name":"tableId","required":false,"in":"query","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["orders"]},"post":{"operationId":"createOrder","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateOrderDto"}}}},"responses":{"201":{"description":""}},"summary":"","tags":["orders"]}},"/api/orders/{id}":{"delete":{"operationId":"deleteOrder","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["orders"]}},"/api/feedback":{"get":{"operationId":"getFeedback","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["feedback"]},"post":{"operationId":"createFeedback","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateFeedbackDto"}}}},"responses":{"201":{"description":""}},"summary":"","tags":["feedback"]}},"/api/personal-notes":{"get":{"operationId":"getNotesByPerson","parameters":[{"name":"personId","required":true,"in":"query","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["personal-notes"]},"post":{"operationId":"createNote","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateNoteDto"}}}},"responses":{"201":{"description":""}},"summary":"","tags":["personal-notes"]}},"/api/personal-notes/{id}":{"delete":{"operationId":"deleteNote","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["personal-notes"]}},"/api/preset-menus":{"get":{"operationId":"getPresetMenus","parameters":[],"responses":{"200":{"description":""}},"summary":"","tags":["preset-menus"]},"post":{"operationId":"createPresetMenu","parameters":[],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreatePresetDto"}}}},"responses":{"201":{"description":""}},"summary":"","tags":["preset-menus"]}},"/api/preset-menus/{id}":{"get":{"operationId":"getPresetMenuById","parameters":[{"name":"id","required":true,"in":"path","schema":{"type":"string"}}],"responses":{"200":{"description":""}},"summary":"","tags":["preset-menus"]}},"/api/images/sign-url":{"get":{"operationId":"getSignedUrl","parameters":[{"name":"folder","required":true,"in":"query","schema":{"type":"string"}}],"responses":{"200":{"description":"","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SignUrlResponseDto"}}}}},"summary":"","tags":["images"]}}},"info":{"title":"YaoYao Dinner API","description":"Restaurant management API","version":"1.0","contact":{}},"tags":[],"servers":[],"components":{"securitySchemes":{"JWT":{"scheme":"bearer","bearerFormat":"JWT","type":"http"}},"schemas":{"MemoryMetricsDto":{"type":"object","properties":{"heapUsed":{"type":"number"},"heapTotal":{"type":"number"},"rss":{"type":"number"}},"required":["heapUsed","heapTotal","rss"]},"SystemMetricsDto":{"type":"object","properties":{"uptime":{"type":"number"},"memory":{"$ref":"#/components/schemas/MemoryMetricsDto"}},"required":["uptime","memory"]},"ServiceStatusDto":{"type":"object","properties":{"status":{"type":"string","enum":["healthy","unhealthy"]},"latency":{"type":"number"},"message":{"type":"string","nullable":true}},"required":["status"]},"HealthServicesDto":{"type":"object","properties":{"database":{"$ref":"#/components/schemas/ServiceStatusDto"},"redis":{"$ref":"#/components/schemas/ServiceStatusDto"}},"required":["database","redis"]},"HealthResponseDto":{"type":"object","properties":{"status":{"type":"string","enum":["ok","degraded"]},"system":{"$ref":"#/components/schemas/SystemMetricsDto"},"services":{"$ref":"#/components/schemas/HealthServicesDto"}},"required":["status","system","services"]},"FoodItemDto":{"type":"object","properties":{"id":{"type":"string"},"name":{"type":"string"},"imageUrl":{"type":"string","nullable":true},"description":{"type":"string","nullable":true},"categoryId":{"type":"string","nullable":true},"isAvailable":{"type":"boolean"}},"required":["id","name","imageUrl","description","categoryId","isAvailable"]},"GetFoodsResponseDto":{"type":"object","properties":{"foods":{"type":"array","items":{"$ref":"#/components/schemas/FoodItemDto"}},"page":{"type":"number"},"count":{"type":"number"},"total":{"type":"number"}},"required":["foods","page","count","total"]},"VariantDto":{"type":"object","properties":{"label":{"type":"string"},"price":{"type":"number","nullable":true},"currency":{"type":"string","example":"RM"},"isSeasonal":{"type":"boolean"}},"required":["label"]},"CreateFoodDto":{"type":"object","properties":{"name":{"type":"string"},"description":{"type":"string","nullable":true},"imageUrl":{"type":"string","nullable":true},"categoryId":{"type":"string"},"variants":{"type":"array","items":{"$ref":"#/components/schemas/VariantDto"}}},"required":["name","categoryId"]},"CreateOrderDto":{"type":"object","properties":{}},"CreateFeedbackDto":{"type":"object","properties":{}},"CreateNoteDto":{"type":"object","properties":{}},"CreatePresetDto":{"type":"object","properties":{}},"SignUrlResponseDto":{"type":"object","properties":{"url":{"type":"string"},"key":{"type":"string"}},"required":["url","key"]}}}}
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api": {
+      "get": {
+        "operationId": "getInfo",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/database": {
+      "get": {
+        "operationId": "checkDatabase",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/redis": {
+      "get": {
+        "operationId": "checkRedis",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/languages": {
+      "get": {
+        "operationId": "getLanguages",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "languages"
+        ]
+      }
+    },
+    "/api/languages/codes": {
+      "get": {
+        "operationId": "getLanguageCodes",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "languages"
+        ]
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "operationId": "getCategories",
+        "parameters": [
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryItemDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "categories"
+        ]
+      }
+    },
+    "/api/categories/{id}": {
+      "get": {
+        "operationId": "getCategoryById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryItemDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "categories"
+        ]
+      }
+    },
+    "/api/foods": {
+      "get": {
+        "operationId": "getFoods",
+        "parameters": [
+          {
+            "name": "category",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "all",
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "lang",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "example": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetFoodsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "foods"
+        ]
+      },
+      "post": {
+        "operationId": "createFood",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFoodDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "foods"
+        ]
+      }
+    },
+    "/api/tables": {
+      "get": {
+        "operationId": "getTables",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "tables"
+        ]
+      }
+    },
+    "/api/tables/{id}": {
+      "get": {
+        "operationId": "getTableById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "tables"
+        ]
+      }
+    },
+    "/api/tables/{id}/people": {
+      "get": {
+        "operationId": "getTablePeople",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "tables"
+        ]
+      }
+    },
+    "/api/people": {
+      "get": {
+        "operationId": "getPeople",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "people"
+        ]
+      }
+    },
+    "/api/account": {
+      "get": {
+        "operationId": "getAccounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "account"
+        ]
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "operationId": "getOrders",
+        "parameters": [
+          {
+            "name": "tableId",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "orders"
+        ]
+      },
+      "post": {
+        "operationId": "createOrder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/orders/{id}": {
+      "delete": {
+        "operationId": "deleteOrder",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/feedback": {
+      "get": {
+        "operationId": "getFeedback",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "feedback"
+        ]
+      },
+      "post": {
+        "operationId": "createFeedback",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeedbackDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "feedback"
+        ]
+      }
+    },
+    "/api/personal-notes": {
+      "get": {
+        "operationId": "getNotesByPerson",
+        "parameters": [
+          {
+            "name": "personId",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "personal-notes"
+        ]
+      },
+      "post": {
+        "operationId": "createNote",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateNoteDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "personal-notes"
+        ]
+      }
+    },
+    "/api/personal-notes/{id}": {
+      "delete": {
+        "operationId": "deleteNote",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "personal-notes"
+        ]
+      }
+    },
+    "/api/preset-menus": {
+      "get": {
+        "operationId": "getPresetMenus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "preset-menus"
+        ]
+      },
+      "post": {
+        "operationId": "createPresetMenu",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePresetDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "preset-menus"
+        ]
+      }
+    },
+    "/api/preset-menus/{id}": {
+      "get": {
+        "operationId": "getPresetMenuById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "",
+        "tags": [
+          "preset-menus"
+        ]
+      }
+    },
+    "/api/images/sign-url": {
+      "get": {
+        "operationId": "getSignedUrl",
+        "parameters": [
+          {
+            "name": "folder",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignUrlResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "",
+        "tags": [
+          "images"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "YaoYao Dinner API",
+    "description": "Restaurant management API",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "JWT": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "MemoryMetricsDto": {
+        "type": "object",
+        "properties": {
+          "heapUsed": {
+            "type": "number"
+          },
+          "heapTotal": {
+            "type": "number"
+          },
+          "rss": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "heapUsed",
+          "heapTotal",
+          "rss"
+        ]
+      },
+      "SystemMetricsDto": {
+        "type": "object",
+        "properties": {
+          "uptime": {
+            "type": "number"
+          },
+          "memory": {
+            "$ref": "#/components/schemas/MemoryMetricsDto"
+          }
+        },
+        "required": [
+          "uptime",
+          "memory"
+        ]
+      },
+      "ServiceStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "healthy",
+              "unhealthy"
+            ]
+          },
+          "latency": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "status"
+        ]
+      },
+      "HealthServicesDto": {
+        "type": "object",
+        "properties": {
+          "database": {
+            "$ref": "#/components/schemas/ServiceStatusDto"
+          },
+          "redis": {
+            "$ref": "#/components/schemas/ServiceStatusDto"
+          }
+        },
+        "required": [
+          "database",
+          "redis"
+        ]
+      },
+      "HealthResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "degraded"
+            ]
+          },
+          "system": {
+            "$ref": "#/components/schemas/SystemMetricsDto"
+          },
+          "services": {
+            "$ref": "#/components/schemas/HealthServicesDto"
+          }
+        },
+        "required": [
+          "status",
+          "system",
+          "services"
+        ]
+      },
+      "FoodItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAvailable": {
+            "type": "boolean"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariantDto"
+            },
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "imageUrl",
+          "description",
+          "categoryId",
+          "isAvailable"
+        ]
+      },
+      "GetFoodsResponseDto": {
+        "type": "object",
+        "properties": {
+          "foods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/FoodItemDto"
+            }
+          },
+          "page": {
+            "type": "number"
+          },
+          "count": {
+            "type": "number"
+          },
+          "total": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "foods",
+          "page",
+          "count",
+          "total"
+        ]
+      },
+      "VariantDto": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "nullable": true
+          },
+          "currency": {
+            "type": "string",
+            "example": "RM"
+          },
+          "isSeasonal": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "label"
+        ]
+      },
+      "CreateFoodDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageUrl": {
+            "type": "string",
+            "nullable": true
+          },
+          "categoryId": {
+            "type": "string"
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/VariantDto"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "categoryId"
+        ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateFeedbackDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreateNoteDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CreatePresetDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "SignUrlResponseDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url",
+          "key"
+        ]
+      },
+      "CategoryItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "isAvailable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "key",
+          "name",
+          "description",
+          "isAvailable"
+        ]
+      }
+    }
+  }
+}

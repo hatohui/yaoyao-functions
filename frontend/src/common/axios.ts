@@ -1,7 +1,7 @@
 import a, { type AxiosRequestConfig } from 'axios'
 import { API_URL } from './app'
 
-const ApiUrl = import.meta.env.DEV ? 'http://localhost:8080/api' : API_URL
+const ApiUrl = API_URL
 
 const axios = a.create({
 	baseURL: ApiUrl,
@@ -21,7 +21,6 @@ axios.interceptors.response.use(
 	}
 )
 
-// Orval-compatible mutator — wraps the axios instance for generated API hooks
 export const customInstance = <T>(config: AxiosRequestConfig): Promise<T> =>
 	axios(config).then(res => res.data)
 

@@ -47,6 +47,31 @@
 		"last_checked": "Last Checked",
 		"loading": "Loading system health..."
 	},
+	"nav": {
+		"menu": "Menu",
+		"dev": "Dev"
+	},
+	"menu": {
+		"our_menu": "Our Menu",
+		"restaurant_name": "高人馆",
+		"restaurant_en": "Gao Ren Guan",
+		"restaurant_location": "Puchong Jaya · Family Style",
+		"tagline": "Fresh ingredients · Authentic flavors",
+		"dishes_available": "{{count}} dishes available",
+		"search_placeholder": "Search dishes…",
+		"all_categories": "All",
+		"no_dishes_title": "No dishes found",
+		"no_dishes_desc": "Try adjusting your filters or searching for something different.",
+		"menu_empty_title": "Menu is empty",
+		"menu_empty_desc": "No menu items are available right now. Check back later.",
+		"clear_filters": "Clear filters",
+		"error_title": "Something went wrong",
+		"error_desc": "Failed to load menu items. Please try again.",
+		"try_again": "Try again",
+		"showing": "Showing {{from}}–{{to}} of {{total}} dishes",
+		"verified": "Verified",
+		"unavailable": "Unavailable"
+	},
 	"dev": {
 		"title": "Development Testing",
 		"subtitle": "Test various components and utilities",

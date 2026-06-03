@@ -1,28 +1,11 @@
 import React from 'react'
-import { LanguageSelector } from '@/components/common/LanguageSelector'
-import { ThemeToggle } from '@/components/common/ThemeToggle'
 import VideoPlayer from '@/components/common/VideoPlayer'
-import { Link } from 'react-router'
-import { Button } from '@/components/ui/button'
 import { ASSET_URL } from '@/common/app'
 
 const LandingPage = (): React.JSX.Element => {
 	return (
-		<div className='dark:bg-green-300'>
-			<div className='absolute top-4 right-4 h-10 flex gap-2 z-10'>
-				<Link to='/menu'>
-					<Button variant='outline'>Menu</Button>
-				</Link>
-				<Link to='/health'>
-					<Button variant='outline'>Health</Button>
-				</Link>
-				<Link to='/dev'>
-					<Button variant='outline'>Dev</Button>
-				</Link>
-				<ThemeToggle />
-				<LanguageSelector />
-			</div>
-			<div className='fixed h-screen w-screen inset-0 z-0'>
+		<div>
+			<div className='fixed inset-0 z-0 h-screen w-screen'>
 				<VideoPlayer
 					className='absolute inset-0'
 					src={`${ASSET_URL}/banner.mp4`}

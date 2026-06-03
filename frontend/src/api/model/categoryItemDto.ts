@@ -5,18 +5,13 @@
  * Restaurant management API
  * OpenAPI spec version: 1.0
  */
-import type { VariantDto } from './variantDto';
 
-export interface FoodItemDto {
+export interface CategoryItemDto {
   id: string;
-  name: string;
+  key: string;
   /** @nullable */
-  imageUrl: string | null;
+  name: string | null;
   /** @nullable */
   description: string | null;
-  /** @nullable */
-  categoryId: string | null;
   isAvailable: boolean;
-  /** @nullable */
-  variants?: VariantDto[] | null;
 }

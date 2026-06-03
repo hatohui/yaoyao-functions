@@ -10,44 +10,47 @@ export class CategoryService {
     const cached = await CacheService.get(cacheKey);
     if (cached) return cached;
 
-    const categories = await prisma.category.findMany({
-      include: {
-        translations: {
-          where: {
-            language: lang,
-          },
-        },
-      },
+    const rows = await prisma.category.findMany({
+      include: { translations: { where: { language: lang } } },
     });
 
-    await CacheService.set(
-      cacheKey,
-      categories,
-      CacheSettings.categories.all.ttl,
-    );
+    const categories = rows.map((c) => {
+      const t = c.translations[0];
+      return {
+        id: c.id,
+        key: c.key,
+        name: t?.name ?? null,
+        description: t?.description ?? null,
+        isAvailable: c.isAvailable,
+      };
+    });
+
+    await CacheService.set(cacheKey, categories, CacheSettings.categories.all.ttl);
     return categories;
   }
 
   async findOne(id: string, lang = "en") {
     const cacheKey = CacheSettings.categories.one.key(id, lang);
     const cached = await CacheService.get(cacheKey);
-
     if (cached) return cached;
 
-    const rows = await prisma.category.findUnique({
+    const row = await prisma.category.findUnique({
       where: { id },
-      include: {
-        translations: {
-          where: {
-            language: lang,
-          },
-        },
-      },
+      include: { translations: { where: { language: lang } } },
     });
 
-    if (!rows) throw new NotFoundException("Category not found");
+    if (!row) throw new NotFoundException("Category not found");
 
-    await CacheService.set(cacheKey, rows, CacheSettings.categories.one.ttl);
-    return rows;
+    const t = row.translations[0];
+    const category = {
+      id: row.id,
+      key: row.key,
+      name: t?.name ?? null,
+      description: t?.description ?? null,
+      isAvailable: row.isAvailable,
+    };
+
+    await CacheService.set(cacheKey, category, CacheSettings.categories.one.ttl);
+    return category;
   }
 }

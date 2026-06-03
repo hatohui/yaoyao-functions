@@ -1,18 +1,21 @@
-import { Card, CardContent } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Spinner } from '@/components/ui/spinner'
 
 export function LoadingView() {
 	return (
-		<div className='grid gap-6 sm:grid-cols-2 lg:grid-cols-3'>
-			{Array.from({ length: 6 }).map((_, i) => (
-				<Card key={i} className='overflow-hidden'>
-					<div className='aspect-video w-full animate-pulse bg-muted' />
-					<CardContent className='space-y-3 p-6'>
-						<div className='h-6 w-3/4 animate-pulse rounded bg-muted' />
-						<div className='h-4 w-full animate-pulse rounded bg-muted' />
-						<div className='h-4 w-2/3 animate-pulse rounded bg-muted' />
-					</CardContent>
-				</Card>
+		<div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+			{Array.from({ length: 8 }).map((_, i) => (
+				<div
+					key={i}
+					className='overflow-hidden rounded-2xl border border-border/50 bg-card shadow-sm'
+				>
+					<Skeleton className='aspect-[4/3] w-full rounded-none' />
+					<div className='space-y-2.5 p-4'>
+						<Skeleton className='h-5 w-4/5 rounded-lg' />
+						<Skeleton className='h-3.5 w-full rounded-lg' />
+						<Skeleton className='h-3.5 w-2/3 rounded-lg' />
+					</div>
+				</div>
 			))}
 		</div>
 	)
@@ -20,8 +23,8 @@ export function LoadingView() {
 
 export function LoadingSpinner() {
 	return (
-		<div className='flex min-h-[400px] items-center justify-center'>
-			<Spinner className='h-8 w-8' />
+		<div className='flex min-h-[300px] items-center justify-center'>
+			<Spinner className='h-8 w-8 text-primary' />
 		</div>
 	)
 }

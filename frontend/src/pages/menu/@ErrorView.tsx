@@ -1,12 +1,6 @@
-import { AlertCircle } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { AlertCircle, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
 
 interface ErrorViewProps {
 	error: Error
@@ -14,22 +8,26 @@ interface ErrorViewProps {
 }
 
 export function ErrorView({ error, onRetry }: ErrorViewProps) {
+	const { t } = useTranslation()
+
 	return (
-		<Card className='mx-auto max-w-md border-destructive'>
-			<CardHeader>
-				<div className='flex items-center gap-2'>
-					<AlertCircle className='h-5 w-5 text-destructive' />
-					<CardTitle className='text-destructive'>Error Loading Menu</CardTitle>
-				</div>
-				<CardDescription>{error.message}</CardDescription>
-			</CardHeader>
+		<div className='flex flex-col items-center justify-center py-20 text-center'>
+			<div className='mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-destructive/10'>
+				<AlertCircle className='h-12 w-12 text-destructive' />
+			</div>
+			<h3 className='mb-2 text-xl font-semibold'>{t('menu.error_title')}</h3>
+			<p className='mb-6 max-w-xs text-sm leading-relaxed text-muted-foreground'>
+				{error.message || t('menu.error_desc')}
+			</p>
 			{onRetry && (
-				<CardContent>
-					<Button onClick={onRetry} variant='outline' className='w-full'>
-						Try Again
-					</Button>
-				</CardContent>
+				<Button
+					onClick={onRetry}
+					className='gap-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90'
+				>
+					<RefreshCw className='h-4 w-4' />
+					{t('menu.try_again')}
+				</Button>
 			)}
-		</Card>
+		</div>
 	)
 }

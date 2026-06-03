@@ -47,6 +47,31 @@
 		"last_checked": "Kiểm Tra Lần Cuối",
 		"loading": "Đang tải sức khỏe hệ thống..."
 	},
+	"nav": {
+		"menu": "Thực Đơn",
+		"dev": "Dev"
+	},
+	"menu": {
+		"our_menu": "Thực Đơn",
+		"restaurant_name": "高人馆",
+		"restaurant_en": "Gao Ren Guan",
+		"restaurant_location": "Puchong Jaya · Quán Gia Đình",
+		"tagline": "Nguyên liệu tươi · Hương vị đích thực",
+		"dishes_available": "{{count}} món ăn có sẵn",
+		"search_placeholder": "Tìm món ăn…",
+		"all_categories": "Tất cả",
+		"no_dishes_title": "Không tìm thấy món ăn",
+		"no_dishes_desc": "Thử điều chỉnh bộ lọc hoặc tìm kiếm thứ khác.",
+		"menu_empty_title": "Thực đơn trống",
+		"menu_empty_desc": "Hiện không có món ăn nào. Vui lòng quay lại sau.",
+		"clear_filters": "Xóa bộ lọc",
+		"error_title": "Có lỗi xảy ra",
+		"error_desc": "Không tải được thực đơn. Vui lòng thử lại.",
+		"try_again": "Thử lại",
+		"showing": "Hiển thị {{from}}–{{to}} trong {{total}} món",
+		"verified": "Đã xác minh",
+		"unavailable": "Không có sẵn"
+	},
 	"dev": {
 		"title": "Kiểm Tra Phát Triển",
 		"subtitle": "Kiểm tra các thành phần và tiện ích khác nhau",

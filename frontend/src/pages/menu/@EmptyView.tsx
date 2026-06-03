@@ -1,31 +1,34 @@
-import { Info } from 'lucide-react'
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { useTranslation } from 'react-i18next'
+import { Button } from '@/components/ui/button'
 
-export function EmptyView() {
+interface EmptyViewProps {
+	onReset?: () => void
+	hasFilters?: boolean
+}
+
+export function EmptyView({ onReset, hasFilters }: EmptyViewProps) {
+	const { t } = useTranslation()
+
 	return (
-		<Card className='mx-auto max-w-md'>
-			<CardHeader>
-				<div className='flex items-center gap-2'>
-					<Info className='h-5 w-5 text-muted-foreground' />
-					<CardTitle>No Items Found</CardTitle>
-				</div>
-				<CardDescription>
-					There are no menu items available at the moment. Please check back
-					later or try a different category.
-				</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<p className='text-sm text-muted-foreground'>
-					Tip: You can also try clearing your filters or searching for something
-					else.
-				</p>
-			</CardContent>
-		</Card>
+		<div className='flex flex-col items-center justify-center py-20 text-center'>
+			<div className='mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-brand-muted'>
+				<span className='text-5xl'>🍜</span>
+			</div>
+			<h3 className='mb-2 text-xl font-semibold'>
+				{hasFilters ? t('menu.no_dishes_title') : t('menu.menu_empty_title')}
+			</h3>
+			<p className='mb-6 max-w-xs text-sm leading-relaxed text-muted-foreground'>
+				{hasFilters ? t('menu.no_dishes_desc') : t('menu.menu_empty_desc')}
+			</p>
+			{hasFilters && onReset && (
+				<Button
+					variant='outline'
+					onClick={onReset}
+					className='rounded-full border-primary/40 text-primary hover:bg-brand-muted'
+				>
+					{t('menu.clear_filters')}
+				</Button>
+			)}
+		</div>
 	)
 }

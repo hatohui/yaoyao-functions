@@ -6,6 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
+export * from './categoryItemDto';
 export * from './createFeedbackDto';
 export * from './createFoodDto';
 export * from './createNoteDto';
