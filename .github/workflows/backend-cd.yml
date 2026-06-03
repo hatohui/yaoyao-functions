@@ -46,7 +46,7 @@ jobs:
         working-directory: backend
         run: |
           mkdir -p build
-          cp bootstrap build/
+          printf '#!/bin/sh\nexec node dist/main.js\n' > build/bootstrap
           chmod +x build/bootstrap
           cp -r dist build/
           cp -r node_modules build/
