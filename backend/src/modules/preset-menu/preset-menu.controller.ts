@@ -1,8 +1,7 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PresetMenuService } from './preset-menu.service';
 import { CreatePresetDto } from './dto/create-preset.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 
 @ApiTags('preset-menus')
 @Controller('preset-menus')
@@ -22,7 +21,6 @@ export class PresetMenuController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ operationId: 'createPresetMenu' })
   create(@Body() dto: CreatePresetDto) {
     return this.preset.create(dto);

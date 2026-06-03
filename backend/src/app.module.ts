@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { AuthModule } from "./auth/auth.module";
 import { HealthModule } from "./modules/health/health.module";
 import { LanguageModule } from "./modules/language/language.module";
 import { CategoryModule } from "./modules/category/category.module";
@@ -17,7 +16,6 @@ import { ImagesModule } from "./modules/images/images.module";
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    AuthModule,
     HealthModule,
     LanguageModule,
     CategoryModule,
