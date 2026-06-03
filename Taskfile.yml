@@ -51,16 +51,16 @@ tasks:
   db:apply:
     desc: Apply pending migrations
     cmds:
-      - "{{.EXEC}} bunx prisma migrate deploy"
+      - "cd backend && bunx prisma migrate deploy"
       - "cd backend && bunx prisma generate"
 
   db:reset:
     desc: Reset DB and re-apply all migrations (destroys data)
-    cmd: "{{.EXEC}} bunx prisma migrate reset --force"
+    cmd: "cd backend && bunx prisma migrate reset --force"
 
   db:seed:
     desc: Seed the database with initial data
-    cmd: "{{.EXEC}} bun run prisma/seed.ts"
+    cmd: "cd backend && bunx prisma db seed"
 
   db:fresh:
     desc: Reset DB, apply migrations, and seed
@@ -70,7 +70,7 @@ tasks:
 
   db:migrate:
     desc: Create a new migration
-    cmd: "{{.EXEC}} bunx prisma migrate dev --name {{.NAME}}"
+    cmd: "cd backend && bunx prisma migrate dev --name {{.NAME}}"
 
   # ── Redis ────────────────────────────────────────────────────────────────────
 
