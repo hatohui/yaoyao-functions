@@ -45,6 +45,8 @@ jobs:
         run: bun run build
         env:
           NODE_ENV: production
+          VITE_API_URL: https://api.yaoyaodinner.party
+          VITE_ASSET_URL: https://assets.yaoyaodinner.party
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

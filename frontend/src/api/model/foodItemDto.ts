@@ -5,7 +5,6 @@
  * Restaurant management API
  * OpenAPI spec version: 1.0
  */
-import type { VariantDto } from './variantDto';
 
 export interface FoodItemDto {
   id: string;
@@ -17,6 +16,4 @@ export interface FoodItemDto {
   /** @nullable */
   categoryId: string | null;
   isAvailable: boolean;
-  /** @nullable */
-  variants?: VariantDto[] | null;
 }
