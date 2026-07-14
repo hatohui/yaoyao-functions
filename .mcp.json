@@ -7,6 +7,11 @@
     "shadcn": {
       "command": "npx",
       "args": ["shadcn@latest", "mcp"]
+    },
+    "doppler": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["@dopplerhq/mcp-server"]
     }
   }
 }
