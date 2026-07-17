@@ -23,7 +23,9 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
 
-  app.enableCors();
+  app.enableCors(
+    { origin: process.env.CORS_ORIGIN?.split(",") || "*", credentials: true }
+  );
 
   const openApiDoc = SwaggerModule.createDocument(
     app,
