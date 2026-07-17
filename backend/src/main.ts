@@ -33,10 +33,6 @@ async function bootstrap() {
       .setTitle("YaoYao Dinner API")
       .setDescription("Restaurant management API")
       .setVersion("1.0")
-      .addBearerAuth(
-        { type: "http", scheme: "bearer", bearerFormat: "JWT" },
-        "JWT",
-      )
       .build(),
   );
 
