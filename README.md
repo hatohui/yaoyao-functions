@@ -4,7 +4,7 @@
 [![frontend-cd](https://github.com/hatohui/yaoyao-functions/actions/workflows/frontend-cd.yml/badge.svg)](https://github.com/hatohui/yaoyao-functions/actions/workflows/frontend-cd.yml)
 
 ## General Details
-
+- API docs: [Docs](https://api.yaoyaodinner.party/api/docs#tag/health)
 - API endpoint: [api.yaoyaodinner.party](https://api.yaoyaodinner.party)
 - Frontend: [yaoyaodinner.party](https://yaoyaodinner.party)
 - Runtime: AWS Lambda (serverless) — kept warm by a cron job pinging the health endpoint every 5 minutes
