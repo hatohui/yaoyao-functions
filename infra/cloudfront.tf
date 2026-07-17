@@ -34,9 +34,8 @@ resource "aws_cloudfront_distribution" "main" {
     cached_methods         = ["GET", "HEAD"]
     compress               = true
 
-    cache_policy_id            = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.all_viewer_except_host.id
-    response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
+    cache_policy_id          = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host.id
   }
 
   restrictions {
