@@ -38,4 +38,12 @@ resource "aws_lambda_function_url" "yaoyao_function_url" {
   authorization_type = "NONE"
 }
 
+resource "aws_lambda_permission" "allow_public_url" {
+  statement_id           = "AllowPublicAccess"
+  action                 = "lambda:InvokeFunctionUrl"
+  function_name          = aws_lambda_function.yaoyao_function.function_name
+  principal              = "*"
+  function_url_auth_type = "NONE"
+}
+
 
