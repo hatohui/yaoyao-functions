@@ -27,6 +27,7 @@ model Category {
   foods        Food[]
 
   @@map("category")
+  @@index([key])
 }
 
 model CategoryTranslation {
@@ -53,6 +54,7 @@ model Food {
   translations FoodTranslation[]
 
   @@map("food")
+  @@index([categoryId, isAvailable])
 }
 
 model FoodTranslation {
@@ -82,6 +84,7 @@ model FoodVariant {
   translations FoodVariantTranslation[]
 
   @@map("food_variant")
+  @@index([foodId])
 }
 
 model FoodVariantTranslation {
@@ -108,17 +111,21 @@ model Table {
   orders Order[]
 
   @@map("table")
+  @@index([no])
 }
 
 model People {
-  id      String  @id @db.VarChar(255)
-  name    String  @db.VarChar(255)
-  tableId String? @map("table_id") @db.VarChar(255)
+  id        String  @id @db.VarChar(255)
+  name      String  @db.VarChar(255)
+  tableId   String? @map("table_id") @db.VarChar(255)
+  accountId String? @unique @map("account_id") @db.VarChar(255)
 
   table         Table?         @relation(fields: [tableId], references: [id])
+  account       Account?       @relation(fields: [accountId], references: [userId], onDelete: SetNull)
   personalNotes PersonalNote[]
 
   @@map("people")
+  @@index([tableId])
 }
 
 model PersonalNote {
@@ -129,6 +136,7 @@ model PersonalNote {
   person People @relation(fields: [personId], references: [id])
 
   @@map("personal_note")
+  @@index([personId])
 }
 
 model Account {
@@ -137,6 +145,7 @@ model Account {
   password String @db.VarChar(255)
 
   feedbacks Feedback[]
+  person    People?
 
   @@map("account")
 }
@@ -155,6 +164,8 @@ model Order {
   variant FoodVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
   @@map("order")
+  @@index([tableId, createdAt])
+  @@index([createdAt])
 }
 
 model Feedback {
@@ -167,6 +178,7 @@ model Feedback {
   account Account? @relation(fields: [by], references: [userId])
 
   @@map("feedback")
+  @@index([createdAt])
 }
 
 model PresetMenu {
@@ -189,4 +201,5 @@ model PresetMenuFood {
 
   @@id([presetId, variantId])
   @@map("preset_menu_food")
+  @@index([variantId])
 }
