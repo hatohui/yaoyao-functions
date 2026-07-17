@@ -99,33 +99,58 @@ model FoodVariantTranslation {
   @@map("food_variant_translation")
 }
 
+model Event {
+  id           String   @id @db.VarChar(255)
+  pin          String   @db.VarChar(10)
+  name         String?  @db.VarChar(255)
+  isActive     Boolean  @default(false) @map("is_active")
+  presetMenuId String?  @map("preset_menu_id") @db.VarChar(255)
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  presetMenu PresetMenu? @relation(fields: [presetMenuId], references: [id])
+  tables     Table[]
+  people     People[]
+  orders     Order[]
+  feedbacks  Feedback[]
+
+  @@map("event")
+  @@index([isActive])
+}
+
 model Table {
   id            String  @id @db.VarChar(255)
-  name          String  @unique @db.VarChar(255)
+  name          String  @db.VarChar(255)
   capacity      Int     @default(1)
   tableLeaderId String? @unique @map("table_leader_id") @db.VarChar(255)
   isStaging     Boolean @default(false) @map("is_staging")
   no            Int     @default(-1)
+  x             Float?
+  y             Float?
+  eventId       String? @map("event_id") @db.VarChar(255)
 
+  event  Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
   people People[]
   orders Order[]
 
   @@map("table")
   @@index([no])
+  @@index([eventId])
 }
 
 model People {
-  id        String  @id @db.VarChar(255)
-  name      String  @db.VarChar(255)
-  tableId   String? @map("table_id") @db.VarChar(255)
-  accountId String? @unique @map("account_id") @db.VarChar(255)
+  id      String  @id @db.VarChar(255)
+  name    String  @db.VarChar(255)
+  tableId String? @map("table_id") @db.VarChar(255)
+  eventId String? @map("event_id") @db.VarChar(255)
 
-  table         Table?         @relation(fields: [tableId], references: [id])
-  account       Account?       @relation(fields: [accountId], references: [userId], onDelete: SetNull)
+  table         Table?         @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  event         Event?         @relation(fields: [eventId], references: [id], onDelete: Cascade)
   personalNotes PersonalNote[]
+  orderSplits   OrderSplit[]
 
   @@map("people")
   @@index([tableId])
+  @@index([eventId])
 }
 
 model PersonalNote {
@@ -139,46 +164,65 @@ model PersonalNote {
   @@index([personId])
 }
 
-model Account {
-  userId   String @id @map("user_id") @db.VarChar(255)
-  username String @unique @db.VarChar(255)
-  password String @db.VarChar(255)
-
-  feedbacks Feedback[]
-  person    People?
-
-  @@map("account")
-}
-
 model Order {
   id        String   @id @db.VarChar(255)
   tableId   String   @map("table_id") @db.VarChar(255)
   variantId String   @map("variant_id") @db.VarChar(255)
+  eventId   String?  @map("event_id") @db.VarChar(255)
   quantity  Int      @default(1)
   price     Decimal  @db.Decimal(10, 2)
-  orderedBy String?  @map("ordered_by") @db.VarChar(255)
+  splitAll  Boolean  @default(true) @map("split_all")
   updatedAt DateTime @updatedAt @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
 
-  table   Table       @relation(fields: [tableId], references: [id], onDelete: Cascade)
-  variant FoodVariant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  table   Table        @relation(fields: [tableId], references: [id], onDelete: Cascade)
+  variant FoodVariant  @relation(fields: [variantId], references: [id], onDelete: Cascade)
+  event   Event?       @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  splits  OrderSplit[]
 
   @@map("order")
   @@index([tableId, createdAt])
   @@index([createdAt])
+  @@index([eventId])
+}
+
+model OrderSplit {
+  orderId  String @map("order_id") @db.VarChar(255)
+  personId String @map("person_id") @db.VarChar(255)
+
+  order  Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  person People @relation(fields: [personId], references: [id], onDelete: Cascade)
+
+  @@id([orderId, personId])
+  @@map("order_split")
+  @@index([personId])
 }
 
 model Feedback {
   id        String   @id @db.VarChar(255)
   by        String?  @map("by") @db.VarChar(255)
   content   String?  @db.Text
+  eventId   String?  @map("event_id") @db.VarChar(255)
   updatedAt DateTime @updatedAt @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
 
-  account Account? @relation(fields: [by], references: [userId])
+  event     Event?             @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  reactions FeedbackReaction[]
 
   @@map("feedback")
   @@index([createdAt])
+  @@index([eventId])
+}
+
+model FeedbackReaction {
+  feedbackId String @map("feedback_id") @db.VarChar(255)
+  emoji      String @db.VarChar(16)
+  count      Int    @default(0)
+
+  feedback Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+
+  @@id([feedbackId, emoji])
+  @@map("feedback_reaction")
 }
 
 model PresetMenu {
@@ -186,7 +230,8 @@ model PresetMenu {
   price    Decimal @db.Decimal(10, 2)
   isActive Boolean @default(true) @map("is_active")
 
-  foods PresetMenuFood[]
+  foods  PresetMenuFood[]
+  events Event[]
 
   @@map("preset_menu")
 }

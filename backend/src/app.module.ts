@@ -6,11 +6,13 @@ import { CategoryModule } from "./modules/category/category.module";
 import { FoodModule } from "./modules/food/food.module";
 import { TableModule } from "./modules/table/table.module";
 import { PeopleModule } from "./modules/people/people.module";
-import { AccountModule } from "./modules/account/account.module";
+import { EventModule } from "./modules/event/event.module";
+import { AuthModule } from "./auth/auth.module";
 import { OrderModule } from "./modules/order/order.module";
 import { FeedbackModule } from "./modules/feedback/feedback.module";
 import { PersonalNoteModule } from "./modules/personal-note/personal-note.module";
 import { PresetMenuModule } from "./modules/preset-menu/preset-menu.module";
+import { StatsModule } from "./modules/stats/stats.module";
 import { ImagesModule } from "./modules/images/images.module";
 
 @Module({
@@ -22,11 +24,13 @@ import { ImagesModule } from "./modules/images/images.module";
     FoodModule,
     TableModule,
     PeopleModule,
-    AccountModule,
+    EventModule,
+    AuthModule,
     OrderModule,
     FeedbackModule,
     PersonalNoteModule,
     PresetMenuModule,
+    StatsModule,
     ImagesModule,
   ],
 })

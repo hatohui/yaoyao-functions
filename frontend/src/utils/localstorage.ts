@@ -10,6 +10,10 @@ const have = (key: string): boolean => {
 	return globalThis.localStorage.getItem(key) !== null
 }
 
+const remove = (key: string): void => {
+	return globalThis.localStorage.removeItem(key)
+}
+
 const preload = (key: string, defaultValue: string): string => {
 	let value = load(key)
 	if (value === null) {
@@ -23,5 +27,6 @@ export const localStorage = {
 	save,
 	load,
 	have,
+	remove,
 	preload,
 }

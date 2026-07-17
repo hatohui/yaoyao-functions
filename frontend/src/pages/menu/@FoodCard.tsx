@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Flame } from 'lucide-react'
 import type { FoodItemDto } from '@/api/model'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/utils/shadcn'
@@ -46,6 +47,13 @@ export function FoodCard({ food, onClick }: FoodCardProps) {
 				)}
 
 				<div className='absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100' />
+
+				{food.isPopular && (
+					<div className='absolute left-2 top-2 flex items-center gap-1 rounded-full bg-primary/90 px-2.5 py-0.5 text-xs font-semibold text-primary-foreground shadow backdrop-blur-sm'>
+						<Flame className='size-3.5' />
+						{t('menu.popular')}
+					</div>
+				)}
 
 				{!food.isAvailable && (
 					<div className='absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>

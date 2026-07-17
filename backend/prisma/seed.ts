@@ -123,6 +123,24 @@ async function seedCategories(): Promise<Record<string, string>> {
   return categoryIds;
 }
 
+const SEED_EVENT_ID = 'seed-event';
+const SEED_EVENT_PIN = '4821';
+
+async function seedEvent() {
+  await prisma.event.deleteMany({ where: { isActive: true } });
+  await prisma.event.upsert({
+    where: { id: SEED_EVENT_ID },
+    update: { isActive: true, pin: SEED_EVENT_PIN },
+    create: {
+      id: SEED_EVENT_ID,
+      pin: SEED_EVENT_PIN,
+      name: "Tonight's dinner",
+      isActive: true,
+    },
+  });
+  console.log(`✓ Active event (PIN ${SEED_EVENT_PIN})`);
+}
+
 async function seedTables() {
   const tables: { name: string; capacity: number }[] = readJson(
     path.join(DATA_DIR, 'tables.json'),
@@ -130,10 +148,17 @@ async function seedTables() {
 
   for (let i = 0; i < tables.length; i++) {
     const t = tables[i];
+    const id = `${SEED_EVENT_ID}-table-${i + 1}`;
     await prisma.table.upsert({
-      where: { name: t.name },
-      update: {},
-      create: { id: uuidv4(), name: t.name, capacity: t.capacity, no: i + 1 },
+      where: { id },
+      update: { name: t.name, capacity: t.capacity, no: i + 1 },
+      create: {
+        id,
+        name: t.name,
+        capacity: t.capacity,
+        no: i + 1,
+        eventId: SEED_EVENT_ID,
+      },
     });
   }
 
@@ -205,6 +230,7 @@ async function main() {
 
   await seedLanguages();
   const categoryIds = await seedCategories();
+  await seedEvent();
   await seedTables();
   await seedFoods(categoryIds);
 

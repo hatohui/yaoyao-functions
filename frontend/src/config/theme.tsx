@@ -26,6 +26,10 @@ const ThemeProvider = ({
 		}
 	}, [])
 
+	useEffect(() => {
+		document.documentElement.setAttribute('data-theme', theme)
+	}, [theme])
+
 	const toggleTheme = () => {
 		const newTheme = theme === 'light' ? 'dark' : 'light'
 		setTheme(newTheme)
@@ -33,9 +37,7 @@ const ThemeProvider = ({
 	}
 
 	return (
-		<ThemeContext.Provider value={[theme, toggleTheme]}>
-			<div data-theme={theme}>{children}</div>
-		</ThemeContext.Provider>
+		<ThemeContext.Provider value={[theme, toggleTheme]}>{children}</ThemeContext.Provider>
 	)
 }
 

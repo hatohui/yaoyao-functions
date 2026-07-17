@@ -1,7 +1,18 @@
-import { Controller, Get, Post, Delete, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { BatchCreateOrderDto } from './dto/batch-create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 
 @ApiTags('orders')
 @Controller('orders')
@@ -20,6 +31,18 @@ export class OrderController {
   @ApiOperation({ operationId: 'createOrder' })
   create(@Body() dto: CreateOrderDto) {
     return this.order.create(dto);
+  }
+
+  @Post('batch')
+  @ApiOperation({ operationId: 'createOrderBatch' })
+  createBatch(@Body() dto: BatchCreateOrderDto) {
+    return this.order.createBatch(dto);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ operationId: 'updateOrder' })
+  update(@Param('id') id: string, @Body() dto: UpdateOrderDto) {
+    return this.order.update(id, dto);
   }
 
   @Delete(':id')

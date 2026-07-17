@@ -1,7 +1,19 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
-import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { ReactDto } from './dto/react.dto';
+import { AdminGuard } from '@common/guards/admin.guard';
+
+type FeedbackSort = 'recent' | 'top';
 
 @ApiTags('feedback')
 @Controller('feedback')
@@ -10,13 +22,51 @@ export class FeedbackController {
 
   @Get()
   @ApiOperation({ operationId: 'getFeedback' })
-  findAll() {
-    return this.feedback.findAll();
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'count', required: false, type: Number })
+  @ApiQuery({ name: 'sort', required: false, enum: ['recent', 'top'] })
+  findAll(
+    @Query('page') page = '1',
+    @Query('count') count = '20',
+    @Query('sort') sort: FeedbackSort = 'recent',
+  ) {
+    return this.feedback.findForActiveEvent(
+      Math.max(1, parseInt(page, 10) || 1),
+      Math.min(100, Math.max(1, parseInt(count, 10) || 20)),
+      sort === 'top' ? 'top' : 'recent',
+    );
+  }
+
+  @Get('event')
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: 'getFeedbackByEvent' })
+  @ApiQuery({ name: 'eventId', required: true, type: String })
+  @ApiQuery({ name: 'page', required: false, type: Number })
+  @ApiQuery({ name: 'count', required: false, type: Number })
+  @ApiQuery({ name: 'sort', required: false, enum: ['recent', 'top'] })
+  findByEvent(
+    @Query('eventId') eventId: string,
+    @Query('page') page = '1',
+    @Query('count') count = '20',
+    @Query('sort') sort: FeedbackSort = 'recent',
+  ) {
+    return this.feedback.findByEvent(
+      eventId,
+      Math.max(1, parseInt(page, 10) || 1),
+      Math.min(100, Math.max(1, parseInt(count, 10) || 20)),
+      sort === 'top' ? 'top' : 'recent',
+    );
   }
 
   @Post()
   @ApiOperation({ operationId: 'createFeedback' })
   create(@Body() dto: CreateFeedbackDto) {
     return this.feedback.create(dto);
+  }
+
+  @Post(':id/react')
+  @ApiOperation({ operationId: 'reactToFeedback' })
+  react(@Param('id') id: string, @Body() dto: ReactDto) {
+    return this.feedback.react(id, dto.emoji);
   }
 }

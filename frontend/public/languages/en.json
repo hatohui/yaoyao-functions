@@ -49,7 +49,39 @@
 	},
 	"nav": {
 		"menu": "Menu",
-		"dev": "Dev"
+		"dev": "Dev",
+		"tables": "Tables"
+	},
+	"access": {
+		"back": "Back",
+		"enter_pin": "Enter event PIN",
+		"subtitle": "Unlocks tonight's tables & ordering",
+		"unlock": "Unlock",
+		"unlocking": "Unlocking…",
+		"invalid_pin": "That PIN didn't work",
+		"saved_note": "Saved on this device after first entry"
+	},
+	"tables": {
+		"find_title": "Find your table",
+		"search_placeholder": "Search table or name…",
+		"all_tables": "All tables",
+		"full": "full",
+		"load_error": "Couldn't load tables. Pull to refresh.",
+		"none_found": "No tables found"
+	},
+	"roster": {
+		"people_here": "People at this table",
+		"empty": "No one here yet — add the first name",
+		"host": "host",
+		"remove": "Remove",
+		"add_placeholder": "Type a name, press Enter…",
+		"remove_title": "Remove {{name}} from {{table}}?",
+		"remove_desc": "This can't be undone — they'll no longer appear on this table's roster.",
+		"link_copied": "Link copied",
+		"share": "Share",
+		"not_found": "Table not found",
+		"add_failed": "Couldn't add — the table may be full",
+		"remove_failed": "Couldn't remove, please try again"
 	},
 	"menu": {
 		"our_menu": "Our Menu",
@@ -70,7 +102,8 @@
 		"try_again": "Try again",
 		"showing": "Showing {{from}}–{{to}} of {{total}} dishes",
 		"verified": "Verified",
-		"unavailable": "Unavailable"
+		"unavailable": "Unavailable",
+		"popular": "Popular"
 	},
 	"dev": {
 		"title": "Development Testing",

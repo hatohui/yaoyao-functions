@@ -25,7 +25,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreateFeedbackDto
+  CreateFeedbackDto,
+  GetFeedbackByEventParams,
+  GetFeedbackParams,
+  ReactDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -34,13 +37,14 @@ import { customInstance } from '../../common/axios';
 
 
 export const getFeedback = (
-
+    params?: GetFeedbackParams,
  signal?: AbortSignal
 ) => {
 
 
       return customInstance<void>(
-      {url: `/api/feedback`, method: 'GET', signal
+      {url: `/api/feedback`, method: 'GET',
+        params, signal
     },
       );
     }
@@ -48,23 +52,23 @@ export const getFeedback = (
 
 
 
-export const getGetFeedbackQueryKey = () => {
+export const getGetFeedbackQueryKey = (params?: GetFeedbackParams,) => {
     return [
-    `/api/feedback`
+    `/api/feedback`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetFeedbackQueryOptions = <TData = Awaited<ReturnType<typeof getFeedback>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>>, }
+export const getGetFeedbackQueryOptions = <TData = Awaited<ReturnType<typeof getFeedback>>, TError = unknown>(params?: GetFeedbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetFeedbackQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetFeedbackQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFeedback>>> = ({ signal }) => getFeedback(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFeedback>>> = ({ signal }) => getFeedback(params, signal);
 
 
 
@@ -78,7 +82,7 @@ export type GetFeedbackQueryError = unknown
 
 
 export function useGetFeedback<TData = Awaited<ReturnType<typeof getFeedback>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>> & Pick<
+ params: undefined |  GetFeedbackParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFeedback>>,
           TError,
@@ -88,7 +92,7 @@ export function useGetFeedback<TData = Awaited<ReturnType<typeof getFeedback>>, 
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetFeedback<TData = Awaited<ReturnType<typeof getFeedback>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>> & Pick<
+ params?: GetFeedbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getFeedback>>,
           TError,
@@ -98,16 +102,16 @@ export function useGetFeedback<TData = Awaited<ReturnType<typeof getFeedback>>, 
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetFeedback<TData = Awaited<ReturnType<typeof getFeedback>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>>, }
+ params?: GetFeedbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetFeedback<TData = Awaited<ReturnType<typeof getFeedback>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>>, }
+ params?: GetFeedbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedback>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetFeedbackQueryOptions(options)
+  const queryOptions = getGetFeedbackQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -175,4 +179,149 @@ const {mutation: mutationOptions} = options ?
         TContext
       > => {
       return useMutation(getCreateFeedbackMutationOptions(options), queryClient);
+    }
+    export const getFeedbackByEvent = (
+    params: GetFeedbackByEventParams,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/feedback/event`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+
+
+
+
+export const getGetFeedbackByEventQueryKey = (params?: GetFeedbackByEventParams,) => {
+    return [
+    `/api/feedback/event`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetFeedbackByEventQueryOptions = <TData = Awaited<ReturnType<typeof getFeedbackByEvent>>, TError = unknown>(params: GetFeedbackByEventParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedbackByEvent>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFeedbackByEventQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFeedbackByEvent>>> = ({ signal }) => getFeedbackByEvent(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFeedbackByEvent>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFeedbackByEventQueryResult = NonNullable<Awaited<ReturnType<typeof getFeedbackByEvent>>>
+export type GetFeedbackByEventQueryError = unknown
+
+
+export function useGetFeedbackByEvent<TData = Awaited<ReturnType<typeof getFeedbackByEvent>>, TError = unknown>(
+ params: GetFeedbackByEventParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedbackByEvent>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFeedbackByEvent>>,
+          TError,
+          Awaited<ReturnType<typeof getFeedbackByEvent>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFeedbackByEvent<TData = Awaited<ReturnType<typeof getFeedbackByEvent>>, TError = unknown>(
+ params: GetFeedbackByEventParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedbackByEvent>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFeedbackByEvent>>,
+          TError,
+          Awaited<ReturnType<typeof getFeedbackByEvent>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFeedbackByEvent<TData = Awaited<ReturnType<typeof getFeedbackByEvent>>, TError = unknown>(
+ params: GetFeedbackByEventParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedbackByEvent>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetFeedbackByEvent<TData = Awaited<ReturnType<typeof getFeedbackByEvent>>, TError = unknown>(
+ params: GetFeedbackByEventParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFeedbackByEvent>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFeedbackByEventQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const reactToFeedback = (
+    id: string,
+    reactDto: ReactDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/feedback/${id}/react`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: reactDto, signal
+    },
+      );
+    }
+
+
+
+export const getReactToFeedbackMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reactToFeedback>>, TError,{id: string;data: ReactDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof reactToFeedback>>, TError,{id: string;data: ReactDto}, TContext> => {
+
+const mutationKey = ['reactToFeedback'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof reactToFeedback>>, {id: string;data: ReactDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  reactToFeedback(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ReactToFeedbackMutationResult = NonNullable<Awaited<ReturnType<typeof reactToFeedback>>>
+    export type ReactToFeedbackMutationBody = ReactDto
+    export type ReactToFeedbackMutationError = unknown
+
+    export const useReactToFeedback = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof reactToFeedback>>, TError,{id: string;data: ReactDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof reactToFeedback>>,
+        TError,
+        {id: string;data: ReactDto},
+        TContext
+      > => {
+      return useMutation(getReactToFeedbackMutationOptions(options), queryClient);
     }

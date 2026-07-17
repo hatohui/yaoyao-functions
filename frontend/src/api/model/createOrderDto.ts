@@ -6,4 +6,12 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface CreateOrderDto { [key: string]: unknown }
+export interface CreateOrderDto {
+  tableId: string;
+  variantId: string;
+  quantity?: number;
+  /** Shared by the whole table (default) */
+  splitAll?: boolean;
+  /** People the cost is split across when splitAll is false */
+  personIds?: string[];
+}

@@ -7,6 +7,39 @@ import { CacheSettings } from "@common/cache/constants";
 
 @Injectable()
 export class FoodService {
+  async getPopularFoodIds(limit = 8): Promise<string[]> {
+    const cacheKey = CacheSettings.food.popular.key;
+    const cached = await CacheService.get<string[]>(cacheKey);
+    if (cached) return cached;
+
+    const grouped = await prisma.order.groupBy({
+      by: ["variantId"],
+      _sum: { quantity: true },
+    });
+
+    let popular: string[] = [];
+    if (grouped.length > 0) {
+      const variants = await prisma.foodVariant.findMany({
+        where: { id: { in: grouped.map((g) => g.variantId) } },
+        select: { id: true, foodId: true },
+      });
+      const variantToFood = new Map(variants.map((v) => [v.id, v.foodId]));
+      const perFood = new Map<string, number>();
+      for (const g of grouped) {
+        const foodId = variantToFood.get(g.variantId);
+        if (!foodId) continue;
+        perFood.set(foodId, (perFood.get(foodId) ?? 0) + (g._sum.quantity ?? 0));
+      }
+      popular = [...perFood.entries()]
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit)
+        .map(([foodId]) => foodId);
+    }
+
+    await CacheService.set(cacheKey, popular, CacheSettings.food.popular.ttl);
+    return popular;
+  }
+
   async findAll(lang = "en", page = 1, count = 20, categoryId = "all") {
     const offset = (page - 1) * count;
 
@@ -20,7 +53,7 @@ export class FoodService {
       ...(categoryId !== "all" && categoryId !== "" ? { categoryId } : {}),
     };
 
-    const [rawFoods, total] = await Promise.all([
+    const [rawFoods, total, popularIds] = await Promise.all([
       prisma.food.findMany({
         where,
         skip: offset,
@@ -28,8 +61,10 @@ export class FoodService {
         include: { translations: { where: { language: lang } } },
       }),
       prisma.food.count({ where }),
+      this.getPopularFoodIds(),
     ]);
 
+    const popular = new Set(popularIds);
     const foods = rawFoods.map((f) => {
       const t = f.translations[0];
       return {
@@ -39,6 +74,7 @@ export class FoodService {
         imageUrl: f.imageUrl,
         categoryId: f.categoryId,
         isAvailable: f.isAvailable,
+        isPopular: popular.has(f.id),
       };
     });
 

@@ -25,8 +25,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  BatchCreateOrderDto,
   CreateOrderDto,
-  GetOrdersParams
+  GetOrdersParams,
+  UpdateOrderDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -177,6 +179,121 @@ const {mutation: mutationOptions} = options ?
         TContext
       > => {
       return useMutation(getCreateOrderMutationOptions(options), queryClient);
+    }
+    export const createOrderBatch = (
+    batchCreateOrderDto: BatchCreateOrderDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/orders/batch`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: batchCreateOrderDto, signal
+    },
+      );
+    }
+
+
+
+export const getCreateOrderBatchMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto}, TContext> => {
+
+const mutationKey = ['createOrderBatch'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrderBatch>>, {data: BatchCreateOrderDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createOrderBatch(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateOrderBatchMutationResult = NonNullable<Awaited<ReturnType<typeof createOrderBatch>>>
+    export type CreateOrderBatchMutationBody = BatchCreateOrderDto
+    export type CreateOrderBatchMutationError = unknown
+
+    export const useCreateOrderBatch = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createOrderBatch>>,
+        TError,
+        {data: BatchCreateOrderDto},
+        TContext
+      > => {
+      return useMutation(getCreateOrderBatchMutationOptions(options), queryClient);
+    }
+    export const updateOrder = (
+    id: string,
+    updateOrderDto: UpdateOrderDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/orders/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateOrderDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdateOrderMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto}, TContext> => {
+
+const mutationKey = ['updateOrder'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOrder>>, {id: string;data: UpdateOrderDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateOrder(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateOrderMutationResult = NonNullable<Awaited<ReturnType<typeof updateOrder>>>
+    export type UpdateOrderMutationBody = UpdateOrderDto
+    export type UpdateOrderMutationError = unknown
+
+    export const useUpdateOrder = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateOrder>>,
+        TError,
+        {id: string;data: UpdateOrderDto},
+        TContext
+      > => {
+      return useMutation(getUpdateOrderMutationOptions(options), queryClient);
     }
     export const deleteOrder = (
     id: string,

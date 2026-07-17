@@ -1,21 +1,42 @@
-import { IsString, IsNumber, IsOptional, Min } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  IsOptional,
+  IsBoolean,
+  IsArray,
+  Min,
+} from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateOrderDto {
+  @ApiProperty()
   @IsString()
   tableId: string;
 
+  @ApiProperty()
   @IsString()
   variantId: string;
 
-  @IsNumber()
+  @ApiPropertyOptional({ default: 1 })
+  @IsInt()
   @Min(1)
-  quantity: number;
-
-  @IsNumber()
-  @Min(0)
-  price: number;
-
-  @IsString()
   @IsOptional()
-  orderedBy?: string;
+  quantity?: number;
+
+  @ApiPropertyOptional({
+    default: true,
+    description: 'Shared by the whole table (default)',
+  })
+  @IsBoolean()
+  @IsOptional()
+  splitAll?: boolean;
+
+  @ApiPropertyOptional({
+    type: [String],
+    description: 'People the cost is split across when splitAll is false',
+  })
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  personIds?: string[];
 }

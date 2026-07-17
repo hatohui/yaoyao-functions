@@ -5,6 +5,10 @@ export const CacheSettings = {
         `foods:${lang}:${page}:${count}:${categoryId}`,
       ttl: 1800,
     },
+    popular: {
+      key: "foods:popular",
+      ttl: 300,
+    },
   },
   categories: {
     all: {

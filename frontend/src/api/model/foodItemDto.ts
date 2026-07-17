@@ -16,4 +16,5 @@ export interface FoodItemDto {
   /** @nullable */
   categoryId: string | null;
   isAvailable: boolean;
+  isPopular: boolean;
 }

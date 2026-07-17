@@ -6,19 +6,30 @@
  * OpenAPI spec version: 1.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
+
+import type {
+  CreatePersonDto,
+  IdsDto,
+  MovePeopleDto,
+  PersonDto
+} from '../model';
 
 import { customInstance } from '../../common/axios';
 
@@ -111,3 +122,229 @@ export function useGetPeople<TData = Awaited<ReturnType<typeof getPeople>>, TErr
 
 
 
+export const createPerson = (
+    createPersonDto: CreatePersonDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PersonDto>(
+      {url: `/api/people`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPersonDto, signal
+    },
+      );
+    }
+
+
+
+export const getCreatePersonMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPerson>>, TError,{data: CreatePersonDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createPerson>>, TError,{data: CreatePersonDto}, TContext> => {
+
+const mutationKey = ['createPerson'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createPerson>>, {data: CreatePersonDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createPerson(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreatePersonMutationResult = NonNullable<Awaited<ReturnType<typeof createPerson>>>
+    export type CreatePersonMutationBody = CreatePersonDto
+    export type CreatePersonMutationError = unknown
+
+    export const useCreatePerson = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createPerson>>, TError,{data: CreatePersonDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createPerson>>,
+        TError,
+        {data: CreatePersonDto},
+        TContext
+      > => {
+      return useMutation(getCreatePersonMutationOptions(options), queryClient);
+    }
+    export const movePeople = (
+    movePeopleDto: MovePeopleDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/people/move`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: movePeopleDto, signal
+    },
+      );
+    }
+
+
+
+export const getMovePeopleMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof movePeople>>, TError,{data: MovePeopleDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof movePeople>>, TError,{data: MovePeopleDto}, TContext> => {
+
+const mutationKey = ['movePeople'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof movePeople>>, {data: MovePeopleDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  movePeople(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type MovePeopleMutationResult = NonNullable<Awaited<ReturnType<typeof movePeople>>>
+    export type MovePeopleMutationBody = MovePeopleDto
+    export type MovePeopleMutationError = unknown
+
+    export const useMovePeople = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof movePeople>>, TError,{data: MovePeopleDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof movePeople>>,
+        TError,
+        {data: MovePeopleDto},
+        TContext
+      > => {
+      return useMutation(getMovePeopleMutationOptions(options), queryClient);
+    }
+    export const bulkDeletePeople = (
+    idsDto: IdsDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/people/bulk-delete`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: idsDto, signal
+    },
+      );
+    }
+
+
+
+export const getBulkDeletePeopleMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkDeletePeople>>, TError,{data: IdsDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof bulkDeletePeople>>, TError,{data: IdsDto}, TContext> => {
+
+const mutationKey = ['bulkDeletePeople'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bulkDeletePeople>>, {data: IdsDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bulkDeletePeople(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BulkDeletePeopleMutationResult = NonNullable<Awaited<ReturnType<typeof bulkDeletePeople>>>
+    export type BulkDeletePeopleMutationBody = IdsDto
+    export type BulkDeletePeopleMutationError = unknown
+
+    export const useBulkDeletePeople = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkDeletePeople>>, TError,{data: IdsDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof bulkDeletePeople>>,
+        TError,
+        {data: IdsDto},
+        TContext
+      > => {
+      return useMutation(getBulkDeletePeopleMutationOptions(options), queryClient);
+    }
+    export const deletePerson = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/people/${id}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+export const getDeletePersonMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePerson>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deletePerson>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deletePerson'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deletePerson>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deletePerson(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeletePersonMutationResult = NonNullable<Awaited<ReturnType<typeof deletePerson>>>
+
+    export type DeletePersonMutationError = unknown
+
+    export const useDeletePerson = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePerson>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deletePerson>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getDeletePersonMutationOptions(options), queryClient);
+    }

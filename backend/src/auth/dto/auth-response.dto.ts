@@ -1,7 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export class AuthResponseDto {
-  @ApiProperty() access_token: string;
-  @ApiProperty() userId: string;
-  @ApiProperty() username: string;
+export class AdminAuthResponseDto {
+  @ApiProperty() valid: boolean;
+}
+
+export class PinAuthResponseDto {
+  @ApiProperty() valid: boolean;
+  @ApiProperty({ nullable: true, type: String }) eventId: string | null;
 }

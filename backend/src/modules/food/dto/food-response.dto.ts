@@ -7,6 +7,7 @@ export class FoodItemDto {
   @ApiProperty({ nullable: true, type: String }) description: string | null;
   @ApiProperty({ nullable: true, type: String }) categoryId: string | null;
   @ApiProperty() isAvailable: boolean;
+  @ApiProperty() isPopular: boolean;
 }
 
 export class GetFoodsResponseDto {

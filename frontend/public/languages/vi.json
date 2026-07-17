@@ -49,7 +49,39 @@
 	},
 	"nav": {
 		"menu": "Thực Đơn",
-		"dev": "Dev"
+		"dev": "Dev",
+		"tables": "Bàn"
+	},
+	"access": {
+		"back": "Quay lại",
+		"enter_pin": "Nhập mã PIN sự kiện",
+		"subtitle": "Mở khóa bàn & đặt món tối nay",
+		"unlock": "Mở khóa",
+		"unlocking": "Đang mở khóa…",
+		"invalid_pin": "Mã PIN không đúng",
+		"saved_note": "Được lưu trên thiết bị này sau lần nhập đầu"
+	},
+	"tables": {
+		"find_title": "Tìm bàn của bạn",
+		"search_placeholder": "Tìm bàn hoặc tên…",
+		"all_tables": "Tất cả bàn",
+		"full": "đầy",
+		"load_error": "Không tải được bàn. Hãy làm mới.",
+		"none_found": "Không tìm thấy bàn nào"
+	},
+	"roster": {
+		"people_here": "Mọi người tại bàn này",
+		"empty": "Chưa có ai — thêm tên đầu tiên",
+		"host": "chủ bàn",
+		"remove": "Xóa",
+		"add_placeholder": "Nhập tên, nhấn Enter…",
+		"remove_title": "Xóa {{name}} khỏi {{table}}?",
+		"remove_desc": "Không thể hoàn tác — họ sẽ không còn trong danh sách bàn này.",
+		"link_copied": "Đã sao chép liên kết",
+		"share": "Chia sẻ",
+		"not_found": "Không tìm thấy bàn",
+		"add_failed": "Không thêm được — bàn có thể đã đầy",
+		"remove_failed": "Không xóa được, vui lòng thử lại"
 	},
 	"menu": {
 		"our_menu": "Thực Đơn",
@@ -70,7 +102,8 @@
 		"try_again": "Thử lại",
 		"showing": "Hiển thị {{from}}–{{to}} trong {{total}} món",
 		"verified": "Đã xác minh",
-		"unavailable": "Không có sẵn"
+		"unavailable": "Không có sẵn",
+		"popular": "Phổ biến"
 	},
 	"dev": {
 		"title": "Kiểm Tra Phát Triển",
