@@ -3,12 +3,8 @@ import {
   id = local.doppler_cloudfront_distribution_id
 }
 
-resource "aws_cloudfront_origin_access_control" "lambda_oac" {
-  name                              = "${var.function_name}-oac"
-  description                       = "Origin Access Control for ${var.function_name} Lambda Function URL"
-  origin_access_control_origin_type = "lambda"
-  signing_behavior                  = "always"
-  signing_protocol                  = "sigv4"
+data "aws_cloudfront_origin_request_policy" "all_viewer_except_host" {
+  name = "Managed-AllViewerExceptHostHeader"
 }
 
 resource "aws_cloudfront_distribution" "main" {
@@ -20,9 +16,8 @@ resource "aws_cloudfront_distribution" "main" {
   aliases         = [var.domain_name]
 
   origin {
-    origin_id                = "lambda"
-    domain_name              = trimprefix(trimsuffix(aws_lambda_function_url.yaoyao_function_url.function_url, "/"), "https://")
-    origin_access_control_id = aws_cloudfront_origin_access_control.lambda_oac.id
+    origin_id   = "lambda"
+    domain_name = trimprefix(trimsuffix(aws_lambda_function_url.yaoyao_function_url.function_url, "/"), "https://")
 
     custom_origin_config {
       http_port              = 80
@@ -40,7 +35,7 @@ resource "aws_cloudfront_distribution" "main" {
     compress               = true
 
     cache_policy_id            = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-    origin_request_policy_id   = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+    origin_request_policy_id   = data.aws_cloudfront_origin_request_policy.all_viewer_except_host.id
     response_headers_policy_id = "5cc3b908-e619-4b99-88e5-2cf7f45965bd"
   }
 

@@ -35,13 +35,7 @@ resource "aws_lambda_function" "yaoyao_function" {
 
 resource "aws_lambda_function_url" "yaoyao_function_url" {
   function_name      = aws_lambda_function.yaoyao_function.function_name
-  authorization_type = "AWS_IAM"
+  authorization_type = "NONE"
 }
 
-resource "aws_lambda_permission" "allow_cloudfront" {
-  statement_id  = "AllowCloudFrontInvoke"
-  action        = "lambda:InvokeFunctionUrl"
-  function_name = aws_lambda_function.yaoyao_function.function_name
-  principal     = "cloudfront.amazonaws.com"
-  source_arn    = aws_cloudfront_distribution.main.arn
-}
+

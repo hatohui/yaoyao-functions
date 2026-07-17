@@ -18,10 +18,6 @@ output "cloudfront_distribution_arn" {
   value       = aws_cloudfront_distribution.main.arn
 }
 
-output "cloudfront_oac_id" {
-  description = "CloudFront Origin Access Control ID"
-  value       = aws_cloudfront_origin_access_control.lambda_oac.id
-}
 
 output "ecr_repository_url" {
   description = "ECR Repository URL"
