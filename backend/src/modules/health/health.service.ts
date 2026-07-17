@@ -11,11 +11,11 @@ export class HealthService {
     return { latency: Date.now() - start };
   }
 
-  async checkRedis(): Promise<{ latency: number }> {
+  async checkRedis(): Promise<{ latency: number; available: boolean }> {
     const start = Date.now();
     const result = await CacheService.ping();
-    if (result !== "PONG") throw new Error("Redis ping failed");
-    return { latency: Date.now() - start };
+    const available = result === "PONG";
+    return { latency: Date.now() - start, available };
   }
 
   getSystemMetrics() {

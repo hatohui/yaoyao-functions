@@ -43,11 +43,14 @@ export class HealthController {
     }
 
     try {
-      const { latency } = await this.health.checkRedis();
+      const { latency, available } = await this.health.checkRedis();
       services.redis.latency = latency;
+      services.redis.status = available ? "healthy" : "unavailable";
     } catch (e: Error | unknown) {
-      services.redis = { status: "unhealthy", message: (e as Error).message };
-      healthy = false;
+      services.redis = {
+        status: "unavailable",
+        message: (e as Error).message,
+      };
     }
 
     return {
@@ -67,7 +70,7 @@ export class HealthController {
   @Get("redis")
   @ApiOperation({ operationId: "checkRedis" })
   async checkRedis() {
-    const { latency } = await this.health.checkRedis();
-    return { status: "ok", latency };
+    const { latency, available } = await this.health.checkRedis();
+    return { status: available ? "ok" : "unavailable", latency };
   }
 }
