@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
+import { Map } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import { SearchBar } from '@/components/common/SearchBar'
 import { PaginationBar } from '@/components/common/PaginationBar'
@@ -7,11 +9,23 @@ import { useTableSearch } from './@useTableSearch'
 
 export default function TablesPage() {
 	const { t } = useTranslation()
-	const { search, setSearch, tables, isLoading, isError, pagination } = useTableSearch()
+	const { search, setSearch, tables, isLoading, isError, pagination } =
+		useTableSearch()
 
 	return (
 		<div className='mx-auto flex max-w-2xl flex-col gap-4 px-4 py-6'>
-			<h1 className='text-xl font-bold text-foreground'>{t('tables.find_title')}</h1>
+			<div className='flex items-center justify-between'>
+				<h1 className='text-xl font-bold text-foreground'>
+					{t('tables.find_title')}
+				</h1>
+				<Link
+					to='/tables/map'
+					className='inline-flex items-center gap-1.5 rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
+				>
+					<Map className='size-4' />
+					{t('floor_plan.view_map')}
+				</Link>
+			</div>
 
 			<SearchBar
 				value={search}
@@ -28,9 +42,13 @@ export default function TablesPage() {
 					<Spinner />
 				</div>
 			) : isError ? (
-				<p className='py-16 text-center text-sm text-muted-foreground'>{t('tables.load_error')}</p>
+				<p className='py-16 text-center text-sm text-muted-foreground'>
+					{t('tables.load_error')}
+				</p>
 			) : tables.length === 0 ? (
-				<p className='py-16 text-center text-sm text-muted-foreground'>{t('tables.none_found')}</p>
+				<p className='py-16 text-center text-sm text-muted-foreground'>
+					{t('tables.none_found')}
+				</p>
 			) : (
 				<>
 					<TableList tables={tables} />

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Flame } from 'lucide-react'
+import { Link } from 'react-router'
+import { Flame, Check } from 'lucide-react'
 import type { FoodItemDto } from '@/api/model'
 import { Badge } from '@/components/ui/badge'
 import { cn } from '@/utils/shadcn'
@@ -8,10 +9,15 @@ import { ASSET_URL } from '@/common/app'
 
 interface FoodCardProps {
 	food: FoodItemDto
-	onClick?: () => void
+	selected?: boolean
+	onToggleSelect?: () => void
 }
 
-export function FoodCard({ food, onClick }: FoodCardProps) {
+export function FoodCard({
+	food,
+	selected = false,
+	onToggleSelect,
+}: FoodCardProps) {
 	const { t } = useTranslation()
 	const [imgError, setImgError] = useState(false)
 
@@ -22,17 +28,24 @@ export function FoodCard({ food, onClick }: FoodCardProps) {
 				: `${ASSET_URL}/${food.imageUrl}`
 			: null
 
+	const canSelect =
+		Boolean(onToggleSelect) &&
+		food.isAvailable &&
+		Boolean(food.defaultVariantId)
+
 	return (
 		<div
 			className={cn(
 				'group relative flex flex-col overflow-hidden rounded-2xl border border-border/50 bg-card shadow-sm',
 				'transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
 				!food.isAvailable && 'opacity-70',
-				onClick && 'cursor-pointer'
+				selected && 'ring-2 ring-primary'
 			)}
-			onClick={onClick}
 		>
-			<div className='relative aspect-[4/3] overflow-hidden bg-muted'>
+			<Link
+				to={`/menu/${food.id}`}
+				className='relative aspect-[4/3] overflow-hidden bg-muted'
+			>
 				{imageSrc ? (
 					<img
 						src={imageSrc}
@@ -57,20 +70,41 @@ export function FoodCard({ food, onClick }: FoodCardProps) {
 
 				{!food.isAvailable && (
 					<div className='absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px]'>
-						<Badge variant='destructive' className='px-3 py-1 text-sm font-semibold shadow-lg'>
+						<Badge
+							variant='destructive'
+							className='px-3 py-1 text-sm font-semibold shadow-lg'
+						>
 							{t('menu.unavailable')}
 						</Badge>
 					</div>
 				)}
 
-				{(food as { isChecked?: boolean }).isChecked && (
-					<div className='absolute right-2 top-2 flex items-center gap-1 rounded-full bg-primary/90 px-2 py-0.5 text-xs font-medium text-primary-foreground shadow backdrop-blur-sm'>
-						✓ {t('menu.verified')}
-					</div>
+				{canSelect && (
+					<button
+						type='button'
+						aria-label={t('menu.select_item')}
+						aria-pressed={selected}
+						onClick={e => {
+							e.preventDefault()
+							e.stopPropagation()
+							onToggleSelect?.()
+						}}
+						className={cn(
+							'absolute right-2 top-2 flex size-7 items-center justify-center rounded-full border shadow backdrop-blur-sm transition-colors',
+							selected
+								? 'border-primary bg-primary text-primary-foreground'
+								: 'border-border/60 bg-background/80 text-transparent'
+						)}
+					>
+						<Check className='size-4' />
+					</button>
 				)}
-			</div>
+			</Link>
 
-			<div className='flex flex-1 flex-col gap-1.5 p-4'>
+			<Link
+				to={`/menu/${food.id}`}
+				className='flex flex-1 flex-col gap-1.5 p-4'
+			>
 				<h3 className='line-clamp-2 text-base font-semibold leading-snug text-foreground transition-colors group-hover:text-primary'>
 					{food.name}
 				</h3>
@@ -79,7 +113,12 @@ export function FoodCard({ food, onClick }: FoodCardProps) {
 						{food.description}
 					</p>
 				)}
-			</div>
+				{food.price !== null && food.price !== undefined && (
+					<p className='mt-auto text-sm font-medium text-primary'>
+						{food.price} {food.currency}
+					</p>
+				)}
+			</Link>
 		</div>
 	)
 }

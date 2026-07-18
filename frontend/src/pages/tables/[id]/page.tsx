@@ -1,13 +1,26 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
 import { ArrowLeft, Share2, Users } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { useGetTablePeople } from '@/api/tables/tables'
+import type { PersonDto } from '@/api/model'
+import { useGuest } from '@/hooks/useGuest'
 import { Roster } from './@Roster'
+import { OrdersTab } from './@OrdersTab'
+import { YourSplitTab } from './@YourSplitTab'
 import { useTableDetail } from './@useTableDetail'
 
 export default function TableDetailPage() {
 	const { t } = useTranslation()
-	const { table, isLoading, isError, shareLink } = useTableDetail()
+	const { id, table, isLoading, isError, shareLink } = useTableDetail()
+	const setActiveTable = useGuest(s => s.setActiveTable)
+	const { data: people } = useGetTablePeople<PersonDto[]>(id)
+
+	useEffect(() => {
+		if (id) setActiveTable(id)
+	}, [id, setActiveTable])
 
 	if (isLoading) {
 		return (
@@ -19,7 +32,9 @@ export default function TableDetailPage() {
 
 	if (isError || !table) {
 		return (
-			<p className='py-20 text-center text-sm text-muted-foreground'>{t('roster.not_found')}</p>
+			<p className='py-20 text-center text-sm text-muted-foreground'>
+				{t('roster.not_found')}
+			</p>
 		)
 	}
 
@@ -51,7 +66,23 @@ export default function TableDetailPage() {
 				</button>
 			</div>
 
-			<Roster table={table} />
+			<Tabs defaultValue='orders'>
+				<TabsList className='w-full'>
+					<TabsTrigger value='people'>{t('tabs.people')}</TabsTrigger>
+					<TabsTrigger value='orders'>{t('tabs.orders')}</TabsTrigger>
+					<TabsTrigger value='split'>{t('tabs.your_split')}</TabsTrigger>
+				</TabsList>
+
+				<TabsContent value='people'>
+					<Roster table={table} />
+				</TabsContent>
+				<TabsContent value='orders'>
+					<OrdersTab table={table} people={people ?? []} />
+				</TabsContent>
+				<TabsContent value='split'>
+					<YourSplitTab table={table} people={people ?? []} />
+				</TabsContent>
+			</Tabs>
 		</div>
 	)
 }

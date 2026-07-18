@@ -26,7 +26,8 @@ import type {
 
 import type {
   CreateNoteDto,
-  GetNotesByPersonParams
+  GetNotesByPersonParams,
+  NoteResponseDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -40,7 +41,7 @@ export const getNotesByPerson = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<NoteResponseDto[]>(
       {url: `/api/personal-notes`, method: 'GET',
         params, signal
     },
@@ -127,7 +128,7 @@ export const createNote = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<NoteResponseDto>(
       {url: `/api/personal-notes`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createNoteDto, signal

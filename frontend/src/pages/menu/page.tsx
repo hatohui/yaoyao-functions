@@ -7,6 +7,8 @@ import { useMenuSearchParams } from '@/utils/searchParams'
 import { HeroSection } from './@HeroSection'
 import { FilterBar } from './@FilterBar'
 import { FoodCard } from './@FoodCard'
+import { SelectionBar } from './@SelectionBar'
+import { useMenuSelection } from './@useMenuSelection'
 import { LoadingView, LoadingSpinner } from './@LoadingView'
 import { ErrorView } from './@ErrorView'
 import { EmptyView } from './@EmptyView'
@@ -20,7 +22,11 @@ import {
 	PaginationEllipsis,
 } from '@/components/ui/pagination'
 import { cn } from '@/utils/shadcn'
-import type { FoodItemDto, CategoryItemDto, GetFoodsResponseDto } from '@/api/model'
+import type {
+	FoodItemDto,
+	CategoryItemDto,
+	GetFoodsResponseDto,
+} from '@/api/model'
 
 export default function MenuPage() {
 	const { t, i18n } = useTranslation()
@@ -56,12 +62,13 @@ export default function MenuPage() {
 		onCountChange: setUrlCount,
 	})
 
-	const { data, isLoading, isError, error, refetch } = useGetFoods<GetFoodsResponseDto>({
-		lang: i18n.language,
-		page,
-		count,
-		category: category === 'all' ? undefined : category,
-	})
+	const { data, isLoading, isError, error, refetch } =
+		useGetFoods<GetFoodsResponseDto>({
+			lang: i18n.language,
+			page,
+			count,
+			category: category === 'all' ? undefined : category,
+		})
 
 	useEffect(() => {
 		if (data?.total !== undefined) setTotal(data.total)
@@ -94,6 +101,8 @@ export default function MenuPage() {
 		setSearch('')
 	}
 
+	const selection = useMenuSelection(filteredFoods)
+
 	return (
 		<div className='min-h-screen bg-background'>
 			<HeroSection totalCount={data?.total} />
@@ -122,7 +131,12 @@ export default function MenuPage() {
 						<>
 							<div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
 								{filteredFoods.map((food: FoodItemDto) => (
-									<FoodCard key={food.id} food={food} />
+									<FoodCard
+										key={food.id}
+										food={food}
+										selected={selection.selected.has(food.id)}
+										onToggleSelect={() => selection.toggle(food.id)}
+									/>
 								))}
 							</div>
 
@@ -190,6 +204,14 @@ export default function MenuPage() {
 					)}
 				</div>
 			</div>
+
+			<SelectionBar
+				count={selection.count}
+				activeTableId={selection.activeTableId}
+				pending={selection.isPending}
+				onClear={selection.clear}
+				onAdd={selection.addSelected}
+			/>
 		</div>
 	)
 }

@@ -6,4 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface CreateFeedbackDto { [key: string]: unknown }
+export interface CreateFeedbackDto {
+  by?: string;
+  content?: string;
+}

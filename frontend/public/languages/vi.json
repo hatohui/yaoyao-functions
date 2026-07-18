@@ -20,7 +20,9 @@
 	"common": {
 		"back": "Quay lại",
 		"confirm": "Xác nhận",
-		"cancel": "Hủy"
+		"cancel": "Hủy",
+		"save": "Lưu",
+		"loading": "Đang tải…"
 	},
 	"health": {
 		"title": "Sức Khỏe Hệ Thống",
@@ -50,7 +52,8 @@
 	"nav": {
 		"menu": "Thực Đơn",
 		"dev": "Dev",
-		"tables": "Bàn"
+		"tables": "Bàn",
+		"feedback": "Góp ý"
 	},
 	"access": {
 		"back": "Quay lại",
@@ -84,11 +87,9 @@
 		"remove_failed": "Không xóa được, vui lòng thử lại"
 	},
 	"menu": {
-		"our_menu": "Thực Đơn",
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
-		"restaurant_location": "Puchong Jaya · Quán Gia Đình",
-		"tagline": "Nguyên liệu tươi · Hương vị đích thực",
+		"restaurant_location": "Puchong Jaya",
 		"dishes_available": "{{count}} món ăn có sẵn",
 		"search_placeholder": "Tìm món ăn…",
 		"all_categories": "Tất cả",
@@ -101,9 +102,71 @@
 		"error_desc": "Không tải được thực đơn. Vui lòng thử lại.",
 		"try_again": "Thử lại",
 		"showing": "Hiển thị {{from}}–{{to}} trong {{total}} món",
-		"verified": "Đã xác minh",
 		"unavailable": "Không có sẵn",
-		"popular": "Phổ biến"
+		"popular": "Phổ biến",
+		"select_item": "Chọn món này",
+		"selected_count": "Đã chọn {{count}}",
+		"clear_selection": "Bỏ chọn",
+		"add_to_order": "Thêm vào đơn",
+		"adding": "Đang thêm…",
+		"open_your_table": "Mở bàn của bạn",
+		"added_to_order": "Đã thêm vào đơn",
+		"add_failed": "Không thêm được, vui lòng thử lại"
+	},
+	"food_detail": {
+		"back_to_menu": "Về thực đơn",
+		"variants": "Tùy chọn",
+		"add_to_order": "Thêm vào đơn",
+		"not_found": "Không tìm thấy món ăn"
+	},
+	"tabs": {
+		"people": "Mọi người",
+		"orders": "Đơn hàng",
+		"your_split": "Phần của bạn"
+	},
+	"orders": {
+		"shared": "Chia sẻ",
+		"personal": "Cá nhân",
+		"split_n": "Chia {{count}} người",
+		"remove": "Xóa",
+		"remove_title": "Xóa {{name}}?",
+		"remove_desc": "Không thể hoàn tác — món này sẽ bị xóa khỏi đơn của bàn.",
+		"empty": "Chưa có đơn nào — hãy thêm món từ thực đơn",
+		"total": "Tổng của bàn",
+		"update_failed": "Không cập nhật được, vui lòng thử lại",
+		"remove_failed": "Không xóa được, vui lòng thử lại"
+	},
+	"split": {
+		"title": "Chia món này",
+		"just_me": "Chỉ mình tôi",
+		"whole_table": "Cả bàn",
+		"choose_people": "Chọn người",
+		"who_are_you": "Bạn là ai ở bàn này?",
+		"viewing_as": "Đang xem với tên {{name}}",
+		"not_you": "Không phải bạn?",
+		"empty": "Chưa có món nào thuộc phần của bạn",
+		"your_total": "Tổng của bạn"
+	},
+	"notes": {
+		"title": "Ghi chú của {{name}}",
+		"placeholder": "Thêm ghi chú mọi người đều thấy được, vd: \"không ăn được tôm\"",
+		"empty": "Chưa có ghi chú"
+	},
+	"feedback": {
+		"title": "Bảng góp ý",
+		"name_placeholder": "Tên của bạn (không bắt buộc)",
+		"content_placeholder": "Viết gì đó…",
+		"post": "Đăng",
+		"post_failed": "Không đăng được, vui lòng thử lại",
+		"anonymous": "Ẩn danh",
+		"sort_recent": "Mới nhất",
+		"sort_top": "Nổi bật",
+		"empty": "Chưa có góp ý nào — hãy là người đầu tiên"
+	},
+	"floor_plan": {
+		"title": "Sơ đồ bàn",
+		"view_map": "Xem sơ đồ",
+		"empty": "Chưa có bàn nào được đặt trên sơ đồ"
 	},
 	"dev": {
 		"title": "Kiểm Tra Phát Triển",

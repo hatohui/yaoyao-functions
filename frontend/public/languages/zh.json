@@ -20,7 +20,9 @@
 	"common": {
 		"back": "返回",
 		"confirm": "确认",
-		"cancel": "取消"
+		"cancel": "取消",
+		"save": "保存",
+		"loading": "加载中…"
 	},
 	"health": {
 		"title": "系统健康",
@@ -50,7 +52,8 @@
 	"nav": {
 		"menu": "菜单",
 		"dev": "Dev",
-		"tables": "餐桌"
+		"tables": "餐桌",
+		"feedback": "反馈"
 	},
 	"access": {
 		"back": "返回",
@@ -84,11 +87,9 @@
 		"remove_failed": "移除失败，请重试"
 	},
 	"menu": {
-		"our_menu": "菜单",
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
-		"restaurant_location": "Puchong Jaya · 家庭式餐厅",
-		"tagline": "新鲜食材 · 正宗口味",
+		"restaurant_location": "Puchong Jaya",
 		"dishes_available": "共 {{count}} 道菜",
 		"search_placeholder": "搜索菜肴…",
 		"all_categories": "全部",
@@ -101,9 +102,71 @@
 		"error_desc": "菜单加载失败，请重试。",
 		"try_again": "重试",
 		"showing": "显示第 {{from}}–{{to}} 项，共 {{total}} 道菜",
-		"verified": "已验证",
 		"unavailable": "暂不可用",
-		"popular": "热门"
+		"popular": "热门",
+		"select_item": "选择此项",
+		"selected_count": "已选 {{count}} 项",
+		"clear_selection": "清除选择",
+		"add_to_order": "加入订单",
+		"adding": "添加中…",
+		"open_your_table": "打开你的餐桌",
+		"added_to_order": "已加入订单",
+		"add_failed": "添加失败，请重试"
+	},
+	"food_detail": {
+		"back_to_menu": "返回菜单",
+		"variants": "选项",
+		"add_to_order": "加入订单",
+		"not_found": "未找到该菜品"
+	},
+	"tabs": {
+		"people": "人员",
+		"orders": "订单",
+		"your_split": "你的分摊"
+	},
+	"orders": {
+		"shared": "共享",
+		"personal": "个人",
+		"split_n": "{{count}} 人分摊",
+		"remove": "移除",
+		"remove_title": "移除 {{name}}？",
+		"remove_desc": "此操作无法撤销 — 将从餐桌订单中移除。",
+		"empty": "暂无订单 — 从菜单添加一些吧",
+		"total": "餐桌总额",
+		"update_failed": "更新失败，请重试",
+		"remove_failed": "移除失败，请重试"
+	},
+	"split": {
+		"title": "分摊此项",
+		"just_me": "只有我",
+		"whole_table": "全桌分摊",
+		"choose_people": "选择人员",
+		"who_are_you": "你是这桌的哪位？",
+		"viewing_as": "正在以 {{name}} 查看",
+		"not_you": "不是你？",
+		"empty": "你的分摊中暂无项目",
+		"your_total": "你的总额"
+	},
+	"notes": {
+		"title": "{{name}} 的备注",
+		"placeholder": "添加所有人可见的备注，例如\"不吃虾\"",
+		"empty": "暂无备注"
+	},
+	"feedback": {
+		"title": "反馈墙",
+		"name_placeholder": "你的名字（可选）",
+		"content_placeholder": "说点什么…",
+		"post": "发布",
+		"post_failed": "发布失败，请重试",
+		"anonymous": "匿名",
+		"sort_recent": "最新",
+		"sort_top": "最热",
+		"empty": "还没有反馈 — 来做第一个吧"
+	},
+	"floor_plan": {
+		"title": "平面图",
+		"view_map": "查看平面图",
+		"empty": "平面图上还没有餐桌"
 	},
 	"dev": {
 		"title": "开发测试",

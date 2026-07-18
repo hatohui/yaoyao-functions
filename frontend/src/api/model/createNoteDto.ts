@@ -6,4 +6,7 @@
  * OpenAPI spec version: 1.0
  */
 
-export interface CreateNoteDto { [key: string]: unknown }
+export interface CreateNoteDto {
+  personId: string;
+  content: string;
+}

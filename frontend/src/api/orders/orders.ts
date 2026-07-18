@@ -26,9 +26,13 @@ import type {
 
 import type {
   BatchCreateOrderDto,
+  CreateOrderBatchParams,
   CreateOrderDto,
+  CreateOrderParams,
   GetOrdersParams,
-  UpdateOrderDto
+  OrderResponseDto,
+  UpdateOrderDto,
+  UpdateOrderParams
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -42,7 +46,7 @@ export const getOrders = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<OrderResponseDto[]>(
       {url: `/api/orders`, method: 'GET',
         params, signal
     },
@@ -125,14 +129,16 @@ export function useGetOrders<TData = Awaited<ReturnType<typeof getOrders>>, TErr
 
 export const createOrder = (
     createOrderDto: CreateOrderDto,
+    params?: CreateOrderParams,
  signal?: AbortSignal
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<OrderResponseDto>(
       {url: `/api/orders`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: createOrderDto, signal
+      data: createOrderDto,
+        params, signal
     },
       );
     }
@@ -140,8 +146,8 @@ export const createOrder = (
 
 
 export const getCreateOrderMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: CreateOrderDto}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: CreateOrderDto}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: CreateOrderDto;params?: CreateOrderParams}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: CreateOrderDto;params?: CreateOrderParams}, TContext> => {
 
 const mutationKey = ['createOrder'];
 const {mutation: mutationOptions} = options ?
@@ -153,10 +159,10 @@ const {mutation: mutationOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrder>>, {data: CreateOrderDto}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrder>>, {data: CreateOrderDto;params?: CreateOrderParams}> = (props) => {
+          const {data,params} = props ?? {};
 
-          return  createOrder(data,)
+          return  createOrder(data,params,)
         }
 
 
@@ -171,25 +177,27 @@ const {mutation: mutationOptions} = options ?
     export type CreateOrderMutationError = unknown
 
     export const useCreateOrder = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: CreateOrderDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrder>>, TError,{data: CreateOrderDto;params?: CreateOrderParams}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createOrder>>,
         TError,
-        {data: CreateOrderDto},
+        {data: CreateOrderDto;params?: CreateOrderParams},
         TContext
       > => {
       return useMutation(getCreateOrderMutationOptions(options), queryClient);
     }
     export const createOrderBatch = (
     batchCreateOrderDto: BatchCreateOrderDto,
+    params?: CreateOrderBatchParams,
  signal?: AbortSignal
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<OrderResponseDto[]>(
       {url: `/api/orders/batch`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: batchCreateOrderDto, signal
+      data: batchCreateOrderDto,
+        params, signal
     },
       );
     }
@@ -197,8 +205,8 @@ const {mutation: mutationOptions} = options ?
 
 
 export const getCreateOrderBatchMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto;params?: CreateOrderBatchParams}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto;params?: CreateOrderBatchParams}, TContext> => {
 
 const mutationKey = ['createOrderBatch'];
 const {mutation: mutationOptions} = options ?
@@ -210,10 +218,10 @@ const {mutation: mutationOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrderBatch>>, {data: BatchCreateOrderDto}> = (props) => {
-          const {data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createOrderBatch>>, {data: BatchCreateOrderDto;params?: CreateOrderBatchParams}> = (props) => {
+          const {data,params} = props ?? {};
 
-          return  createOrderBatch(data,)
+          return  createOrderBatch(data,params,)
         }
 
 
@@ -228,11 +236,11 @@ const {mutation: mutationOptions} = options ?
     export type CreateOrderBatchMutationError = unknown
 
     export const useCreateOrderBatch = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createOrderBatch>>, TError,{data: BatchCreateOrderDto;params?: CreateOrderBatchParams}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof createOrderBatch>>,
         TError,
-        {data: BatchCreateOrderDto},
+        {data: BatchCreateOrderDto;params?: CreateOrderBatchParams},
         TContext
       > => {
       return useMutation(getCreateOrderBatchMutationOptions(options), queryClient);
@@ -240,14 +248,16 @@ const {mutation: mutationOptions} = options ?
     export const updateOrder = (
     id: string,
     updateOrderDto: UpdateOrderDto,
+    params?: UpdateOrderParams,
  signal?: AbortSignal
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<OrderResponseDto>(
       {url: `/api/orders/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
-      data: updateOrderDto, signal
+      data: updateOrderDto,
+        params, signal
     },
       );
     }
@@ -255,8 +265,8 @@ const {mutation: mutationOptions} = options ?
 
 
 export const getUpdateOrderMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto}, TContext>, }
-): UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto}, TContext> => {
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto;params?: UpdateOrderParams}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto;params?: UpdateOrderParams}, TContext> => {
 
 const mutationKey = ['updateOrder'];
 const {mutation: mutationOptions} = options ?
@@ -268,10 +278,10 @@ const {mutation: mutationOptions} = options ?
 
 
 
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOrder>>, {id: string;data: UpdateOrderDto}> = (props) => {
-          const {id,data} = props ?? {};
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateOrder>>, {id: string;data: UpdateOrderDto;params?: UpdateOrderParams}> = (props) => {
+          const {id,data,params} = props ?? {};
 
-          return  updateOrder(id,data,)
+          return  updateOrder(id,data,params,)
         }
 
 
@@ -286,11 +296,11 @@ const {mutation: mutationOptions} = options ?
     export type UpdateOrderMutationError = unknown
 
     export const useUpdateOrder = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto}, TContext>, }
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateOrder>>, TError,{id: string;data: UpdateOrderDto;params?: UpdateOrderParams}, TContext>, }
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof updateOrder>>,
         TError,
-        {id: string;data: UpdateOrderDto},
+        {id: string;data: UpdateOrderDto;params?: UpdateOrderParams},
         TContext
       > => {
       return useMutation(getUpdateOrderMutationOptions(options), queryClient);

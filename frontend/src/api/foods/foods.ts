@@ -26,6 +26,8 @@ import type {
 
 import type {
   CreateFoodDto,
+  FoodDetailDto,
+  GetFoodByIdParams,
   GetFoodsParams,
   GetFoodsResponseDto
 } from '../model';
@@ -179,3 +181,97 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getCreateFoodMutationOptions(options), queryClient);
     }
+    export const getFoodById = (
+    id: string,
+    params?: GetFoodByIdParams,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<FoodDetailDto>(
+      {url: `/api/foods/${id}`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+
+
+
+
+export const getGetFoodByIdQueryKey = (id: string,
+    params?: GetFoodByIdParams,) => {
+    return [
+    `/api/foods/${id}`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetFoodByIdQueryOptions = <TData = Awaited<ReturnType<typeof getFoodById>>, TError = unknown>(id: string,
+    params?: GetFoodByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodById>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFoodByIdQueryKey(id,params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFoodById>>> = ({ signal }) => getFoodById(id,params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFoodById>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFoodByIdQueryResult = NonNullable<Awaited<ReturnType<typeof getFoodById>>>
+export type GetFoodByIdQueryError = unknown
+
+
+export function useGetFoodById<TData = Awaited<ReturnType<typeof getFoodById>>, TError = unknown>(
+ id: string,
+    params: undefined |  GetFoodByIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodById>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFoodById>>,
+          TError,
+          Awaited<ReturnType<typeof getFoodById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoodById<TData = Awaited<ReturnType<typeof getFoodById>>, TError = unknown>(
+ id: string,
+    params?: GetFoodByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodById>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFoodById>>,
+          TError,
+          Awaited<ReturnType<typeof getFoodById>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoodById<TData = Awaited<ReturnType<typeof getFoodById>>, TError = unknown>(
+ id: string,
+    params?: GetFoodByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetFoodById<TData = Awaited<ReturnType<typeof getFoodById>>, TError = unknown>(
+ id: string,
+    params?: GetFoodByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodById>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFoodByIdQueryOptions(id,params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+

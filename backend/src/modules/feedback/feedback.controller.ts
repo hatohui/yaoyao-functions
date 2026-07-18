@@ -7,10 +7,15 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { FeedbackService } from './feedback.service';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { ReactDto } from './dto/react.dto';
+import {
+  GetFeedbackResponseDto,
+  FeedbackItemDto,
+  FeedbackReactionDto,
+} from './dto/feedback-response.dto';
 import { AdminGuard } from '@common/guards/admin.guard';
 
 type FeedbackSort = 'recent' | 'top';
@@ -25,6 +30,7 @@ export class FeedbackController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'count', required: false, type: Number })
   @ApiQuery({ name: 'sort', required: false, enum: ['recent', 'top'] })
+  @ApiResponse({ status: 200, type: GetFeedbackResponseDto })
   findAll(
     @Query('page') page = '1',
     @Query('count') count = '20',
@@ -44,6 +50,7 @@ export class FeedbackController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'count', required: false, type: Number })
   @ApiQuery({ name: 'sort', required: false, enum: ['recent', 'top'] })
+  @ApiResponse({ status: 200, type: GetFeedbackResponseDto })
   findByEvent(
     @Query('eventId') eventId: string,
     @Query('page') page = '1',
@@ -60,12 +67,14 @@ export class FeedbackController {
 
   @Post()
   @ApiOperation({ operationId: 'createFeedback' })
+  @ApiResponse({ status: 201, type: FeedbackItemDto })
   create(@Body() dto: CreateFeedbackDto) {
     return this.feedback.create(dto);
   }
 
   @Post(':id/react')
   @ApiOperation({ operationId: 'reactToFeedback' })
+  @ApiResponse({ status: 201, type: FeedbackReactionDto })
   react(@Param('id') id: string, @Body() dto: ReactDto) {
     return this.feedback.react(id, dto.emoji);
   }

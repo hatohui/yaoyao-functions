@@ -1,0 +1,116 @@
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useQueryClient } from '@tanstack/react-query'
+import {
+	useGetFeedback,
+	useCreateFeedback,
+	useReactToFeedback,
+	getGetFeedbackQueryKey,
+} from '@/api/feedback/feedback'
+import { usePagination } from '@/hooks/usePagination'
+import { useToast } from '@/hooks/useToast'
+import type {
+	FeedbackItemDto,
+	GetFeedbackResponseDto,
+	GetFeedbackSort,
+} from '@/api/model'
+
+export function useFeedback() {
+	const { t } = useTranslation()
+	const toast = useToast()
+	const qc = useQueryClient()
+	const [sort, setSort] = useState<GetFeedbackSort>('recent')
+	const [total, setTotal] = useState(0)
+
+	const pagination = usePagination({ initialCount: 10, total })
+	const { page, count } = pagination
+
+	const params = { page, count, sort }
+	const feedbackKey = getGetFeedbackQueryKey(params)
+
+	const { data, isLoading } = useGetFeedback<GetFeedbackResponseDto>(params)
+
+	useEffect(() => {
+		if (data?.total !== undefined) setTotal(data.total)
+	}, [data?.total])
+
+	const createMutation = useCreateFeedback({
+		mutation: {
+			onMutate: async ({ data: body }) => {
+				await qc.cancelQueries({ queryKey: feedbackKey })
+				const prev = qc.getQueryData<GetFeedbackResponseDto>(feedbackKey)
+				const optimistic: FeedbackItemDto = {
+					id: `temp-${Date.now()}`,
+					by: body.by ?? null,
+					content: body.content ?? null,
+					eventId: null,
+					reactions: [],
+					reactionTotal: 0,
+					createdAt: new Date().toISOString(),
+					updatedAt: new Date().toISOString(),
+				}
+				qc.setQueryData<GetFeedbackResponseDto>(feedbackKey, old => ({
+					feedback: [optimistic, ...(old?.feedback ?? [])],
+					total: (old?.total ?? 0) + 1,
+				}))
+				return { prev }
+			},
+			onError: (_e, _v, ctx) => {
+				qc.setQueryData(feedbackKey, ctx?.prev)
+				toast.error(t('feedback.post_failed'))
+			},
+			onSettled: () => qc.invalidateQueries({ queryKey: feedbackKey }),
+		},
+	})
+
+	const reactMutation = useReactToFeedback({
+		mutation: {
+			onMutate: async ({ id, data: body }) => {
+				await qc.cancelQueries({ queryKey: feedbackKey })
+				const prev = qc.getQueryData<GetFeedbackResponseDto>(feedbackKey)
+				qc.setQueryData<GetFeedbackResponseDto>(feedbackKey, old => {
+					if (!old) return old
+					return {
+						...old,
+						feedback: old.feedback.map(f => {
+							if (f.id !== id) return f
+							const existing = f.reactions.find(r => r.emoji === body.emoji)
+							const reactions = existing
+								? f.reactions.map(r =>
+										r.emoji === body.emoji ? { ...r, count: r.count + 1 } : r
+									)
+								: [...f.reactions, { emoji: body.emoji, count: 1 }]
+							return { ...f, reactions, reactionTotal: f.reactionTotal + 1 }
+						}),
+					}
+				})
+				return { prev }
+			},
+			onError: (_e, _v, ctx) => qc.setQueryData(feedbackKey, ctx?.prev),
+			onSettled: () => qc.invalidateQueries({ queryKey: feedbackKey }),
+		},
+	})
+
+	const post = (by: string, content: string) => {
+		const trimmed = content.trim()
+		if (!trimmed) return
+		createMutation.mutate({
+			data: { by: by.trim() || undefined, content: trimmed },
+		})
+	}
+
+	const react = (id: string, emoji: string) => {
+		reactMutation.mutate({ id, data: { emoji } })
+	}
+
+	return {
+		feedback: data?.feedback ?? [],
+		isLoading,
+		sort,
+		setSort,
+		pagination,
+		post,
+		react,
+		isPosting: createMutation.isPending,
+	}
+}

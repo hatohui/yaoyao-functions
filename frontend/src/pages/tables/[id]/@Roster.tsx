@@ -1,9 +1,11 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X } from 'lucide-react'
+import { X, NotebookText } from 'lucide-react'
 import type { PersonDto, TableDto } from '@/api/model'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
+import { useWhoAmI } from '@/hooks/useWhoAmI'
 import { useRoster } from './@useRoster'
+import { PersonNoteDialog } from './@PersonNoteDialog'
 
 interface RosterProps {
 	table: TableDto
@@ -12,7 +14,9 @@ interface RosterProps {
 export function Roster({ table }: RosterProps) {
 	const { t } = useTranslation()
 	const { people, add, remove } = useRoster(table.id)
+	const { personId: myPersonId } = useWhoAmI(table.id)
 	const [pending, setPending] = useState<PersonDto | null>(null)
+	const [noteFor, setNoteFor] = useState<PersonDto | null>(null)
 	const inputRef = useRef<HTMLInputElement>(null)
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -30,7 +34,9 @@ export function Roster({ table }: RosterProps) {
 			</p>
 
 			{people.length === 0 ? (
-				<p className='py-6 text-center text-sm text-muted-foreground'>{t('roster.empty')}</p>
+				<p className='py-6 text-center text-sm text-muted-foreground'>
+					{t('roster.empty')}
+				</p>
 			) : (
 				<ul className='flex flex-col gap-2'>
 					{people.map(person => (
@@ -46,14 +52,24 @@ export function Roster({ table }: RosterProps) {
 									</span>
 								)}
 							</span>
-							<button
-								type='button'
-								onClick={() => setPending(person)}
-								aria-label={t('roster.remove')}
-								className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'
-							>
-								<X className='size-4' />
-							</button>
+							<div className='flex items-center gap-1'>
+								<button
+									type='button'
+									onClick={() => setNoteFor(person)}
+									aria-label={t('notes.title', { name: person.name })}
+									className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
+								>
+									<NotebookText className='size-4' />
+								</button>
+								<button
+									type='button'
+									onClick={() => setPending(person)}
+									aria-label={t('roster.remove')}
+									className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'
+								>
+									<X className='size-4' />
+								</button>
+							</div>
 						</li>
 					))}
 				</ul>
@@ -69,13 +85,22 @@ export function Roster({ table }: RosterProps) {
 			<ConfirmDialog
 				open={pending !== null}
 				onOpenChange={open => !open && setPending(null)}
-				title={t('roster.remove_title', { name: pending?.name, table: table.name })}
+				title={t('roster.remove_title', {
+					name: pending?.name,
+					table: table.name,
+				})}
 				description={t('roster.remove_desc')}
 				confirmLabel={t('roster.remove')}
 				onConfirm={() => {
 					if (pending) remove(pending.id)
 					setPending(null)
 				}}
+			/>
+
+			<PersonNoteDialog
+				person={noteFor}
+				isMe={noteFor?.id === myPersonId}
+				onOpenChange={open => !open && setNoteFor(null)}
 			/>
 		</div>
 	)

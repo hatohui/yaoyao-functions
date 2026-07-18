@@ -68,7 +68,7 @@ export class FeedbackService {
 
   async create(dto: CreateFeedbackDto) {
     const eventId = await this.events.getActiveId();
-    return prisma.feedback.create({
+    const feedback = await prisma.feedback.create({
       data: {
         id: uuidv4(),
         by: dto.by || null,
@@ -77,6 +77,7 @@ export class FeedbackService {
       },
       include: { reactions: true },
     });
+    return { ...feedback, reactionTotal: 0 };
   }
 
   async react(feedbackId: string, emoji: string) {

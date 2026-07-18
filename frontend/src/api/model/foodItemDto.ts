@@ -17,4 +17,10 @@ export interface FoodItemDto {
   categoryId: string | null;
   isAvailable: boolean;
   isPopular: boolean;
+  /** @nullable */
+  defaultVariantId: string | null;
+  /** @nullable */
+  price: number | null;
+  /** @nullable */
+  currency: string | null;
 }

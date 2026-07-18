@@ -58,7 +58,10 @@ export class FoodService {
         where,
         skip: offset,
         take: count,
-        include: { translations: { where: { language: lang } } },
+        include: {
+          translations: { where: { language: lang } },
+          variants: { where: { isAvailable: true }, orderBy: { price: "asc" } },
+        },
       }),
       prisma.food.count({ where }),
       this.getPopularFoodIds(),
@@ -67,6 +70,7 @@ export class FoodService {
     const popular = new Set(popularIds);
     const foods = rawFoods.map((f) => {
       const t = f.translations[0];
+      const defaultVariant = f.variants[0] ?? null;
       return {
         id: f.id,
         name: t?.name ?? "",
@@ -75,6 +79,9 @@ export class FoodService {
         categoryId: f.categoryId,
         isAvailable: f.isAvailable,
         isPopular: popular.has(f.id),
+        defaultVariantId: defaultVariant?.id ?? null,
+        price: defaultVariant?.price ? Number(defaultVariant.price) : null,
+        currency: defaultVariant?.currency ?? null,
       };
     });
 
@@ -87,6 +94,37 @@ export class FoodService {
     );
 
     return result;
+  }
+
+  async findOne(id: string, lang = "en") {
+    const food = await prisma.food.findUnique({
+      where: { id },
+      include: {
+        translations: { where: { language: lang } },
+        variants: {
+          include: { translations: { where: { language: lang } } },
+        },
+      },
+    });
+    if (!food) throw new NotFoundException("Food not found");
+
+    const t = food.translations[0];
+    return {
+      id: food.id,
+      name: t?.name ?? "",
+      description: t?.description ?? null,
+      imageUrl: food.imageUrl,
+      categoryId: food.categoryId,
+      isAvailable: food.isAvailable,
+      variants: food.variants.map((v) => ({
+        id: v.id,
+        label: v.translations[0]?.label ?? "",
+        price: v.price ? Number(v.price) : null,
+        currency: v.currency,
+        isSeasonal: v.isSeasonal,
+        isAvailable: v.isAvailable,
+      })),
+    };
   }
 
   async create(dto: CreateFoodDto) {

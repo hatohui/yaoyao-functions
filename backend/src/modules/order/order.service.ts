@@ -5,26 +5,54 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { BatchCreateOrderDto } from './dto/batch-create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 
-const orderInclude = {
-  variant: { include: { food: true } },
+const orderIncludeWithLang = (lang: string) => ({
+  variant: {
+    include: {
+      food: { include: { translations: { where: { language: lang } } } },
+      translations: { where: { language: lang } },
+    },
+  },
   splits: true,
-};
+});
+
+type OrderWithLangInclude = Awaited<
+  ReturnType<typeof prisma.order.findMany<{ include: ReturnType<typeof orderIncludeWithLang> }>>
+>[number];
 
 @Injectable()
 export class OrderService {
-  findByTable(tableId: string) {
-    return prisma.order.findMany({
-      where: { tableId },
-      include: orderInclude,
-      orderBy: { createdAt: 'desc' },
-    });
+  private toResponseDto(order: OrderWithLangInclude) {
+    return {
+      id: order.id,
+      tableId: order.tableId,
+      variantId: order.variantId,
+      eventId: order.eventId,
+      quantity: order.quantity,
+      price: Number(order.price),
+      splitAll: order.splitAll,
+      foodName: order.variant.food.translations[0]?.name ?? '',
+      variantLabel: order.variant.translations[0]?.label ?? '',
+      splits: order.splits.map((s) => ({ personId: s.personId })),
+      createdAt: order.createdAt,
+      updatedAt: order.updatedAt,
+    };
   }
 
-  findAll() {
-    return prisma.order.findMany({
-      include: orderInclude,
+  async findByTable(tableId: string, lang = 'en') {
+    const orders = await prisma.order.findMany({
+      where: { tableId },
+      include: orderIncludeWithLang(lang),
       orderBy: { createdAt: 'desc' },
     });
+    return orders.map((o) => this.toResponseDto(o));
+  }
+
+  async findAll(lang = 'en') {
+    const orders = await prisma.order.findMany({
+      include: orderIncludeWithLang(lang),
+      orderBy: { createdAt: 'desc' },
+    });
+    return orders.map((o) => this.toResponseDto(o));
   }
 
   private async resolvePrice(variantId: string): Promise<number> {
@@ -50,13 +78,13 @@ export class OrderService {
     return { create: personIds.map((personId) => ({ personId })) };
   }
 
-  async create(dto: CreateOrderDto) {
+  async create(dto: CreateOrderDto, lang = 'en') {
     const [price, eventId] = await Promise.all([
       this.resolvePrice(dto.variantId),
       this.tableEventId(dto.tableId),
     ]);
     const splitAll = dto.splitAll ?? true;
-    return prisma.order.create({
+    const order = await prisma.order.create({
       data: {
         id: uuidv4(),
         tableId: dto.tableId,
@@ -67,11 +95,12 @@ export class OrderService {
         splitAll,
         splits: this.splitData(splitAll, dto.personIds),
       },
-      include: orderInclude,
+      include: orderIncludeWithLang(lang),
     });
+    return this.toResponseDto(order);
   }
 
-  async createBatch(dto: BatchCreateOrderDto) {
+  async createBatch(dto: BatchCreateOrderDto, lang = 'en') {
     const eventId = await this.tableEventId(dto.tableId);
     const splitAll = dto.splitAll ?? true;
     const priced = await Promise.all(
@@ -81,7 +110,7 @@ export class OrderService {
       })),
     );
 
-    return prisma.$transaction((tx) =>
+    const orders = await prisma.$transaction((tx) =>
       Promise.all(
         priced.map(({ item, price }) =>
           tx.order.create({
@@ -95,14 +124,15 @@ export class OrderService {
               splitAll,
               splits: this.splitData(splitAll, dto.personIds),
             },
-            include: orderInclude,
+            include: orderIncludeWithLang(lang),
           }),
         ),
       ),
     );
+    return orders.map((o) => this.toResponseDto(o));
   }
 
-  async update(id: string, dto: UpdateOrderDto) {
+  async update(id: string, dto: UpdateOrderDto, lang = 'en') {
     const order = await prisma.order.findUnique({ where: { id } });
     if (!order) throw new NotFoundException('Order not found');
 
@@ -110,7 +140,7 @@ export class OrderService {
     const resetSplits =
       dto.splitAll !== undefined || dto.personIds !== undefined;
 
-    return prisma.$transaction(async (tx) => {
+    const updated = await prisma.$transaction(async (tx) => {
       if (resetSplits) {
         await tx.orderSplit.deleteMany({ where: { orderId: id } });
         if (!splitAll && dto.personIds && dto.personIds.length > 0) {
@@ -125,9 +155,10 @@ export class OrderService {
           quantity: dto.quantity ?? order.quantity,
           splitAll,
         },
-        include: orderInclude,
+        include: orderIncludeWithLang(lang),
       });
     });
+    return this.toResponseDto(updated);
   }
 
   async remove(id: string) {

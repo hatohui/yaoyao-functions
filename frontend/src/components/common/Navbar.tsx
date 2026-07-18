@@ -17,7 +17,9 @@ export function Navbar() {
 					className='shrink-0 font-bold tracking-tight text-foreground transition-opacity hover:opacity-70'
 				>
 					<span className='hidden text-base sm:inline'>YaoYao Dinner</span>
-					<span className='inline text-lg font-black text-primary sm:hidden'>YY</span>
+					<span className='inline text-lg font-black text-primary sm:hidden'>
+						YY
+					</span>
 				</Link>
 
 				<nav className='flex min-w-0 items-center gap-0.5 sm:gap-1'>
@@ -43,6 +45,18 @@ export function Navbar() {
 						)}
 					>
 						{t('nav.tables')}
+					</Link>
+
+					<Link
+						to='/feedback'
+						className={cn(
+							'rounded-full px-3 py-1.5 text-sm font-medium transition-all sm:px-4',
+							pathname === '/feedback'
+								? 'bg-primary/90 text-primary-foreground shadow-sm'
+								: 'text-muted-foreground hover:bg-accent hover:text-foreground'
+						)}
+					>
+						{t('nav.feedback')}
 					</Link>
 
 					{import.meta.env.DEV && (

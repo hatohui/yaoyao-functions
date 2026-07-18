@@ -8,4 +8,5 @@
 
 export type GetOrdersParams = {
 tableId?: string;
+lang?: string;
 };

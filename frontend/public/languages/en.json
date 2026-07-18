@@ -20,7 +20,9 @@
 	"common": {
 		"back": "Back",
 		"confirm": "Confirm",
-		"cancel": "Cancel"
+		"cancel": "Cancel",
+		"save": "Save",
+		"loading": "Loading…"
 	},
 	"health": {
 		"title": "System Health",
@@ -50,7 +52,8 @@
 	"nav": {
 		"menu": "Menu",
 		"dev": "Dev",
-		"tables": "Tables"
+		"tables": "Tables",
+		"feedback": "Feedback"
 	},
 	"access": {
 		"back": "Back",
@@ -84,11 +87,9 @@
 		"remove_failed": "Couldn't remove, please try again"
 	},
 	"menu": {
-		"our_menu": "Our Menu",
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
-		"restaurant_location": "Puchong Jaya · Family Style",
-		"tagline": "Fresh ingredients · Authentic flavors",
+		"restaurant_location": "Puchong Jaya",
 		"dishes_available": "{{count}} dishes available",
 		"search_placeholder": "Search dishes…",
 		"all_categories": "All",
@@ -101,9 +102,71 @@
 		"error_desc": "Failed to load menu items. Please try again.",
 		"try_again": "Try again",
 		"showing": "Showing {{from}}–{{to}} of {{total}} dishes",
-		"verified": "Verified",
 		"unavailable": "Unavailable",
-		"popular": "Popular"
+		"popular": "Popular",
+		"select_item": "Select this item",
+		"selected_count": "{{count}} selected",
+		"clear_selection": "Clear selection",
+		"add_to_order": "Add to order",
+		"adding": "Adding…",
+		"open_your_table": "Open your table",
+		"added_to_order": "Added to order",
+		"add_failed": "Couldn't add, please try again"
+	},
+	"food_detail": {
+		"back_to_menu": "Back to menu",
+		"variants": "Options",
+		"add_to_order": "Add to order",
+		"not_found": "Food not found"
+	},
+	"tabs": {
+		"people": "People",
+		"orders": "Orders",
+		"your_split": "Your split"
+	},
+	"orders": {
+		"shared": "Shared",
+		"personal": "Personal",
+		"split_n": "Split {{count}}",
+		"remove": "Remove",
+		"remove_title": "Remove {{name}}?",
+		"remove_desc": "This can't be undone — it's removed from the table's order.",
+		"empty": "No orders yet — add something from the menu",
+		"total": "Table total",
+		"update_failed": "Couldn't update, please try again",
+		"remove_failed": "Couldn't remove, please try again"
+	},
+	"split": {
+		"title": "Split this item",
+		"just_me": "Just me",
+		"whole_table": "Whole table",
+		"choose_people": "Choose people",
+		"who_are_you": "Who are you at this table?",
+		"viewing_as": "Viewing as {{name}}",
+		"not_you": "Not you?",
+		"empty": "No items are on your split",
+		"your_total": "Your total"
+	},
+	"notes": {
+		"title": "{{name}}'s note",
+		"placeholder": "Add a note visible to everyone, e.g. \"can't eat shrimp\"",
+		"empty": "No note yet"
+	},
+	"feedback": {
+		"title": "Feedback wall",
+		"name_placeholder": "Your name (optional)",
+		"content_placeholder": "Say something…",
+		"post": "Post",
+		"post_failed": "Couldn't post, please try again",
+		"anonymous": "Anonymous",
+		"sort_recent": "Recent",
+		"sort_top": "Top",
+		"empty": "No feedback yet — be the first to post"
+	},
+	"floor_plan": {
+		"title": "Floor plan",
+		"view_map": "Map view",
+		"empty": "No tables placed on the map yet"
 	},
 	"dev": {
 		"title": "Development Testing",

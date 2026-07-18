@@ -20,7 +20,9 @@
 	"common": {
 		"back": "ย้อนกลับ",
 		"confirm": "ยืนยัน",
-		"cancel": "ยกเลิก"
+		"cancel": "ยกเลิก",
+		"save": "บันทึก",
+		"loading": "กำลังโหลด…"
 	},
 	"health": {
 		"title": "สุขภาพระบบ",
@@ -50,7 +52,8 @@
 	"nav": {
 		"menu": "เมนู",
 		"dev": "Dev",
-		"tables": "โต๊ะ"
+		"tables": "โต๊ะ",
+		"feedback": "ความคิดเห็น"
 	},
 	"access": {
 		"back": "กลับ",
@@ -84,11 +87,9 @@
 		"remove_failed": "ลบไม่สำเร็จ กรุณาลองใหม่"
 	},
 	"menu": {
-		"our_menu": "เมนู",
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
-		"restaurant_location": "Puchong Jaya · ร้านอาหารครอบครัว",
-		"tagline": "วัตถุดิบสด · รสชาติแท้",
+		"restaurant_location": "Puchong Jaya",
 		"dishes_available": "มี {{count}} เมนู",
 		"search_placeholder": "ค้นหาเมนู…",
 		"all_categories": "ทั้งหมด",
@@ -101,9 +102,71 @@
 		"error_desc": "โหลดเมนูไม่สำเร็จ โปรดลองอีกครั้ง",
 		"try_again": "ลองอีกครั้ง",
 		"showing": "แสดง {{from}}–{{to}} จาก {{total}} เมนู",
-		"verified": "ยืนยันแล้ว",
 		"unavailable": "ไม่พร้อมให้บริการ",
-		"popular": "ยอดนิยม"
+		"popular": "ยอดนิยม",
+		"select_item": "เลือกรายการนี้",
+		"selected_count": "เลือกแล้ว {{count}} รายการ",
+		"clear_selection": "ล้างการเลือก",
+		"add_to_order": "เพิ่มลงออเดอร์",
+		"adding": "กำลังเพิ่ม…",
+		"open_your_table": "เปิดโต๊ะของคุณ",
+		"added_to_order": "เพิ่มลงออเดอร์แล้ว",
+		"add_failed": "เพิ่มไม่สำเร็จ โปรดลองอีกครั้ง"
+	},
+	"food_detail": {
+		"back_to_menu": "กลับไปที่เมนู",
+		"variants": "ตัวเลือก",
+		"add_to_order": "เพิ่มลงออเดอร์",
+		"not_found": "ไม่พบเมนูนี้"
+	},
+	"tabs": {
+		"people": "คนที่โต๊ะ",
+		"orders": "ออเดอร์",
+		"your_split": "ส่วนของคุณ"
+	},
+	"orders": {
+		"shared": "ร่วมกัน",
+		"personal": "ส่วนตัว",
+		"split_n": "แบ่ง {{count}} คน",
+		"remove": "ลบ",
+		"remove_title": "ลบ {{name}}?",
+		"remove_desc": "ไม่สามารถย้อนกลับได้ — จะถูกลบออกจากออเดอร์ของโต๊ะ",
+		"empty": "ยังไม่มีออเดอร์ — เพิ่มเมนูได้เลย",
+		"total": "ยอดรวมของโต๊ะ",
+		"update_failed": "อัปเดตไม่สำเร็จ โปรดลองอีกครั้ง",
+		"remove_failed": "ลบไม่สำเร็จ โปรดลองอีกครั้ง"
+	},
+	"split": {
+		"title": "แบ่งรายการนี้",
+		"just_me": "แค่ฉันคนเดียว",
+		"whole_table": "ทั้งโต๊ะ",
+		"choose_people": "เลือกคน",
+		"who_are_you": "คุณคือใครที่โต๊ะนี้?",
+		"viewing_as": "กำลังดูในชื่อ {{name}}",
+		"not_you": "ไม่ใช่คุณ?",
+		"empty": "ยังไม่มีรายการในส่วนของคุณ",
+		"your_total": "ยอดรวมของคุณ"
+	},
+	"notes": {
+		"title": "โน้ตของ {{name}}",
+		"placeholder": "เพิ่มโน้ตที่ทุกคนมองเห็นได้ เช่น \"กินกุ้งไม่ได้\"",
+		"empty": "ยังไม่มีโน้ต"
+	},
+	"feedback": {
+		"title": "กระดานความคิดเห็น",
+		"name_placeholder": "ชื่อของคุณ (ไม่บังคับ)",
+		"content_placeholder": "พูดอะไรสักอย่าง…",
+		"post": "โพสต์",
+		"post_failed": "โพสต์ไม่สำเร็จ โปรดลองอีกครั้ง",
+		"anonymous": "ไม่ระบุชื่อ",
+		"sort_recent": "ล่าสุด",
+		"sort_top": "ยอดนิยม",
+		"empty": "ยังไม่มีความคิดเห็น — เป็นคนแรกเลย"
+	},
+	"floor_plan": {
+		"title": "ผังโต๊ะ",
+		"view_map": "ดูผังโต๊ะ",
+		"empty": "ยังไม่มีโต๊ะบนผัง"
 	},
 	"dev": {
 		"title": "การทดสอบการพัฒนา",

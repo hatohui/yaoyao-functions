@@ -34,7 +34,10 @@ export function useRoster(tableId: string) {
 					tableId,
 					eventId: null,
 				}
-				qc.setQueryData<PersonDto[]>(peopleKey, old => [...(old ?? []), optimistic])
+				qc.setQueryData<PersonDto[]>(peopleKey, old => [
+					...(old ?? []),
+					optimistic,
+				])
 				return { prev }
 			},
 			onError: (_e, _v, ctx) => {

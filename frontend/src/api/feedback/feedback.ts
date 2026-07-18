@@ -26,8 +26,11 @@ import type {
 
 import type {
   CreateFeedbackDto,
+  FeedbackItemDto,
+  FeedbackReactionDto,
   GetFeedbackByEventParams,
   GetFeedbackParams,
+  GetFeedbackResponseDto,
   ReactDto
 } from '../model';
 
@@ -42,7 +45,7 @@ export const getFeedback = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<GetFeedbackResponseDto>(
       {url: `/api/feedback`, method: 'GET',
         params, signal
     },
@@ -129,7 +132,7 @@ export const createFeedback = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FeedbackItemDto>(
       {url: `/api/feedback`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createFeedbackDto, signal
@@ -186,7 +189,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<GetFeedbackResponseDto>(
       {url: `/api/feedback/event`, method: 'GET',
         params, signal
     },
@@ -274,7 +277,7 @@ export const reactToFeedback = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FeedbackReactionDto>(
       {url: `/api/feedback/${id}/react`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: reactDto, signal

@@ -8,11 +8,12 @@ import {
   Param,
   Query,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { BatchCreateOrderDto } from './dto/batch-create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { OrderResponseDto } from './dto/order-response.dto';
 
 @ApiTags('orders')
 @Controller('orders')
@@ -22,27 +23,39 @@ export class OrderController {
   @Get()
   @ApiOperation({ operationId: 'getOrders' })
   @ApiQuery({ name: 'tableId', required: false, type: String })
-  findAll(@Query('tableId') tableId?: string) {
-    if (tableId) return this.order.findByTable(tableId);
-    return this.order.findAll();
+  @ApiQuery({ name: 'lang', required: false, type: String, example: 'en' })
+  @ApiResponse({ status: 200, type: [OrderResponseDto] })
+  findAll(@Query('tableId') tableId?: string, @Query('lang') lang = 'en') {
+    if (tableId) return this.order.findByTable(tableId, lang);
+    return this.order.findAll(lang);
   }
 
   @Post()
   @ApiOperation({ operationId: 'createOrder' })
-  create(@Body() dto: CreateOrderDto) {
-    return this.order.create(dto);
+  @ApiQuery({ name: 'lang', required: false, type: String, example: 'en' })
+  @ApiResponse({ status: 201, type: OrderResponseDto })
+  create(@Body() dto: CreateOrderDto, @Query('lang') lang = 'en') {
+    return this.order.create(dto, lang);
   }
 
   @Post('batch')
   @ApiOperation({ operationId: 'createOrderBatch' })
-  createBatch(@Body() dto: BatchCreateOrderDto) {
-    return this.order.createBatch(dto);
+  @ApiQuery({ name: 'lang', required: false, type: String, example: 'en' })
+  @ApiResponse({ status: 201, type: [OrderResponseDto] })
+  createBatch(@Body() dto: BatchCreateOrderDto, @Query('lang') lang = 'en') {
+    return this.order.createBatch(dto, lang);
   }
 
   @Patch(':id')
   @ApiOperation({ operationId: 'updateOrder' })
-  update(@Param('id') id: string, @Body() dto: UpdateOrderDto) {
-    return this.order.update(id, dto);
+  @ApiQuery({ name: 'lang', required: false, type: String, example: 'en' })
+  @ApiResponse({ status: 200, type: OrderResponseDto })
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdateOrderDto,
+    @Query('lang') lang = 'en',
+  ) {
+    return this.order.update(id, dto, lang);
   }
 
   @Delete(':id')
