@@ -53,7 +53,8 @@
 		"menu": "Menu",
 		"dev": "Dev",
 		"tables": "Tables",
-		"feedback": "Feedback"
+		"feedback": "Feedback",
+		"admin": "Admin"
 	},
 	"access": {
 		"back": "Back",
@@ -108,8 +109,9 @@
 		"selected_count": "{{count}} selected",
 		"clear_selection": "Clear selection",
 		"add_to_order": "Add to order",
+		"configure_title": "Configure your order",
 		"adding": "Adding…",
-		"open_your_table": "Open your table",
+		"choose_table_title": "Choose a table",
 		"added_to_order": "Added to order",
 		"add_failed": "Couldn't add, please try again"
 	},
@@ -122,17 +124,19 @@
 	"tabs": {
 		"people": "People",
 		"orders": "Orders",
-		"your_split": "Your split"
+		"splits": "Splits"
 	},
 	"orders": {
 		"shared": "Shared",
 		"personal": "Personal",
-		"split_n": "Split {{count}}",
+		"free_badge": "Free",
+		"unknown_person": "Someone",
 		"remove": "Remove",
 		"remove_title": "Remove {{name}}?",
 		"remove_desc": "This can't be undone — it's removed from the table's order.",
 		"empty": "No orders yet — add something from the menu",
 		"total": "Table total",
+		"quantity": "Quantity",
 		"update_failed": "Couldn't update, please try again",
 		"remove_failed": "Couldn't remove, please try again"
 	},
@@ -141,11 +145,9 @@
 		"just_me": "Just me",
 		"whole_table": "Whole table",
 		"choose_people": "Choose people",
-		"who_are_you": "Who are you at this table?",
-		"viewing_as": "Viewing as {{name}}",
-		"not_you": "Not you?",
-		"empty": "No items are on your split",
-		"your_total": "Your total"
+		"empty": "No orders yet",
+		"you": "You",
+		"free_badge": "Free"
 	},
 	"notes": {
 		"title": "{{name}}'s note",
@@ -217,6 +219,170 @@
 			"undo_description": "You can undo this action",
 			"undo": "Undo",
 			"action_undone": "Action undone"
+		}
+	},
+	"admin": {
+		"gate": {
+			"title": "Admin access",
+			"subtitle": "Enter the admin passphrase to continue",
+			"placeholder": "Passphrase",
+			"invalid": "That passphrase didn't work",
+			"unlocking": "Unlocking…",
+			"unlock": "Unlock"
+		},
+		"nav": {
+			"title": "Admin",
+			"dashboard": "Dashboard",
+			"exit": "Exit to site",
+			"lock": "Lock admin",
+			"toggle": "Toggle admin menu",
+			"tables": "Tables",
+			"food": "Food",
+			"presets": "Presets",
+			"people": "People",
+			"stats": "Stats",
+			"feedback": "Feedback",
+			"settings": "Settings"
+		},
+		"dashboard": {
+			"title": "Dashboard",
+			"publish": "Publish new event",
+			"publishing": "Publishing…",
+			"publish_title": "Publish a new event?",
+			"publish_desc_active": "This resets what guests currently see: the live table set is swapped for whatever is staged, and a fresh PIN is generated. Past data is kept, not deleted.",
+			"publish_desc_empty": "This generates a fresh PIN and starts a new event from whatever tables are staged.",
+			"publish_name_placeholder": "Event name (optional)",
+			"published": "Event published",
+			"publish_failed": "Couldn't publish, please try again",
+			"pin_copied": "PIN copied",
+			"copy_pin": "Copy",
+			"current_event": "Current event",
+			"no_active_event": "No event is live right now. Publish one to give guests a PIN.",
+			"past_events": "Past events",
+			"past_events_empty": "No past events yet",
+			"unnamed_event": "Unnamed event",
+			"stat_tables": "Tables",
+			"stat_occupied": "Occupied",
+			"stat_people": "People",
+			"stat_orders": "Orders"
+		},
+		"tables": {
+			"title": "Tables",
+			"create": "New table",
+			"create_title": "Create a table",
+			"name": "Name",
+			"name_placeholder": "Table 1",
+			"capacity": "Capacity",
+			"staged": "Staged",
+			"live": "Live",
+			"empty": "No tables here yet",
+			"select_all": "Select all",
+			"selected_count": "{{count}} selected",
+			"bulk_create": "Bulk create",
+			"bulk_create_title": "Bulk create tables",
+			"bulk_create_desc": "Tables are auto-numbered (Table 1, Table 2, ...) — rename any of them afterward.",
+			"count": "Count",
+			"created": "Table created",
+			"bulk_created": "Tables created",
+			"create_failed": "Couldn't create, please try again",
+			"deleted": "Deleted",
+			"delete_failed": "Couldn't delete, please try again",
+			"delete_selected": "Delete",
+			"bulk_delete_title": "Delete {{count}} tables?",
+			"bulk_delete_desc": "This can't be undone — the tables and their rosters/orders will be removed.",
+			"move_to_staging": "Move to staging",
+			"moved_to_staging": "Moved to staging"
+		},
+		"floor_plan": {
+			"drag_hint": "Drag a table onto its spot on the floor — positions save as you drop them."
+		},
+		"people": {
+			"title": "People",
+			"search_placeholder": "Search people…",
+			"empty": "No people found",
+			"name": "Name",
+			"table": "Table",
+			"ordered": "Ordered",
+			"note": "Note"
+		},
+		"stats": {
+			"title": "Stats",
+			"popular_title": "Popular items",
+			"popular_empty": "No orders yet",
+			"scope_event": "This event",
+			"scope_all": "All time",
+			"totals_title": "Per-table totals",
+			"totals_empty": "No tables yet",
+			"outlier": "Outlier"
+		},
+		"feedback": {
+			"title": "Feedback",
+			"select_event": "Select an event",
+			"reaction_count": "{{count}} reactions"
+		},
+		"settings": {
+			"title": "Settings",
+			"subtitle": "Toggle features and tune system parameters. Changes apply immediately.",
+			"saved": "Saved",
+			"save_failed": "Could not save setting",
+			"invalid_json": "Invalid JSON",
+			"empty": "No settings found",
+			"category_auth": "Access",
+			"category_event": "Event",
+			"category_tables": "Tables",
+			"category_feedback": "Feedback",
+			"category_features": "Features"
+		},
+		"food": {
+			"title": "Food catalog",
+			"create": "New food",
+			"create_title": "Create a food",
+			"name": "Name",
+			"category": "Category",
+			"price": "Price",
+			"available": "Available",
+			"calculated": "Counts toward bill",
+			"variants": "Variants",
+			"variants_count": "{{count}} variants",
+			"empty": "No food items found",
+			"save_failed": "Couldn't save, please try again",
+			"delete": "Delete",
+			"delete_title": "Delete {{name}}?",
+			"delete_desc": "This can't be undone. Foods with order history can't be deleted — toggle availability instead.",
+			"bulk_enable": "Enable",
+			"bulk_disable": "Disable",
+			"bulk_delete_desc": "This can't be undone — foods with order history will be skipped.",
+			"add_variant": "Add variant",
+			"variant_label_placeholder": "Label",
+			"variant_price_placeholder": "Price",
+			"default_variant_label": "Regular"
+		},
+		"presets": {
+			"title": "Preset menus",
+			"new": "New preset",
+			"empty": "No preset menus yet — create one to get started",
+			"menu_label": "Menu {{idx}}",
+			"active": "Active",
+			"activate": "Set active",
+			"deactivate": "Deactivate",
+			"price_label": "Flat price (per person)",
+			"save_failed": "Couldn't save, please try again",
+			"delete_preset": "Delete preset",
+			"items_empty": "No items — add foods from the catalog",
+			"add_item": "Add item",
+			"add_item_title": "Add food to preset",
+			"already_added": "Added",
+			"col_food": "Food",
+			"col_variant": "Variant",
+			"col_price": "Price",
+			"col_qty": "Qty",
+			"remove_item": "Remove",
+			"bulk_remove_desc": "The selected items will be removed from this preset."
+		},
+		"tables": {
+			"selected_count": "{{count}} selected",
+			"delete_selected": "Delete",
+			"bulk_delete_title": "Delete {{count}} items?"
 		}
 	}
 }

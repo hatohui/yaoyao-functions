@@ -11,6 +11,12 @@ export class FoodItemDto {
   @ApiProperty({ nullable: true, type: String }) defaultVariantId: string | null;
   @ApiProperty({ nullable: true, type: Number }) price: number | null;
   @ApiProperty({ nullable: true, type: String }) currency: string | null;
+  @ApiProperty({
+    description:
+      'Whether orders of this food count toward table/split totals. False for joke/gag menu items that still show a price and can be ordered, but are free.',
+  })
+  shouldCalculate: boolean;
+  @ApiProperty({ required: false }) aiTranslationFailed?: boolean;
 }
 
 export class GetFoodsResponseDto {
@@ -27,6 +33,7 @@ export class FoodVariantDto {
   @ApiProperty() currency: string;
   @ApiProperty() isSeasonal: boolean;
   @ApiProperty() isAvailable: boolean;
+  @ApiProperty({ required: false }) aiTranslationFailed?: boolean;
 }
 
 export class FoodDetailDto {
@@ -36,5 +43,18 @@ export class FoodDetailDto {
   @ApiProperty({ nullable: true, type: String }) description: string | null;
   @ApiProperty({ nullable: true, type: String }) categoryId: string | null;
   @ApiProperty() isAvailable: boolean;
+  @ApiProperty({
+    description:
+      'Whether orders of this food count toward table/split totals. False for joke/gag menu items that still show a price and can be ordered, but are free.',
+  })
+  shouldCalculate: boolean;
   @ApiProperty({ type: [FoodVariantDto] }) variants: FoodVariantDto[];
+  @ApiProperty({ required: false }) aiTranslationFailed?: boolean;
+}
+
+export class GetFoodsForAdminResponseDto {
+  @ApiProperty({ type: [FoodDetailDto] }) foods: FoodDetailDto[];
+  @ApiProperty() page: number;
+  @ApiProperty() count: number;
+  @ApiProperty() total: number;
 }

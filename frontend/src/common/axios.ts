@@ -1,5 +1,7 @@
 import a, { type AxiosRequestConfig } from 'axios'
 import { API_URL } from './app'
+import { ADMIN_HEADER, ADMIN_PASSPHRASE_STORAGE_KEY } from './constants'
+import { localStorage } from '@/utils/localstorage'
 
 const ApiUrl = API_URL
 
@@ -9,6 +11,12 @@ const axios = a.create({
 	headers: {
 		'Content-Type': 'application/json',
 	},
+})
+
+axios.interceptors.request.use(config => {
+	const passphrase = localStorage.load(ADMIN_PASSPHRASE_STORAGE_KEY)
+	if (passphrase) config.headers[ADMIN_HEADER] = passphrase
+	return config
 })
 
 axios.interceptors.response.use(

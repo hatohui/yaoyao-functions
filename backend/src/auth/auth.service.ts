@@ -1,21 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { prisma } from '../libs/prisma';
-import { getAdminPassphrase } from '@common/auth/admin';
+import { EventService } from '@modules/event/event.service';
+import { ConfigService } from '@modules/config/config.service';
 
 @Injectable()
 export class AuthService {
-  verifyAdmin(passphrase: string) {
-    return { valid: passphrase === getAdminPassphrase() };
+  constructor(
+    private events: EventService,
+    private config: ConfigService,
+  ) {}
+
+  async verifyAdmin(passphrase: string) {
+    const expected = await this.config.getAdminPassphrase();
+    return { valid: Boolean(expected) && passphrase === expected };
   }
 
   async verifyPin(pin: string) {
-    const event = await prisma.event.findFirst({
-      where: { isActive: true },
-      select: { id: true, pin: true },
-    });
-    if (!event || event.pin !== pin) {
+    const meta = await this.events.getActiveMeta();
+    if (!meta || meta.pin !== pin) {
       return { valid: false, eventId: null };
     }
-    return { valid: true, eventId: event.id };
+    return { valid: true, eventId: meta.id };
   }
 }

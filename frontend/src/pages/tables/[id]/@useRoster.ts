@@ -5,6 +5,7 @@ import {
 	useGetTablePeople,
 	getGetTablePeopleQueryKey,
 	getGetTableByIdQueryKey,
+	getGetTablesQueryKey,
 } from '@/api/tables/tables'
 import { useToast } from '@/hooks/useToast'
 import type { PersonDto } from '@/api/model'
@@ -21,6 +22,8 @@ export function useRoster(tableId: string) {
 	const invalidate = () => {
 		qc.invalidateQueries({ queryKey: peopleKey })
 		qc.invalidateQueries({ queryKey: tableKey })
+		// occupancy badges live in the tables list (search, floor plan, picker)
+		qc.invalidateQueries({ queryKey: getGetTablesQueryKey() })
 	}
 
 	const addMutation = useCreatePerson({

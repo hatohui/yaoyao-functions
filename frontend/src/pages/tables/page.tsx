@@ -6,11 +6,13 @@ import { SearchBar } from '@/components/common/SearchBar'
 import { PaginationBar } from '@/components/common/PaginationBar'
 import { TableList } from './@TableList'
 import { useTableSearch } from './@useTableSearch'
+import { useConfig } from '@/hooks/useConfig'
 
 export default function TablesPage() {
 	const { t } = useTranslation()
 	const { search, setSearch, tables, isLoading, isError, pagination } =
 		useTableSearch()
+	const { floorPlan } = useConfig()
 
 	return (
 		<div className='mx-auto flex max-w-2xl flex-col gap-4 px-4 py-6'>
@@ -18,13 +20,15 @@ export default function TablesPage() {
 				<h1 className='text-xl font-bold text-foreground'>
 					{t('tables.find_title')}
 				</h1>
-				<Link
-					to='/tables/map'
-					className='inline-flex items-center gap-1.5 rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
-				>
-					<Map className='size-4' />
-					{t('floor_plan.view_map')}
-				</Link>
+				{floorPlan && (
+					<Link
+						to='/tables/map'
+						className='inline-flex items-center gap-1.5 rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
+					>
+						<Map className='size-4' />
+						{t('floor_plan.view_map')}
+					</Link>
+				)}
 			</div>
 
 			<SearchBar

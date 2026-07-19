@@ -6,24 +6,32 @@
  * OpenAPI spec version: 1.0
  */
 import {
+  useMutation,
   useQuery
 } from '@tanstack/react-query';
 import type {
   DataTag,
   DefinedInitialDataOptions,
   DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
   QueryFunction,
   QueryKey,
   UndefinedInitialDataOptions,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult
 } from '@tanstack/react-query';
 
 import type {
+  BulkToggleDto,
   CategoryItemDto,
+  CreateCategoryDto,
   GetCategoriesParams,
-  GetCategoryByIdParams
+  GetCategoryByIdParams,
+  IdsDto,
+  UpdateCategoryDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -118,7 +126,64 @@ export function useGetCategories<TData = Awaited<ReturnType<typeof getCategories
 
 
 
-export const getCategoryById = (
+export const createCategory = (
+    createCategoryDto: CreateCategoryDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/categories`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createCategoryDto, signal
+    },
+      );
+    }
+
+
+
+export const getCreateCategoryMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: CreateCategoryDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: CreateCategoryDto}, TContext> => {
+
+const mutationKey = ['createCategory'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof createCategory>>, {data: CreateCategoryDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  createCategory(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type CreateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof createCategory>>>
+    export type CreateCategoryMutationBody = CreateCategoryDto
+    export type CreateCategoryMutationError = unknown
+
+    export const useCreateCategory = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof createCategory>>, TError,{data: CreateCategoryDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof createCategory>>,
+        TError,
+        {data: CreateCategoryDto},
+        TContext
+      > => {
+      return useMutation(getCreateCategoryMutationOptions(options), queryClient);
+    }
+    export const getCategoryById = (
     id: string,
     params?: GetCategoryByIdParams,
  signal?: AbortSignal
@@ -212,3 +277,230 @@ export function useGetCategoryById<TData = Awaited<ReturnType<typeof getCategory
 
 
 
+export const updateCategory = (
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/categories/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateCategoryDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdateCategoryMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{id: string;data: UpdateCategoryDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{id: string;data: UpdateCategoryDto}, TContext> => {
+
+const mutationKey = ['updateCategory'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateCategory>>, {id: string;data: UpdateCategoryDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateCategory(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof updateCategory>>>
+    export type UpdateCategoryMutationBody = UpdateCategoryDto
+    export type UpdateCategoryMutationError = unknown
+
+    export const useUpdateCategory = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateCategory>>, TError,{id: string;data: UpdateCategoryDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateCategory>>,
+        TError,
+        {id: string;data: UpdateCategoryDto},
+        TContext
+      > => {
+      return useMutation(getUpdateCategoryMutationOptions(options), queryClient);
+    }
+    export const deleteCategory = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/categories/${id}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+export const getDeleteCategoryMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deleteCategory'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCategory>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteCategory(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteCategoryMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCategory>>>
+
+    export type DeleteCategoryMutationError = unknown
+
+    export const useDeleteCategory = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteCategory>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteCategory>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getDeleteCategoryMutationOptions(options), queryClient);
+    }
+    export const bulkToggleCategories = (
+    bulkToggleDto: BulkToggleDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/categories/bulk-toggle`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: bulkToggleDto, signal
+    },
+      );
+    }
+
+
+
+export const getBulkToggleCategoriesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkToggleCategories>>, TError,{data: BulkToggleDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof bulkToggleCategories>>, TError,{data: BulkToggleDto}, TContext> => {
+
+const mutationKey = ['bulkToggleCategories'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bulkToggleCategories>>, {data: BulkToggleDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bulkToggleCategories(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BulkToggleCategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof bulkToggleCategories>>>
+    export type BulkToggleCategoriesMutationBody = BulkToggleDto
+    export type BulkToggleCategoriesMutationError = unknown
+
+    export const useBulkToggleCategories = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkToggleCategories>>, TError,{data: BulkToggleDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof bulkToggleCategories>>,
+        TError,
+        {data: BulkToggleDto},
+        TContext
+      > => {
+      return useMutation(getBulkToggleCategoriesMutationOptions(options), queryClient);
+    }
+    export const bulkDeleteCategories = (
+    idsDto: IdsDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/categories/bulk-delete`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: idsDto, signal
+    },
+      );
+    }
+
+
+
+export const getBulkDeleteCategoriesMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkDeleteCategories>>, TError,{data: IdsDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof bulkDeleteCategories>>, TError,{data: IdsDto}, TContext> => {
+
+const mutationKey = ['bulkDeleteCategories'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bulkDeleteCategories>>, {data: IdsDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bulkDeleteCategories(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BulkDeleteCategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof bulkDeleteCategories>>>
+    export type BulkDeleteCategoriesMutationBody = IdsDto
+    export type BulkDeleteCategoriesMutationError = unknown
+
+    export const useBulkDeleteCategories = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkDeleteCategories>>, TError,{data: IdsDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof bulkDeleteCategories>>,
+        TError,
+        {data: IdsDto},
+        TContext
+      > => {
+      return useMutation(getBulkDeleteCategoriesMutationOptions(options), queryClient);
+    }

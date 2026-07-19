@@ -58,14 +58,25 @@ export class StatsService {
     const tables = await prisma.table.findMany({
       where: { eventId, isStaging: false },
       orderBy: { no: 'asc' },
-      include: { orders: { select: { price: true, quantity: true } } },
+      include: {
+        orders: {
+          select: {
+            price: true,
+            quantity: true,
+            variant: { select: { food: { select: { shouldCalculate: true } } } },
+          },
+        },
+      },
     });
 
     const rows = tables.map((t) => ({
       tableId: t.id,
       name: t.name,
       total: t.orders.reduce(
-        (sum, o) => sum + Number(o.price) * o.quantity,
+        (sum, o) =>
+          o.variant.food.shouldCalculate
+            ? sum + Number(o.price) * o.quantity
+            : sum,
         0,
       ),
     }));

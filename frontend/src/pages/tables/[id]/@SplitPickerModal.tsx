@@ -8,11 +8,11 @@ import {
 	DialogTitle,
 	DialogFooter,
 } from '@/components/ui/dialog'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/utils/shadcn'
-
-type SplitMode = 'me' | 'table' | 'choose'
+import {
+	SplitModeSelector,
+	type SplitMode,
+} from '@/components/common/SplitModeSelector'
 
 interface SplitPickerModalProps {
 	open: boolean
@@ -79,44 +79,14 @@ export function SplitPickerModal({
 					<DialogTitle>{t('split.title')}</DialogTitle>
 				</DialogHeader>
 
-				<RadioGroup
-					value={mode}
-					onValueChange={v => setMode(v as SplitMode)}
-					className='gap-3'
-				>
-					<label className='flex items-center gap-2.5 text-sm font-medium text-foreground'>
-						<RadioGroupItem value='me' disabled={!myPersonId} />
-						{t('split.just_me')}
-					</label>
-					<label className='flex items-center gap-2.5 text-sm font-medium text-foreground'>
-						<RadioGroupItem value='table' />
-						{t('split.whole_table')}
-					</label>
-					<label className='flex items-center gap-2.5 text-sm font-medium text-foreground'>
-						<RadioGroupItem value='choose' />
-						{t('split.choose_people')}
-					</label>
-				</RadioGroup>
-
-				{mode === 'choose' && (
-					<div className='flex flex-wrap gap-2'>
-						{people.map(person => (
-							<button
-								key={person.id}
-								type='button'
-								onClick={() => toggle(person.id)}
-								className={cn(
-									'rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
-									chosen.has(person.id)
-										? 'border-primary bg-primary text-primary-foreground'
-										: 'border-border/60 bg-card text-foreground hover:bg-muted'
-								)}
-							>
-								{person.name}
-							</button>
-						))}
-					</div>
-				)}
+				<SplitModeSelector
+					people={people}
+					mode={mode}
+					onModeChange={setMode}
+					chosen={chosen}
+					onToggle={toggle}
+					myPersonId={myPersonId}
+				/>
 
 				<DialogFooter>
 					<Button

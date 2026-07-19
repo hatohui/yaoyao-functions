@@ -1,23 +1,14 @@
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router'
 import { ShoppingBag, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface SelectionBarProps {
 	count: number
-	activeTableId: string | null
-	pending?: boolean
 	onClear: () => void
 	onAdd: () => void
 }
 
-export function SelectionBar({
-	count,
-	activeTableId,
-	pending,
-	onClear,
-	onAdd,
-}: SelectionBarProps) {
+export function SelectionBar({ count, onClear, onAdd }: SelectionBarProps) {
 	const { t } = useTranslation()
 
 	if (count === 0) return null
@@ -37,21 +28,10 @@ export function SelectionBar({
 				{t('menu.selected_count', { count })}
 			</span>
 
-			{activeTableId ? (
-				<Button
-					size='sm'
-					className='gap-1.5 rounded-full'
-					disabled={pending}
-					onClick={onAdd}
-				>
-					<ShoppingBag className='size-4' />
-					{pending ? t('menu.adding') : t('menu.add_to_order')}
-				</Button>
-			) : (
-				<Button size='sm' className='rounded-full' asChild>
-					<Link to='/tables'>{t('menu.open_your_table')}</Link>
-				</Button>
-			)}
+			<Button size='sm' className='gap-1.5 rounded-full' onClick={onAdd}>
+				<ShoppingBag className='size-4' />
+				{t('menu.add_to_order')}
+			</Button>
 		</div>
 	)
 }

@@ -48,4 +48,23 @@ export class CreateFoodDto {
   @Type(() => VariantDto)
   @IsOptional()
   variants?: VariantDto[];
+
+  @ApiProperty({
+    required: false,
+    default: true,
+    description:
+      'Set to false for joke/gag menu items: guests can still order them and see a price, but they are excluded from table/split totals.',
+  })
+  @IsBoolean()
+  @IsOptional()
+  shouldCalculate?: boolean;
+
+  @ApiProperty({
+    required: false,
+    default: 'en',
+    description: 'Locale the name/description/variant labels are written in',
+  })
+  @IsString()
+  @IsOptional()
+  lang?: string;
 }

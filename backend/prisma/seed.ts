@@ -4,6 +4,10 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 import * as path from 'path';
+import {
+  CONFIG_DEFAULTS,
+  serializeConfigValue,
+} from '../src/common/config/registry';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
@@ -85,6 +89,24 @@ async function seedLanguages() {
     });
   }
   console.log(`✓ Languages (${languages.length})`);
+}
+
+async function seedConfig() {
+  for (const c of CONFIG_DEFAULTS) {
+    await prisma.appConfig.upsert({
+      where: { key: c.key },
+      update: {},
+      create: {
+        key: c.key,
+        value: serializeConfigValue(c.type, c.value),
+        type: c.type,
+        category: c.category,
+        label: c.label,
+        isPublic: c.isPublic,
+      },
+    });
+  }
+  console.log(`✓ App config (${CONFIG_DEFAULTS.length} settings)`);
 }
 
 async function seedCategories(): Promise<Record<string, string>> {
@@ -226,15 +248,23 @@ async function seedFoods(categoryIds: Record<string, string>) {
 }
 
 async function main() {
-  console.log('🌱 Seeding database...\n');
+  const withSampleData = process.argv.includes('--with-sample-data');
 
+  console.log('🌱 Seeding core data...\n');
   await seedLanguages();
+  await seedConfig();
   const categoryIds = await seedCategories();
-  await seedEvent();
-  await seedTables();
   await seedFoods(categoryIds);
 
-  console.log('\n✅ Seed complete!');
+  if (withSampleData) {
+    console.log('\n🧪 Seeding sample data...\n');
+    await seedEvent();
+    await seedTables();
+  }
+
+  console.log(
+    `\n✅ Seed complete!${withSampleData ? '' : ' (core only — pass --with-sample-data for demo content)'}`,
+  );
 }
 
 main()

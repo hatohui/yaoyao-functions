@@ -25,7 +25,13 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
-  CreatePresetDto
+  AddPresetItemDto,
+  CreatePresetDto,
+  GetPresetMenuByIdParams,
+  GetPresetMenusParams,
+  PresetMenuDto,
+  UpdatePresetDto,
+  UpdatePresetItemDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -34,13 +40,14 @@ import { customInstance } from '../../common/axios';
 
 
 export const getPresetMenus = (
-
+    params?: GetPresetMenusParams,
  signal?: AbortSignal
 ) => {
 
 
-      return customInstance<void>(
-      {url: `/api/preset-menus`, method: 'GET', signal
+      return customInstance<PresetMenuDto[]>(
+      {url: `/api/preset-menus`, method: 'GET',
+        params, signal
     },
       );
     }
@@ -48,23 +55,23 @@ export const getPresetMenus = (
 
 
 
-export const getGetPresetMenusQueryKey = () => {
+export const getGetPresetMenusQueryKey = (params?: GetPresetMenusParams,) => {
     return [
-    `/api/preset-menus`
+    `/api/preset-menus`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetPresetMenusQueryOptions = <TData = Awaited<ReturnType<typeof getPresetMenus>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>>, }
+export const getGetPresetMenusQueryOptions = <TData = Awaited<ReturnType<typeof getPresetMenus>>, TError = unknown>(params?: GetPresetMenusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetPresetMenusQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetPresetMenusQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPresetMenus>>> = ({ signal }) => getPresetMenus(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPresetMenus>>> = ({ signal }) => getPresetMenus(params, signal);
 
 
 
@@ -78,7 +85,7 @@ export type GetPresetMenusQueryError = unknown
 
 
 export function useGetPresetMenus<TData = Awaited<ReturnType<typeof getPresetMenus>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>> & Pick<
+ params: undefined |  GetPresetMenusParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPresetMenus>>,
           TError,
@@ -88,7 +95,7 @@ export function useGetPresetMenus<TData = Awaited<ReturnType<typeof getPresetMen
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPresetMenus<TData = Awaited<ReturnType<typeof getPresetMenus>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>> & Pick<
+ params?: GetPresetMenusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPresetMenus>>,
           TError,
@@ -98,16 +105,16 @@ export function useGetPresetMenus<TData = Awaited<ReturnType<typeof getPresetMen
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPresetMenus<TData = Awaited<ReturnType<typeof getPresetMenus>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>>, }
+ params?: GetPresetMenusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetPresetMenus<TData = Awaited<ReturnType<typeof getPresetMenus>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>>, }
+ params?: GetPresetMenusParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenus>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetPresetMenusQueryOptions(options)
+  const queryOptions = getGetPresetMenusQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -125,7 +132,7 @@ export const createPresetMenu = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PresetMenuDto>(
       {url: `/api/preset-menus`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createPresetDto, signal
@@ -178,12 +185,14 @@ const {mutation: mutationOptions} = options ?
     }
     export const getPresetMenuById = (
     id: string,
+    params?: GetPresetMenuByIdParams,
  signal?: AbortSignal
 ) => {
 
 
-      return customInstance<void>(
-      {url: `/api/preset-menus/${id}`, method: 'GET', signal
+      return customInstance<PresetMenuDto>(
+      {url: `/api/preset-menus/${id}`, method: 'GET',
+        params, signal
     },
       );
     }
@@ -191,23 +200,25 @@ const {mutation: mutationOptions} = options ?
 
 
 
-export const getGetPresetMenuByIdQueryKey = (id: string,) => {
+export const getGetPresetMenuByIdQueryKey = (id: string,
+    params?: GetPresetMenuByIdParams,) => {
     return [
-    `/api/preset-menus/${id}`
+    `/api/preset-menus/${id}`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetPresetMenuByIdQueryOptions = <TData = Awaited<ReturnType<typeof getPresetMenuById>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>>, }
+export const getGetPresetMenuByIdQueryOptions = <TData = Awaited<ReturnType<typeof getPresetMenuById>>, TError = unknown>(id: string,
+    params?: GetPresetMenuByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetPresetMenuByIdQueryKey(id);
+  const queryKey =  queryOptions?.queryKey ?? getGetPresetMenuByIdQueryKey(id,params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPresetMenuById>>> = ({ signal }) => getPresetMenuById(id, signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getPresetMenuById>>> = ({ signal }) => getPresetMenuById(id,params, signal);
 
 
 
@@ -221,7 +232,8 @@ export type GetPresetMenuByIdQueryError = unknown
 
 
 export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPresetMenuById>>, TError = unknown>(
- id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>> & Pick<
+ id: string,
+    params: undefined |  GetPresetMenuByIdParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPresetMenuById>>,
           TError,
@@ -231,7 +243,8 @@ export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPreset
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPresetMenuById>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>> & Pick<
+ id: string,
+    params?: GetPresetMenuByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getPresetMenuById>>,
           TError,
@@ -241,16 +254,18 @@ export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPreset
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPresetMenuById>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>>, }
+ id: string,
+    params?: GetPresetMenuByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPresetMenuById>>, TError = unknown>(
- id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>>, }
+ id: string,
+    params?: GetPresetMenuByIdParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getPresetMenuById>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetPresetMenuByIdQueryOptions(id,options)
+  const queryOptions = getGetPresetMenuByIdQueryOptions(id,params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
@@ -262,3 +277,289 @@ export function useGetPresetMenuById<TData = Awaited<ReturnType<typeof getPreset
 
 
 
+export const updatePresetMenu = (
+    id: string,
+    updatePresetDto: UpdatePresetDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PresetMenuDto>(
+      {url: `/api/preset-menus/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePresetDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdatePresetMenuMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePresetMenu>>, TError,{id: string;data: UpdatePresetDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updatePresetMenu>>, TError,{id: string;data: UpdatePresetDto}, TContext> => {
+
+const mutationKey = ['updatePresetMenu'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePresetMenu>>, {id: string;data: UpdatePresetDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updatePresetMenu(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePresetMenuMutationResult = NonNullable<Awaited<ReturnType<typeof updatePresetMenu>>>
+    export type UpdatePresetMenuMutationBody = UpdatePresetDto
+    export type UpdatePresetMenuMutationError = unknown
+
+    export const useUpdatePresetMenu = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePresetMenu>>, TError,{id: string;data: UpdatePresetDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updatePresetMenu>>,
+        TError,
+        {id: string;data: UpdatePresetDto},
+        TContext
+      > => {
+      return useMutation(getUpdatePresetMenuMutationOptions(options), queryClient);
+    }
+    export const deletePresetMenu = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/preset-menus/${id}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+export const getDeletePresetMenuMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePresetMenu>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deletePresetMenu>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deletePresetMenu'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deletePresetMenu>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deletePresetMenu(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeletePresetMenuMutationResult = NonNullable<Awaited<ReturnType<typeof deletePresetMenu>>>
+
+    export type DeletePresetMenuMutationError = unknown
+
+    export const useDeletePresetMenu = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deletePresetMenu>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deletePresetMenu>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getDeletePresetMenuMutationOptions(options), queryClient);
+    }
+    export const addPresetMenuItem = (
+    id: string,
+    addPresetItemDto: AddPresetItemDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PresetMenuDto>(
+      {url: `/api/preset-menus/${id}/items`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addPresetItemDto, signal
+    },
+      );
+    }
+
+
+
+export const getAddPresetMenuItemMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addPresetMenuItem>>, TError,{id: string;data: AddPresetItemDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof addPresetMenuItem>>, TError,{id: string;data: AddPresetItemDto}, TContext> => {
+
+const mutationKey = ['addPresetMenuItem'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addPresetMenuItem>>, {id: string;data: AddPresetItemDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  addPresetMenuItem(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddPresetMenuItemMutationResult = NonNullable<Awaited<ReturnType<typeof addPresetMenuItem>>>
+    export type AddPresetMenuItemMutationBody = AddPresetItemDto
+    export type AddPresetMenuItemMutationError = unknown
+
+    export const useAddPresetMenuItem = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addPresetMenuItem>>, TError,{id: string;data: AddPresetItemDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addPresetMenuItem>>,
+        TError,
+        {id: string;data: AddPresetItemDto},
+        TContext
+      > => {
+      return useMutation(getAddPresetMenuItemMutationOptions(options), queryClient);
+    }
+    export const updatePresetMenuItem = (
+    id: string,
+    variantId: string,
+    updatePresetItemDto: UpdatePresetItemDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PresetMenuDto>(
+      {url: `/api/preset-menus/${id}/items/${variantId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePresetItemDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdatePresetMenuItemMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePresetMenuItem>>, TError,{id: string;variantId: string;data: UpdatePresetItemDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updatePresetMenuItem>>, TError,{id: string;variantId: string;data: UpdatePresetItemDto}, TContext> => {
+
+const mutationKey = ['updatePresetMenuItem'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePresetMenuItem>>, {id: string;variantId: string;data: UpdatePresetItemDto}> = (props) => {
+          const {id,variantId,data} = props ?? {};
+
+          return  updatePresetMenuItem(id,variantId,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePresetMenuItemMutationResult = NonNullable<Awaited<ReturnType<typeof updatePresetMenuItem>>>
+    export type UpdatePresetMenuItemMutationBody = UpdatePresetItemDto
+    export type UpdatePresetMenuItemMutationError = unknown
+
+    export const useUpdatePresetMenuItem = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePresetMenuItem>>, TError,{id: string;variantId: string;data: UpdatePresetItemDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updatePresetMenuItem>>,
+        TError,
+        {id: string;variantId: string;data: UpdatePresetItemDto},
+        TContext
+      > => {
+      return useMutation(getUpdatePresetMenuItemMutationOptions(options), queryClient);
+    }
+    export const removePresetMenuItem = (
+    id: string,
+    variantId: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PresetMenuDto>(
+      {url: `/api/preset-menus/${id}/items/${variantId}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+export const getRemovePresetMenuItemMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePresetMenuItem>>, TError,{id: string;variantId: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof removePresetMenuItem>>, TError,{id: string;variantId: string}, TContext> => {
+
+const mutationKey = ['removePresetMenuItem'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof removePresetMenuItem>>, {id: string;variantId: string}> = (props) => {
+          const {id,variantId} = props ?? {};
+
+          return  removePresetMenuItem(id,variantId,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RemovePresetMenuItemMutationResult = NonNullable<Awaited<ReturnType<typeof removePresetMenuItem>>>
+
+    export type RemovePresetMenuItemMutationError = unknown
+
+    export const useRemovePresetMenuItem = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof removePresetMenuItem>>, TError,{id: string;variantId: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof removePresetMenuItem>>,
+        TError,
+        {id: string;variantId: string},
+        TContext
+      > => {
+      return useMutation(getRemovePresetMenuItemMutationOptions(options), queryClient);
+    }

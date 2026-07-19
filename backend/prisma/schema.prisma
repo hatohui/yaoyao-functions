@@ -44,10 +44,11 @@ model CategoryTranslation {
 }
 
 model Food {
-  id          String  @id @db.VarChar(255)
-  imageUrl    String? @map("image_url") @db.VarChar(500)
-  categoryId  String  @map("category_id") @db.VarChar(255)
-  isAvailable Boolean @default(true) @map("is_available")
+  id              String  @id @db.VarChar(255)
+  imageUrl        String? @map("image_url") @db.VarChar(500)
+  categoryId      String  @map("category_id") @db.VarChar(255)
+  isAvailable     Boolean @default(true) @map("is_available")
+  shouldCalculate Boolean @default(true) @map("should_calculate")
 
   category     Category          @relation(fields: [categoryId], references: [id])
   variants     FoodVariant[]
@@ -247,4 +248,17 @@ model PresetMenuFood {
   @@id([presetId, variantId])
   @@map("preset_menu_food")
   @@index([variantId])
+}
+
+model AppConfig {
+  key       String   @id @db.VarChar(255)
+  value     String   @db.Text
+  type      String   @default("string") @db.VarChar(20)
+  category  String?  @db.VarChar(100)
+  label     String?  @db.VarChar(255)
+  isPublic  Boolean  @default(false) @map("is_public")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("app_config")
+  @@index([category])
 }

@@ -30,13 +30,15 @@ export const CacheSettings = {
       ttl: 3600,
     },
   },
-  tables: {
-    all: {
-      key: "tables:all",
+  event: {
+    active: {
+      key: "event:active",
       ttl: 1800,
     },
-    one: {
-      key: (id: string) => `tables:${id}`,
+  },
+  config: {
+    all: {
+      key: "config:all",
       ttl: 1800,
     },
   },

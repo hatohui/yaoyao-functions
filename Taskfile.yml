@@ -65,14 +65,22 @@ tasks:
     cmd: "cd backend && bunx prisma migrate reset --force"
 
   db:seed:
-    desc: Seed the database with initial data
+    aliases:
+      - seed
+    desc: Seed core data (alias of `task seed`)
     cmd: "cd backend && bunx prisma db seed"
 
+  db:seed:sample:
+    aliases:
+      - seed:sample
+    desc: Seed sample data (alias of `task seed -- --with-sample-data`)
+    cmd: "cd backend && bunx prisma db seed -- --with-sample-data"
+
   db:fresh:
-    desc: Reset DB, apply migrations, and seed
+    desc: Reset DB, apply migrations, and seed core + sample data
     cmds:
       - task: db:reset
-      - task: db:seed
+      - "cd backend && bunx prisma db seed -- --with-sample-data"
 
   db:migrate:
     desc: Create a new migration

@@ -82,7 +82,10 @@ export function useOrders(tableId: string) {
 	const remove = (id: string) => removeMutation.mutate({ id })
 
 	const orders = data ?? []
-	const total = orders.reduce((sum, o) => sum + o.price * o.quantity, 0)
+	const total = orders.reduce(
+		(sum, o) => (o.shouldCalculate ? sum + o.price * o.quantity : sum),
+		0
+	)
 
 	return { orders, isLoading, total, setQuantity, setSplit, remove }
 }

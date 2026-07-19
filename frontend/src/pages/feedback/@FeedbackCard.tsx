@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { FeedbackItemDto } from '@/api/model'
-import { SUGGESTED_REACTIONS } from '@/common/constants'
+import { useConfig } from '@/hooks/useConfig'
 import { cn } from '@/utils/shadcn'
 
 interface FeedbackCardProps {
@@ -10,6 +10,7 @@ interface FeedbackCardProps {
 
 export function FeedbackCard({ item, onReact }: FeedbackCardProps) {
 	const { t } = useTranslation()
+	const { suggestedReactions } = useConfig()
 
 	return (
 		<div className='flex flex-col gap-2 rounded-2xl border border-border/60 bg-card p-4 shadow-sm'>
@@ -23,7 +24,7 @@ export function FeedbackCard({ item, onReact }: FeedbackCardProps) {
 			)}
 
 			<div className='flex flex-wrap items-center gap-1.5 pt-1'>
-				{SUGGESTED_REACTIONS.map(emoji => {
+				{suggestedReactions.map(emoji => {
 					const reaction = item.reactions.find(r => r.emoji === emoji)
 					return (
 						<button

@@ -4,27 +4,18 @@ import { Link } from 'react-router'
 import { ArrowLeft } from 'lucide-react'
 import type { FoodDetailDto, FoodVariantDto } from '@/api/model'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/utils/shadcn'
 import { ASSET_URL } from '@/common/app'
 
 interface FoodDetailViewProps {
 	food: FoodDetailDto
 	availableVariants: FoodVariantDto[]
-	selectedVariant: FoodVariantDto | null
-	onSelectVariant: (id: string) => void
-	activeTableId: string | null
 	onAdd: () => void
-	isPending: boolean
 }
 
 export function FoodDetailView({
 	food,
 	availableVariants,
-	selectedVariant,
-	onSelectVariant,
-	activeTableId,
 	onAdd,
-	isPending,
 }: FoodDetailViewProps) {
 	const { t } = useTranslation()
 	const [imgError, setImgError] = useState(false)
@@ -82,39 +73,26 @@ export function FoodDetailView({
 					</p>
 					<div className='flex flex-wrap gap-2'>
 						{availableVariants.map(v => (
-							<button
+							<span
 								key={v.id}
-								type='button'
-								onClick={() => onSelectVariant(v.id)}
-								className={cn(
-									'rounded-full border px-4 py-2 text-sm font-medium transition-colors',
-									selectedVariant?.id === v.id
-										? 'border-primary bg-primary text-primary-foreground'
-										: 'border-border/60 bg-card text-foreground hover:bg-muted'
-								)}
+								className='rounded-full border border-border/60 bg-card px-4 py-2 text-sm font-medium text-foreground'
 							>
 								{v.label ? `${v.label} — ` : ''}
 								{v.price} {v.currency}
-							</button>
+							</span>
 						))}
 					</div>
 				</div>
 			)}
 
-			{activeTableId ? (
-				<Button
-					size='lg'
-					className='rounded-full'
-					disabled={!selectedVariant || isPending}
-					onClick={onAdd}
-				>
-					{isPending ? t('menu.adding') : t('food_detail.add_to_order')}
-				</Button>
-			) : (
-				<Button size='lg' className='rounded-full' asChild>
-					<Link to='/tables'>{t('menu.open_your_table')}</Link>
-				</Button>
-			)}
+			<Button
+				size='lg'
+				className='rounded-full'
+				disabled={availableVariants.length === 0}
+				onClick={onAdd}
+			>
+				{t('food_detail.add_to_order')}
+			</Button>
 		</div>
 	)
 }

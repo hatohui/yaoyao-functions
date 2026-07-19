@@ -8,6 +8,8 @@ import { HeroSection } from './@HeroSection'
 import { FilterBar } from './@FilterBar'
 import { FoodCard } from './@FoodCard'
 import { SelectionBar } from './@SelectionBar'
+import { TablePickerModal } from './@TablePickerModal'
+import { OrderConfigModal } from './@OrderConfigModal'
 import { useMenuSelection } from './@useMenuSelection'
 import { LoadingView, LoadingSpinner } from './@LoadingView'
 import { ErrorView } from './@ErrorView'
@@ -22,6 +24,7 @@ import {
 	PaginationEllipsis,
 } from '@/components/ui/pagination'
 import { cn } from '@/utils/shadcn'
+import { STALE_TIME_STATIC } from '@/common/constants'
 import type {
 	FoodItemDto,
 	CategoryItemDto,
@@ -63,20 +66,24 @@ export default function MenuPage() {
 	})
 
 	const { data, isLoading, isError, error, refetch } =
-		useGetFoods<GetFoodsResponseDto>({
-			lang: i18n.language,
-			page,
-			count,
-			category: category === 'all' ? undefined : category,
-		})
+		useGetFoods<GetFoodsResponseDto>(
+			{
+				lang: i18n.language,
+				page,
+				count,
+				category: category === 'all' ? undefined : category,
+			},
+			{ query: { staleTime: STALE_TIME_STATIC, refetchOnWindowFocus: false } }
+		)
 
 	useEffect(() => {
 		if (data?.total !== undefined) setTotal(data.total)
 	}, [data?.total])
 
-	const { data: categoriesRaw } = useGetCategories<CategoryItemDto[]>({
-		lang: i18n.language,
-	})
+	const { data: categoriesRaw } = useGetCategories<CategoryItemDto[]>(
+		{ lang: i18n.language },
+		{ query: { staleTime: STALE_TIME_STATIC, refetchOnWindowFocus: false } }
+	)
 
 	const categories = useMemo<CategoryItemDto[]>(
 		() => (Array.isArray(categoriesRaw) ? categoriesRaw : []),
@@ -207,10 +214,26 @@ export default function MenuPage() {
 
 			<SelectionBar
 				count={selection.count}
-				activeTableId={selection.activeTableId}
-				pending={selection.isPending}
 				onClear={selection.clear}
-				onAdd={selection.addSelected}
+				onAdd={selection.openPicker}
+			/>
+
+			<TablePickerModal
+				open={selection.pickerOpen}
+				onOpenChange={selection.setPickerOpen}
+				onSelect={selection.selectTable}
+			/>
+
+			<OrderConfigModal
+				open={selection.configOpen}
+				onOpenChange={selection.setConfigOpen}
+				tableId={selection.tableId}
+				foods={selection.selectedFoods.map(f => ({
+					id: f.id,
+					name: f.name,
+					defaultVariantId: f.defaultVariantId,
+				}))}
+				onSuccess={selection.handleDone}
 			/>
 		</div>
 	)

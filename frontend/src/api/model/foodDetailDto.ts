@@ -17,5 +17,8 @@ export interface FoodDetailDto {
   /** @nullable */
   categoryId: string | null;
   isAvailable: boolean;
+  /** Whether orders of this food count toward table/split totals. False for joke/gag menu items that still show a price and can be ordered, but are free. */
+  shouldCalculate: boolean;
   variants: FoodVariantDto[];
+  aiTranslationFailed?: boolean;
 }

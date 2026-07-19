@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { Spinner } from '@/components/ui/spinner'
+import { TablePickerModal } from '../@TablePickerModal'
+import { OrderConfigModal } from '../@OrderConfigModal'
 import { FoodDetailView } from './@FoodDetailView'
 import { useFoodDetail } from './@useFoodDetail'
 
@@ -10,11 +12,14 @@ export default function FoodDetailPage() {
 		isLoading,
 		isError,
 		availableVariants,
-		selectedVariant,
-		setVariantId,
-		activeTableId,
-		addToOrder,
-		isPending,
+		pickerOpen,
+		setPickerOpen,
+		openPicker,
+		configOpen,
+		setConfigOpen,
+		tableId,
+		selectTable,
+		handleDone,
 	} = useFoodDetail()
 
 	if (isLoading) {
@@ -34,14 +39,37 @@ export default function FoodDetailPage() {
 	}
 
 	return (
-		<FoodDetailView
-			food={food}
-			availableVariants={availableVariants}
-			selectedVariant={selectedVariant}
-			onSelectVariant={setVariantId}
-			activeTableId={activeTableId}
-			onAdd={addToOrder}
-			isPending={isPending}
-		/>
+		<>
+			<FoodDetailView
+				food={food}
+				availableVariants={availableVariants}
+				onAdd={openPicker}
+			/>
+
+			<TablePickerModal
+				open={pickerOpen}
+				onOpenChange={setPickerOpen}
+				onSelect={selectTable}
+			/>
+
+			<OrderConfigModal
+				open={configOpen}
+				onOpenChange={setConfigOpen}
+				tableId={tableId}
+				foods={
+					food
+						? [
+								{
+									id: food.id,
+									name: food.name,
+									defaultVariantId: availableVariants[0]?.id ?? null,
+									variants: availableVariants,
+								},
+							]
+						: []
+				}
+				onSuccess={handleDone}
+			/>
+		</>
 	)
 }

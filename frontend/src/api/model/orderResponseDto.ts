@@ -15,9 +15,14 @@ export interface OrderResponseDto {
   eventId: string | null;
   quantity: number;
   price: number;
+  currency: string;
   splitAll: boolean;
   foodName: string;
   variantLabel: string;
+  /** @nullable */
+  foodImageUrl: string | null;
+  /** Whether this order counts toward table/split totals. False for joke/gag menu items. */
+  shouldCalculate: boolean;
   splits: OrderSplitDto[];
   createdAt: string;
   updatedAt: string;

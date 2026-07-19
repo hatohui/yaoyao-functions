@@ -53,7 +53,8 @@
 		"menu": "菜单",
 		"dev": "Dev",
 		"tables": "餐桌",
-		"feedback": "反馈"
+		"feedback": "反馈",
+		"admin": "管理"
 	},
 	"access": {
 		"back": "返回",
@@ -108,8 +109,9 @@
 		"selected_count": "已选 {{count}} 项",
 		"clear_selection": "清除选择",
 		"add_to_order": "加入订单",
+		"configure_title": "配置你的订单",
 		"adding": "添加中…",
-		"open_your_table": "打开你的餐桌",
+		"choose_table_title": "选择餐桌",
 		"added_to_order": "已加入订单",
 		"add_failed": "添加失败，请重试"
 	},
@@ -122,17 +124,19 @@
 	"tabs": {
 		"people": "人员",
 		"orders": "订单",
-		"your_split": "你的分摊"
+		"splits": "分摊"
 	},
 	"orders": {
 		"shared": "共享",
 		"personal": "个人",
-		"split_n": "{{count}} 人分摊",
+		"free_badge": "免费",
+		"unknown_person": "某人",
 		"remove": "移除",
 		"remove_title": "移除 {{name}}？",
 		"remove_desc": "此操作无法撤销 — 将从餐桌订单中移除。",
 		"empty": "暂无订单 — 从菜单添加一些吧",
 		"total": "餐桌总额",
+		"quantity": "数量",
 		"update_failed": "更新失败，请重试",
 		"remove_failed": "移除失败，请重试"
 	},
@@ -141,11 +145,9 @@
 		"just_me": "只有我",
 		"whole_table": "全桌分摊",
 		"choose_people": "选择人员",
-		"who_are_you": "你是这桌的哪位？",
-		"viewing_as": "正在以 {{name}} 查看",
-		"not_you": "不是你？",
-		"empty": "你的分摊中暂无项目",
-		"your_total": "你的总额"
+		"empty": "暂无订单",
+		"you": "你",
+		"free_badge": "免费"
 	},
 	"notes": {
 		"title": "{{name}} 的备注",
@@ -217,6 +219,143 @@
 			"undo_description": "您可以撤消此操作",
 			"undo": "撤消",
 			"action_undone": "操作已撤消"
+		}
+	},
+	"admin": {
+		"gate": {
+			"title": "管理员访问",
+			"subtitle": "输入管理员密码以继续",
+			"placeholder": "密码",
+			"invalid": "密码不正确",
+			"unlocking": "解锁中…",
+			"unlock": "解锁"
+		},
+		"nav": {
+			"title": "管理",
+			"dashboard": "仪表盘",
+			"exit": "返回网站",
+			"lock": "锁定管理",
+			"toggle": "切换管理菜单",
+			"tables": "餐桌",
+			"food": "菜品",
+			"presets": "套餐",
+			"people": "人员",
+			"stats": "统计",
+			"feedback": "反馈",
+			"settings": "设置"
+		},
+		"dashboard": {
+			"title": "仪表盘",
+			"publish": "发布新活动",
+			"publishing": "发布中…",
+			"publish_title": "发布新活动？",
+			"publish_desc_active": "此操作会重置访客当前看到的内容：当前的餐桌配置将被替换为已暂存的配置，并生成新的 PIN 码。过往数据会被保留，不会删除。",
+			"publish_desc_empty": "此操作会生成新的 PIN 码，并使用已暂存的餐桌开始新的活动。",
+			"publish_name_placeholder": "活动名称（可选）",
+			"published": "活动已发布",
+			"publish_failed": "发布失败，请重试",
+			"pin_copied": "PIN 码已复制",
+			"copy_pin": "复制",
+			"current_event": "当前活动",
+			"no_active_event": "目前没有正在进行的活动。发布一个活动以生成访客 PIN 码。",
+			"past_events": "过往活动",
+			"past_events_empty": "暂无过往活动",
+			"unnamed_event": "未命名活动",
+			"stat_tables": "餐桌",
+			"stat_occupied": "已入座",
+			"stat_people": "人数",
+			"stat_orders": "订单"
+		},
+		"tables": {
+			"title": "餐桌",
+			"create": "新建餐桌",
+			"create_title": "创建餐桌",
+			"name": "名称",
+			"name_placeholder": "1号桌",
+			"capacity": "容量",
+			"staged": "待发布",
+			"live": "进行中",
+			"empty": "暂无餐桌",
+			"select_all": "全选",
+			"selected_count": "已选 {{count}} 项",
+			"bulk_create": "批量创建",
+			"bulk_create_title": "批量创建餐桌",
+			"bulk_create_desc": "餐桌会自动编号（1号桌、2号桌……）— 之后可以重命名。",
+			"count": "数量",
+			"created": "餐桌已创建",
+			"bulk_created": "餐桌已批量创建",
+			"create_failed": "创建失败，请重试",
+			"deleted": "已删除",
+			"delete_failed": "删除失败，请重试",
+			"delete_selected": "删除",
+			"bulk_delete_title": "删除 {{count}} 张餐桌？",
+			"bulk_delete_desc": "此操作无法撤销 — 餐桌及其人员名单/订单都会被删除。",
+			"move_to_staging": "移回待发布",
+			"moved_to_staging": "已移回待发布"
+		},
+		"floor_plan": {
+			"drag_hint": "将餐桌拖到平面图上的位置 — 松开即自动保存。"
+		},
+		"people": {
+			"title": "人员",
+			"search_placeholder": "搜索人员…",
+			"empty": "未找到相关人员",
+			"name": "姓名",
+			"table": "餐桌",
+			"ordered": "已点菜品",
+			"note": "备注"
+		},
+		"stats": {
+			"title": "统计",
+			"popular_title": "热门菜品",
+			"popular_empty": "暂无订单",
+			"scope_event": "本场活动",
+			"scope_all": "全部时间",
+			"totals_title": "各餐桌总额",
+			"totals_empty": "暂无餐桌",
+			"outlier": "异常"
+		},
+		"feedback": {
+			"title": "反馈",
+			"select_event": "选择活动",
+			"reaction_count": "{{count}} 个反应"
+		},
+		"settings": {
+			"title": "设置",
+			"subtitle": "开关功能并调整系统参数。更改立即生效。",
+			"saved": "已保存",
+			"save_failed": "无法保存设置",
+			"invalid_json": "JSON 无效",
+			"empty": "暂无设置",
+			"category_auth": "访问",
+			"category_event": "活动",
+			"category_tables": "餐桌",
+			"category_feedback": "反馈",
+			"category_features": "功能"
+		},
+		"food": {
+			"title": "菜品目录",
+			"create": "新建菜品",
+			"create_title": "创建菜品",
+			"name": "名称",
+			"category": "分类",
+			"price": "价格",
+			"available": "可购买",
+			"calculated": "计入账单",
+			"variants": "规格",
+			"variants_count": "{{count}} 个规格",
+			"empty": "未找到菜品",
+			"save_failed": "保存失败，请重试",
+			"delete": "删除",
+			"delete_title": "删除 {{name}}？",
+			"delete_desc": "此操作无法撤销。有订单记录的菜品无法删除 — 请改为切换可购买状态。",
+			"bulk_enable": "启用",
+			"bulk_disable": "停用",
+			"bulk_delete_desc": "此操作无法撤销 — 有订单记录的菜品将被跳过。",
+			"add_variant": "添加规格",
+			"variant_label_placeholder": "规格名称",
+			"variant_price_placeholder": "价格",
+			"default_variant_label": "标准"
 		}
 	}
 }

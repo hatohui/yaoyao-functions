@@ -15,4 +15,8 @@ export interface CreateFoodDto {
   imageUrl?: string | null;
   categoryId: string;
   variants?: VariantDto[];
+  /** Set to false for joke/gag menu items: guests can still order them and see a price, but they are excluded from table/split totals. */
+  shouldCalculate?: boolean;
+  /** Locale the name/description/variant labels are written in */
+  lang?: string;
 }

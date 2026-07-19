@@ -1,8 +1,12 @@
 import React from 'react'
 import { useGuest } from '@/hooks/useGuest'
-import { PinUnlock } from './@PinUnlock'
+import { PinUnlock } from '@/components/common/PinUnlock'
 
-const TablesLayout = ({ children }: { children: React.ReactNode }): React.ReactElement => {
+const TablesLayout = ({
+	children,
+}: {
+	children: React.ReactNode
+}): React.ReactElement => {
 	const pin = useGuest(s => s.pin)
 	if (!pin) return <PinUnlock />
 	return <>{children}</>

@@ -12,7 +12,7 @@ export class LanguageService {
     const languages = await prisma.language.findMany();
     await CacheService.set(
       CacheSettings.languages.all.key,
-      JSON.stringify(languages),
+      languages,
       CacheSettings.languages.all.ttl,
     );
     return languages;

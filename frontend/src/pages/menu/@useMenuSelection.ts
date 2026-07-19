@@ -1,18 +1,11 @@
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useQueryClient } from '@tanstack/react-query'
-import { useCreateOrderBatch } from '@/api/orders/orders'
-import { getGetOrdersQueryKey } from '@/api/orders/orders'
-import { useGuest } from '@/hooks/useGuest'
-import { useToast } from '@/hooks/useToast'
 import type { FoodItemDto } from '@/api/model'
 
 export function useMenuSelection(foods: FoodItemDto[]) {
-	const { t } = useTranslation()
-	const toast = useToast()
-	const qc = useQueryClient()
-	const activeTableId = useGuest(s => s.activeTableId)
 	const [selected, setSelected] = useState<Set<string>>(new Set())
+	const [pickerOpen, setPickerOpen] = useState(false)
+	const [configOpen, setConfigOpen] = useState(false)
+	const [tableId, setTableId] = useState<string | null>(null)
 
 	const toggle = (foodId: string) => {
 		setSelected(prev => {
@@ -25,37 +18,35 @@ export function useMenuSelection(foods: FoodItemDto[]) {
 
 	const clear = () => setSelected(new Set())
 
-	const { mutate, isPending } = useCreateOrderBatch({
-		mutation: {
-			onSuccess: () => {
-				if (activeTableId) {
-					qc.invalidateQueries({
-						queryKey: getGetOrdersQueryKey({ tableId: activeTableId }),
-					})
-				}
-				toast.success(t('menu.added_to_order'))
-				clear()
-			},
-			onError: () => toast.error(t('menu.add_failed')),
-		},
-	})
+	const openPicker = () => {
+		if (selected.size === 0) return
+		setPickerOpen(true)
+	}
 
-	const addSelected = () => {
-		if (!activeTableId) return
-		const items = foods
-			.filter(f => selected.has(f.id) && f.defaultVariantId)
-			.map(f => ({ variantId: f.defaultVariantId as string, quantity: 1 }))
-		if (items.length === 0) return
-		mutate({ data: { tableId: activeTableId, items, splitAll: true } })
+	const selectTable = (id: string) => {
+		setTableId(id)
+		setPickerOpen(false)
+		setConfigOpen(true)
+	}
+
+	const handleDone = () => {
+		setConfigOpen(false)
+		clear()
 	}
 
 	return {
 		selected,
 		toggle,
 		clear,
-		addSelected,
-		isPending,
-		activeTableId,
 		count: selected.size,
+		pickerOpen,
+		setPickerOpen,
+		openPicker,
+		configOpen,
+		setConfigOpen,
+		tableId,
+		selectTable,
+		selectedFoods: foods.filter(f => selected.has(f.id)),
+		handleDone,
 	}
 }

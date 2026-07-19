@@ -6,6 +6,8 @@ import {
 import { prisma } from '../../libs/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { EventService } from '@modules/event/event.service';
+import { ConfigService } from '@modules/config/config.service';
+import { CONFIG_KEYS } from '@common/config/registry';
 import { CreateTableDto } from './dto/create-table.dto';
 import { BulkCreateTableDto } from './dto/bulk-create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
@@ -25,7 +27,10 @@ type TableRow = {
 
 @Injectable()
 export class TableService {
-  constructor(private events: EventService) {}
+  constructor(
+    private events: EventService,
+    private config: ConfigService,
+  ) {}
 
   private toDto(t: TableRow) {
     const { _count, ...rest } = t;
@@ -84,11 +89,14 @@ export class TableService {
   async create(dto: CreateTableDto) {
     const isStaging = dto.isStaging ?? false;
     const eventId = isStaging ? null : await this.events.getActiveId();
+    const capacity =
+      dto.capacity ??
+      (await this.config.get<number>(CONFIG_KEYS.defaultTableCapacity));
     return prisma.table.create({
       data: {
         id: uuidv4(),
         name: dto.name,
-        capacity: dto.capacity ?? 8,
+        capacity,
         isStaging,
         no: await this.nextNo(),
         eventId,

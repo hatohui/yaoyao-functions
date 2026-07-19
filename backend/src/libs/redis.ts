@@ -144,6 +144,43 @@ export const CacheService = {
     _fallbackCache.delete(key);
   },
 
+  async deleteByPrefix(prefix: string): Promise<void> {
+    try {
+      await initializeClient();
+
+      if (_client && _isAvailable) {
+        try {
+          let cursor = "0";
+          do {
+            const [next, keys] = await _client.scan(
+              cursor,
+              "MATCH",
+              `${prefix}*`,
+              "COUNT",
+              100
+            );
+            cursor = next;
+            if (keys.length > 0) await _client.del(...keys);
+          } while (cursor !== "0");
+        } catch (err) {
+          console.warn(
+            "[Redis] Delete-by-prefix failed:",
+            err instanceof Error ? err.message : String(err)
+          );
+        }
+      }
+    } catch (err) {
+      console.warn(
+        "[Redis] Initialization failed:",
+        err instanceof Error ? err.message : String(err)
+      );
+    }
+
+    for (const key of _fallbackCache.keys()) {
+      if (key.startsWith(prefix)) _fallbackCache.delete(key);
+    }
+  },
+
   async ping(): Promise<string> {
     try {
       await initializeClient();

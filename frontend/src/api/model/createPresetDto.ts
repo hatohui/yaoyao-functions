@@ -5,5 +5,10 @@
  * Restaurant management API
  * OpenAPI spec version: 1.0
  */
+import type { PresetFoodDto } from './presetFoodDto';
 
-export interface CreatePresetDto { [key: string]: unknown }
+export interface CreatePresetDto {
+  price: number;
+  isActive?: boolean;
+  foods?: PresetFoodDto[];
+}

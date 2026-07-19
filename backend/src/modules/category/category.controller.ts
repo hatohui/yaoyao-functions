@@ -1,7 +1,22 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Query,
+  Body,
+  UseGuards,
+} from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from "@nestjs/swagger";
 import { CategoryService } from "./category.service";
 import { CategoryItemDto } from "./dto/category-response.dto";
+import { CreateCategoryDto } from "./dto/create-category.dto";
+import { UpdateCategoryDto } from "./dto/update-category.dto";
+import { AdminGuard } from "@common/guards/admin.guard";
+import { BulkToggleDto } from "@common/dto/bulk-toggle.dto";
+import { IdsDto } from "@common/dto/ids.dto";
 
 @ApiTags("categories")
 @Controller("categories")
@@ -22,5 +37,40 @@ export class CategoryController {
   @ApiResponse({ status: 200, type: CategoryItemDto })
   findOne(@Param("id") id: string, @Query("lang") lang = "en") {
     return this.category.findOne(id, lang);
+  }
+
+  @Post()
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: "createCategory" })
+  create(@Body() dto: CreateCategoryDto) {
+    return this.category.create(dto);
+  }
+
+  @Patch(":id")
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: "updateCategory" })
+  update(@Param("id") id: string, @Body() dto: UpdateCategoryDto) {
+    return this.category.update(id, dto);
+  }
+
+  @Delete(":id")
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: "deleteCategory" })
+  remove(@Param("id") id: string) {
+    return this.category.remove(id);
+  }
+
+  @Post("bulk-toggle")
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: "bulkToggleCategories" })
+  bulkToggle(@Body() dto: BulkToggleDto) {
+    return this.category.bulkToggle(dto.ids, dto.isAvailable);
+  }
+
+  @Post("bulk-delete")
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: "bulkDeleteCategories" })
+  bulkDelete(@Body() dto: IdsDto) {
+    return this.category.bulkRemove(dto.ids);
   }
 }

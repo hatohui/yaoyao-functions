@@ -53,7 +53,8 @@
 		"menu": "Thực Đơn",
 		"dev": "Dev",
 		"tables": "Bàn",
-		"feedback": "Góp ý"
+		"feedback": "Góp ý",
+		"admin": "Quản trị"
 	},
 	"access": {
 		"back": "Quay lại",
@@ -108,8 +109,9 @@
 		"selected_count": "Đã chọn {{count}}",
 		"clear_selection": "Bỏ chọn",
 		"add_to_order": "Thêm vào đơn",
+		"configure_title": "Tùy chỉnh đơn hàng",
 		"adding": "Đang thêm…",
-		"open_your_table": "Mở bàn của bạn",
+		"choose_table_title": "Chọn một bàn",
 		"added_to_order": "Đã thêm vào đơn",
 		"add_failed": "Không thêm được, vui lòng thử lại"
 	},
@@ -122,17 +124,19 @@
 	"tabs": {
 		"people": "Mọi người",
 		"orders": "Đơn hàng",
-		"your_split": "Phần của bạn"
+		"splits": "Chia hóa đơn"
 	},
 	"orders": {
 		"shared": "Chia sẻ",
 		"personal": "Cá nhân",
-		"split_n": "Chia {{count}} người",
+		"free_badge": "Miễn phí",
+		"unknown_person": "Ai đó",
 		"remove": "Xóa",
 		"remove_title": "Xóa {{name}}?",
 		"remove_desc": "Không thể hoàn tác — món này sẽ bị xóa khỏi đơn của bàn.",
 		"empty": "Chưa có đơn nào — hãy thêm món từ thực đơn",
 		"total": "Tổng của bàn",
+		"quantity": "Số lượng",
 		"update_failed": "Không cập nhật được, vui lòng thử lại",
 		"remove_failed": "Không xóa được, vui lòng thử lại"
 	},
@@ -141,11 +145,9 @@
 		"just_me": "Chỉ mình tôi",
 		"whole_table": "Cả bàn",
 		"choose_people": "Chọn người",
-		"who_are_you": "Bạn là ai ở bàn này?",
-		"viewing_as": "Đang xem với tên {{name}}",
-		"not_you": "Không phải bạn?",
-		"empty": "Chưa có món nào thuộc phần của bạn",
-		"your_total": "Tổng của bạn"
+		"empty": "Chưa có đơn nào",
+		"you": "Bạn",
+		"free_badge": "Miễn phí"
 	},
 	"notes": {
 		"title": "Ghi chú của {{name}}",
@@ -217,6 +219,143 @@
 			"undo_description": "Bạn có thể hoàn tác hành động này",
 			"undo": "Hoàn tác",
 			"action_undone": "Đã hoàn tác"
+		}
+	},
+	"admin": {
+		"gate": {
+			"title": "Truy cập quản trị",
+			"subtitle": "Nhập mật khẩu quản trị để tiếp tục",
+			"placeholder": "Mật khẩu",
+			"invalid": "Mật khẩu không đúng",
+			"unlocking": "Đang mở khóa…",
+			"unlock": "Mở khóa"
+		},
+		"nav": {
+			"title": "Quản trị",
+			"dashboard": "Bảng điều khiển",
+			"exit": "Thoát ra trang chính",
+			"lock": "Khóa quản trị",
+			"toggle": "Bật/tắt menu quản trị",
+			"tables": "Bàn",
+			"food": "Món ăn",
+			"presets": "Thực đơn mẫu",
+			"people": "Mọi người",
+			"stats": "Thống kê",
+			"feedback": "Phản hồi",
+			"settings": "Cài đặt"
+		},
+		"dashboard": {
+			"title": "Bảng điều khiển",
+			"publish": "Xuất bản sự kiện mới",
+			"publishing": "Đang xuất bản…",
+			"publish_title": "Xuất bản sự kiện mới?",
+			"publish_desc_active": "Thao tác này sẽ đặt lại những gì khách đang thấy: bộ bàn hiện tại sẽ được thay bằng bộ bàn đang chuẩn bị, và một mã PIN mới sẽ được tạo. Dữ liệu cũ vẫn được giữ lại, không bị xóa.",
+			"publish_desc_empty": "Thao tác này sẽ tạo mã PIN mới và bắt đầu sự kiện mới từ các bàn đang chuẩn bị.",
+			"publish_name_placeholder": "Tên sự kiện (tùy chọn)",
+			"published": "Đã xuất bản sự kiện",
+			"publish_failed": "Không xuất bản được, vui lòng thử lại",
+			"pin_copied": "Đã sao chép mã PIN",
+			"copy_pin": "Sao chép",
+			"current_event": "Sự kiện hiện tại",
+			"no_active_event": "Hiện chưa có sự kiện nào đang diễn ra. Hãy xuất bản một sự kiện để có mã PIN cho khách.",
+			"past_events": "Sự kiện đã qua",
+			"past_events_empty": "Chưa có sự kiện nào",
+			"unnamed_event": "Sự kiện chưa đặt tên",
+			"stat_tables": "Bàn",
+			"stat_occupied": "Đã ngồi",
+			"stat_people": "Người",
+			"stat_orders": "Đơn hàng"
+		},
+		"tables": {
+			"title": "Bàn",
+			"create": "Bàn mới",
+			"create_title": "Tạo bàn",
+			"name": "Tên",
+			"name_placeholder": "Bàn 1",
+			"capacity": "Sức chứa",
+			"staged": "Đang chuẩn bị",
+			"live": "Đang hoạt động",
+			"empty": "Chưa có bàn nào",
+			"select_all": "Chọn tất cả",
+			"selected_count": "Đã chọn {{count}}",
+			"bulk_create": "Tạo hàng loạt",
+			"bulk_create_title": "Tạo nhiều bàn cùng lúc",
+			"bulk_create_desc": "Bàn sẽ được tự động đánh số (Bàn 1, Bàn 2, ...) — bạn có thể đổi tên sau.",
+			"count": "Số lượng",
+			"created": "Đã tạo bàn",
+			"bulk_created": "Đã tạo các bàn",
+			"create_failed": "Không tạo được, vui lòng thử lại",
+			"deleted": "Đã xóa",
+			"delete_failed": "Không xóa được, vui lòng thử lại",
+			"delete_selected": "Xóa",
+			"bulk_delete_title": "Xóa {{count}} bàn?",
+			"bulk_delete_desc": "Không thể hoàn tác — các bàn cùng danh sách người/đơn hàng sẽ bị xóa.",
+			"move_to_staging": "Chuyển về chuẩn bị",
+			"moved_to_staging": "Đã chuyển về chuẩn bị"
+		},
+		"floor_plan": {
+			"drag_hint": "Kéo bàn vào đúng vị trí trên sơ đồ — vị trí sẽ tự lưu khi bạn thả."
+		},
+		"people": {
+			"title": "Mọi người",
+			"search_placeholder": "Tìm người…",
+			"empty": "Không tìm thấy ai",
+			"name": "Tên",
+			"table": "Bàn",
+			"ordered": "Đã gọi món",
+			"note": "Ghi chú"
+		},
+		"stats": {
+			"title": "Thống kê",
+			"popular_title": "Món ăn phổ biến",
+			"popular_empty": "Chưa có đơn hàng nào",
+			"scope_event": "Sự kiện này",
+			"scope_all": "Mọi lúc",
+			"totals_title": "Tổng theo từng bàn",
+			"totals_empty": "Chưa có bàn nào",
+			"outlier": "Bất thường"
+		},
+		"feedback": {
+			"title": "Phản hồi",
+			"select_event": "Chọn một sự kiện",
+			"reaction_count": "{{count}} lượt thả cảm xúc"
+		},
+		"settings": {
+			"title": "Cài đặt",
+			"subtitle": "Bật/tắt tính năng và điều chỉnh tham số hệ thống. Thay đổi áp dụng ngay lập tức.",
+			"saved": "Đã lưu",
+			"save_failed": "Không thể lưu cài đặt",
+			"invalid_json": "JSON không hợp lệ",
+			"empty": "Chưa có cài đặt",
+			"category_auth": "Truy cập",
+			"category_event": "Sự kiện",
+			"category_tables": "Bàn",
+			"category_feedback": "Phản hồi",
+			"category_features": "Tính năng"
+		},
+		"food": {
+			"title": "Danh mục món ăn",
+			"create": "Món mới",
+			"create_title": "Tạo món ăn",
+			"name": "Tên",
+			"category": "Danh mục",
+			"price": "Giá",
+			"available": "Có sẵn",
+			"calculated": "Tính vào hóa đơn",
+			"variants": "Biến thể",
+			"variants_count": "{{count}} biến thể",
+			"empty": "Không tìm thấy món ăn nào",
+			"save_failed": "Không lưu được, vui lòng thử lại",
+			"delete": "Xóa",
+			"delete_title": "Xóa {{name}}?",
+			"delete_desc": "Không thể hoàn tác. Món đã có lịch sử đặt hàng không thể xóa — hãy tắt trạng thái có sẵn thay vào đó.",
+			"bulk_enable": "Bật",
+			"bulk_disable": "Tắt",
+			"bulk_delete_desc": "Không thể hoàn tác — các món đã có lịch sử đặt hàng sẽ được bỏ qua.",
+			"add_variant": "Thêm biến thể",
+			"variant_label_placeholder": "Nhãn",
+			"variant_price_placeholder": "Giá",
+			"default_variant_label": "Thường"
 		}
 	}
 }

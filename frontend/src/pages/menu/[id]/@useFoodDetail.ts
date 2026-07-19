@@ -2,59 +2,40 @@ import { useState } from 'react'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useGetFoodById } from '@/api/foods/foods'
-import { useCreateOrder } from '@/api/orders/orders'
-import { getGetOrdersQueryKey } from '@/api/orders/orders'
-import { useQueryClient } from '@tanstack/react-query'
-import { useGuest } from '@/hooks/useGuest'
-import { useToast } from '@/hooks/useToast'
+import { STALE_TIME_STATIC } from '@/common/constants'
 import type { FoodDetailDto } from '@/api/model'
 
 export function useFoodDetail() {
 	const { id = '' } = useParams()
-	const { t, i18n } = useTranslation()
-	const toast = useToast()
-	const qc = useQueryClient()
-	const activeTableId = useGuest(s => s.activeTableId)
+	const { i18n } = useTranslation()
+	const [pickerOpen, setPickerOpen] = useState(false)
+	const [configOpen, setConfigOpen] = useState(false)
+	const [tableId, setTableId] = useState<string | null>(null)
 
 	const {
 		data: food,
 		isLoading,
 		isError,
-	} = useGetFoodById<FoodDetailDto>(id, {
-		lang: i18n.language,
-	})
+	} = useGetFoodById<FoodDetailDto>(
+		id,
+		{ lang: i18n.language },
+		{ query: { staleTime: STALE_TIME_STATIC, refetchOnWindowFocus: false } }
+	)
 
 	const availableVariants = (food?.variants ?? []).filter(v => v.isAvailable)
-	const [variantId, setVariantId] = useState<string | null>(null)
-	const selectedVariant =
-		availableVariants.find(v => v.id === variantId) ??
-		availableVariants[0] ??
-		null
 
-	const { mutate, isPending } = useCreateOrder({
-		mutation: {
-			onSuccess: () => {
-				if (activeTableId) {
-					qc.invalidateQueries({
-						queryKey: getGetOrdersQueryKey({ tableId: activeTableId }),
-					})
-				}
-				toast.success(t('menu.added_to_order'))
-			},
-			onError: () => toast.error(t('menu.add_failed')),
-		},
-	})
-
-	const addToOrder = () => {
-		if (!activeTableId || !selectedVariant) return
-		mutate({
-			data: {
-				tableId: activeTableId,
-				variantId: selectedVariant.id,
-				splitAll: true,
-			},
-		})
+	const openPicker = () => {
+		if (availableVariants.length === 0) return
+		setPickerOpen(true)
 	}
+
+	const selectTable = (id: string) => {
+		setTableId(id)
+		setPickerOpen(false)
+		setConfigOpen(true)
+	}
+
+	const handleDone = () => setConfigOpen(false)
 
 	return {
 		id,
@@ -62,10 +43,13 @@ export function useFoodDetail() {
 		isLoading,
 		isError,
 		availableVariants,
-		selectedVariant,
-		setVariantId,
-		activeTableId,
-		addToOrder,
-		isPending,
+		pickerOpen,
+		setPickerOpen,
+		openPicker,
+		configOpen,
+		setConfigOpen,
+		tableId,
+		selectTable,
+		handleDone,
 	}
 }

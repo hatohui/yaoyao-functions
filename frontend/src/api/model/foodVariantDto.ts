@@ -14,4 +14,5 @@ export interface FoodVariantDto {
   currency: string;
   isSeasonal: boolean;
   isAvailable: boolean;
+  aiTranslationFailed?: boolean;
 }

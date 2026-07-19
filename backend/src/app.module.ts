@@ -14,10 +14,12 @@ import { PersonalNoteModule } from "./modules/personal-note/personal-note.module
 import { PresetMenuModule } from "./modules/preset-menu/preset-menu.module";
 import { StatsModule } from "./modules/stats/stats.module";
 import { ImagesModule } from "./modules/images/images.module";
+import { ConfigModule as AppConfigModule } from "./modules/config/config.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    AppConfigModule,
     HealthModule,
     LanguageModule,
     CategoryModule,

@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import { useVerifyPin } from '@/api/auth/auth'
 import { useGuest } from '@/hooks/useGuest'
-import { PIN_LENGTH } from '@/common/constants'
+import { useConfig } from '@/hooks/useConfig'
 
 export function usePinUnlock() {
 	const [pin, setPin] = useState('')
 	const [invalid, setInvalid] = useState(false)
 	const setAuth = useGuest(s => s.setAuth)
+	const { pinLength } = useConfig()
 	const { mutate, isPending } = useVerifyPin()
 
 	const submit = (value: string) => {
-		if (value.length < PIN_LENGTH) return
+		if (value.length < pinLength) return
 		setInvalid(false)
 		mutate(
 			{ data: { pin: value } },

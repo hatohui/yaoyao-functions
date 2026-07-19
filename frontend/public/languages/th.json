@@ -53,7 +53,8 @@
 		"menu": "เมนู",
 		"dev": "Dev",
 		"tables": "โต๊ะ",
-		"feedback": "ความคิดเห็น"
+		"feedback": "ความคิดเห็น",
+		"admin": "ผู้ดูแล"
 	},
 	"access": {
 		"back": "กลับ",
@@ -108,8 +109,9 @@
 		"selected_count": "เลือกแล้ว {{count}} รายการ",
 		"clear_selection": "ล้างการเลือก",
 		"add_to_order": "เพิ่มลงออเดอร์",
+		"configure_title": "ปรับแต่งออเดอร์ของคุณ",
 		"adding": "กำลังเพิ่ม…",
-		"open_your_table": "เปิดโต๊ะของคุณ",
+		"choose_table_title": "เลือกโต๊ะ",
 		"added_to_order": "เพิ่มลงออเดอร์แล้ว",
 		"add_failed": "เพิ่มไม่สำเร็จ โปรดลองอีกครั้ง"
 	},
@@ -122,17 +124,19 @@
 	"tabs": {
 		"people": "คนที่โต๊ะ",
 		"orders": "ออเดอร์",
-		"your_split": "ส่วนของคุณ"
+		"splits": "ยอดแบ่งจ่าย"
 	},
 	"orders": {
 		"shared": "ร่วมกัน",
 		"personal": "ส่วนตัว",
-		"split_n": "แบ่ง {{count}} คน",
+		"free_badge": "ฟรี",
+		"unknown_person": "บางคน",
 		"remove": "ลบ",
 		"remove_title": "ลบ {{name}}?",
 		"remove_desc": "ไม่สามารถย้อนกลับได้ — จะถูกลบออกจากออเดอร์ของโต๊ะ",
 		"empty": "ยังไม่มีออเดอร์ — เพิ่มเมนูได้เลย",
 		"total": "ยอดรวมของโต๊ะ",
+		"quantity": "จำนวน",
 		"update_failed": "อัปเดตไม่สำเร็จ โปรดลองอีกครั้ง",
 		"remove_failed": "ลบไม่สำเร็จ โปรดลองอีกครั้ง"
 	},
@@ -141,11 +145,9 @@
 		"just_me": "แค่ฉันคนเดียว",
 		"whole_table": "ทั้งโต๊ะ",
 		"choose_people": "เลือกคน",
-		"who_are_you": "คุณคือใครที่โต๊ะนี้?",
-		"viewing_as": "กำลังดูในชื่อ {{name}}",
-		"not_you": "ไม่ใช่คุณ?",
-		"empty": "ยังไม่มีรายการในส่วนของคุณ",
-		"your_total": "ยอดรวมของคุณ"
+		"empty": "ยังไม่มีออเดอร์",
+		"you": "คุณ",
+		"free_badge": "ฟรี"
 	},
 	"notes": {
 		"title": "โน้ตของ {{name}}",
@@ -217,6 +219,143 @@
 			"undo_description": "คุณสามารถยกเลิกการกระทำนี้ได้",
 			"undo": "ยกเลิก",
 			"action_undone": "ยกเลิกการกระทำแล้ว"
+		}
+	},
+	"admin": {
+		"gate": {
+			"title": "เข้าสู่ระบบผู้ดูแล",
+			"subtitle": "กรอกรหัสผ่านผู้ดูแลเพื่อดำเนินการต่อ",
+			"placeholder": "รหัสผ่าน",
+			"invalid": "รหัสผ่านไม่ถูกต้อง",
+			"unlocking": "กำลังปลดล็อก…",
+			"unlock": "ปลดล็อก"
+		},
+		"nav": {
+			"title": "ผู้ดูแล",
+			"dashboard": "แดชบอร์ด",
+			"exit": "ออกไปยังเว็บไซต์",
+			"lock": "ล็อกระบบผู้ดูแล",
+			"toggle": "สลับเมนูผู้ดูแล",
+			"tables": "โต๊ะ",
+			"food": "เมนูอาหาร",
+			"presets": "ชุดเมนู",
+			"people": "คน",
+			"stats": "สถิติ",
+			"feedback": "ความคิดเห็น",
+			"settings": "ตั้งค่า"
+		},
+		"dashboard": {
+			"title": "แดชบอร์ด",
+			"publish": "เผยแพร่งานใหม่",
+			"publishing": "กำลังเผยแพร่…",
+			"publish_title": "เผยแพร่งานใหม่?",
+			"publish_desc_active": "การดำเนินการนี้จะรีเซ็ตสิ่งที่แขกเห็นอยู่: ชุดโต๊ะปัจจุบันจะถูกแทนที่ด้วยชุดที่เตรียมไว้ และจะสร้างรหัส PIN ใหม่ ข้อมูลเก่ายังคงถูกเก็บไว้ ไม่ถูกลบ",
+			"publish_desc_empty": "การดำเนินการนี้จะสร้างรหัส PIN ใหม่และเริ่มงานใหม่จากโต๊ะที่เตรียมไว้",
+			"publish_name_placeholder": "ชื่องาน (ไม่บังคับ)",
+			"published": "เผยแพร่งานแล้ว",
+			"publish_failed": "เผยแพร่ไม่สำเร็จ โปรดลองอีกครั้ง",
+			"pin_copied": "คัดลอกรหัส PIN แล้ว",
+			"copy_pin": "คัดลอก",
+			"current_event": "งานปัจจุบัน",
+			"no_active_event": "ยังไม่มีงานที่กำลังดำเนินอยู่ เผยแพร่งานเพื่อสร้างรหัส PIN สำหรับแขก",
+			"past_events": "งานที่ผ่านมา",
+			"past_events_empty": "ยังไม่มีงานที่ผ่านมา",
+			"unnamed_event": "งานที่ยังไม่ได้ตั้งชื่อ",
+			"stat_tables": "โต๊ะ",
+			"stat_occupied": "มีคนนั่ง",
+			"stat_people": "คน",
+			"stat_orders": "ออเดอร์"
+		},
+		"tables": {
+			"title": "โต๊ะ",
+			"create": "สร้างโต๊ะใหม่",
+			"create_title": "สร้างโต๊ะ",
+			"name": "ชื่อ",
+			"name_placeholder": "โต๊ะ 1",
+			"capacity": "ความจุ",
+			"staged": "เตรียมไว้",
+			"live": "ใช้งานอยู่",
+			"empty": "ยังไม่มีโต๊ะ",
+			"select_all": "เลือกทั้งหมด",
+			"selected_count": "เลือกแล้ว {{count}} รายการ",
+			"bulk_create": "สร้างจำนวนมาก",
+			"bulk_create_title": "สร้างโต๊ะจำนวนมาก",
+			"bulk_create_desc": "โต๊ะจะถูกกำหนดหมายเลขอัตโนมัติ (โต๊ะ 1, โต๊ะ 2, ...) — เปลี่ยนชื่อภายหลังได้",
+			"count": "จำนวน",
+			"created": "สร้างโต๊ะแล้ว",
+			"bulk_created": "สร้างโต๊ะแล้ว",
+			"create_failed": "สร้างไม่สำเร็จ โปรดลองอีกครั้ง",
+			"deleted": "ลบแล้ว",
+			"delete_failed": "ลบไม่สำเร็จ โปรดลองอีกครั้ง",
+			"delete_selected": "ลบ",
+			"bulk_delete_title": "ลบ {{count}} โต๊ะ?",
+			"bulk_delete_desc": "ไม่สามารถย้อนกลับได้ — โต๊ะพร้อมรายชื่อ/ออเดอร์จะถูกลบ",
+			"move_to_staging": "ย้ายกลับไปเตรียมไว้",
+			"moved_to_staging": "ย้ายกลับไปเตรียมไว้แล้ว"
+		},
+		"floor_plan": {
+			"drag_hint": "ลากโต๊ะไปยังตำแหน่งบนผังพื้น — ตำแหน่งจะบันทึกอัตโนมัติเมื่อคุณปล่อย"
+		},
+		"people": {
+			"title": "คน",
+			"search_placeholder": "ค้นหาคน…",
+			"empty": "ไม่พบคน",
+			"name": "ชื่อ",
+			"table": "โต๊ะ",
+			"ordered": "สั่งแล้ว",
+			"note": "บันทึก"
+		},
+		"stats": {
+			"title": "สถิติ",
+			"popular_title": "เมนูยอดนิยม",
+			"popular_empty": "ยังไม่มีออเดอร์",
+			"scope_event": "งานนี้",
+			"scope_all": "ทั้งหมด",
+			"totals_title": "ยอดรวมต่อโต๊ะ",
+			"totals_empty": "ยังไม่มีโต๊ะ",
+			"outlier": "ผิดปกติ"
+		},
+		"feedback": {
+			"title": "ความคิดเห็น",
+			"select_event": "เลือกงาน",
+			"reaction_count": "{{count}} รีแอกชัน"
+		},
+		"settings": {
+			"title": "ตั้งค่า",
+			"subtitle": "เปิด/ปิดฟีเจอร์และปรับพารามิเตอร์ระบบ การเปลี่ยนแปลงมีผลทันที",
+			"saved": "บันทึกแล้ว",
+			"save_failed": "บันทึกการตั้งค่าไม่สำเร็จ",
+			"invalid_json": "JSON ไม่ถูกต้อง",
+			"empty": "ไม่มีการตั้งค่า",
+			"category_auth": "การเข้าถึง",
+			"category_event": "อีเวนต์",
+			"category_tables": "โต๊ะ",
+			"category_feedback": "ความคิดเห็น",
+			"category_features": "ฟีเจอร์"
+		},
+		"food": {
+			"title": "แคตตาล็อกเมนู",
+			"create": "เมนูใหม่",
+			"create_title": "สร้างเมนู",
+			"name": "ชื่อ",
+			"category": "หมวดหมู่",
+			"price": "ราคา",
+			"available": "พร้อมขาย",
+			"calculated": "นับรวมในบิล",
+			"variants": "ตัวเลือก",
+			"variants_count": "{{count}} ตัวเลือก",
+			"empty": "ไม่พบเมนู",
+			"save_failed": "บันทึกไม่สำเร็จ โปรดลองอีกครั้ง",
+			"delete": "ลบ",
+			"delete_title": "ลบ {{name}}?",
+			"delete_desc": "ไม่สามารถย้อนกลับได้ เมนูที่มีประวัติออเดอร์จะลบไม่ได้ — ให้สลับสถานะพร้อมขายแทน",
+			"bulk_enable": "เปิดใช้งาน",
+			"bulk_disable": "ปิดใช้งาน",
+			"bulk_delete_desc": "ไม่สามารถย้อนกลับได้ — เมนูที่มีประวัติออเดอร์จะถูกข้าม",
+			"add_variant": "เพิ่มตัวเลือก",
+			"variant_label_placeholder": "ป้ายกำกับ",
+			"variant_price_placeholder": "ราคา",
+			"default_variant_label": "ปกติ"
 		}
 	}
 }

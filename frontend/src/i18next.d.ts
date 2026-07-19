@@ -14,7 +14,13 @@ declare module 'react-i18next' {
 					save: string
 					loading: string
 				}
-				nav: { menu: string; dev: string; tables: string; feedback: string }
+				nav: {
+					menu: string
+					dev: string
+					tables: string
+					feedback: string
+					admin: string
+				}
 				access: {
 					back: string
 					enter_pin: string
@@ -68,8 +74,9 @@ declare module 'react-i18next' {
 					selected_count: string
 					clear_selection: string
 					add_to_order: string
+					configure_title: string
 					adding: string
-					open_your_table: string
+					choose_table_title: string
 					added_to_order: string
 					add_failed: string
 				}
@@ -79,29 +86,29 @@ declare module 'react-i18next' {
 					add_to_order: string
 					not_found: string
 				}
-				tabs: { people: string; orders: string; your_split: string }
+				tabs: { people: string; orders: string; splits: string }
 				orders: {
 					shared: string
 					personal: string
-					split_n: string
+					unknown_person: string
 					remove: string
 					remove_title: string
 					remove_desc: string
 					empty: string
 					total: string
+					quantity: string
 					update_failed: string
 					remove_failed: string
+					free_badge: string
 				}
 				split: {
 					title: string
 					just_me: string
 					whole_table: string
 					choose_people: string
-					who_are_you: string
-					viewing_as: string
-					not_you: string
 					empty: string
-					your_total: string
+					you: string
+					free_badge: string
 				}
 				notes: { title: string; placeholder: string; empty: string }
 				feedback: {
@@ -118,6 +125,117 @@ declare module 'react-i18next' {
 				floor_plan: { title: string; view_map: string; empty: string }
 				health: Record<string, string>
 				dev: Record<string, unknown>
+				admin: {
+					gate: {
+						title: string
+						subtitle: string
+						placeholder: string
+						invalid: string
+						unlocking: string
+						unlock: string
+					}
+					nav: {
+						title: string
+						dashboard: string
+						exit: string
+						lock: string
+						toggle: string
+						tables: string
+						food: string
+						presets: string
+						people: string
+						stats: string
+						feedback: string
+						settings: string
+					}
+					dashboard: {
+						title: string
+						publish: string
+						publishing: string
+						publish_title: string
+						publish_desc_active: string
+						publish_desc_empty: string
+						publish_name_placeholder: string
+						published: string
+						publish_failed: string
+						pin_copied: string
+						copy_pin: string
+						current_event: string
+						no_active_event: string
+						past_events: string
+						past_events_empty: string
+						unnamed_event: string
+						stat_tables: string
+						stat_occupied: string
+						stat_people: string
+						stat_orders: string
+					}
+					tables: {
+						title: string
+						create: string
+						create_title: string
+						name: string
+						name_placeholder: string
+						capacity: string
+						staged: string
+						live: string
+						empty: string
+						select_all: string
+						selected_count: string
+						bulk_create: string
+						bulk_create_title: string
+						bulk_create_desc: string
+						count: string
+						created: string
+						bulk_created: string
+						create_failed: string
+						deleted: string
+						delete_failed: string
+						delete_selected: string
+						bulk_delete_title: string
+						bulk_delete_desc: string
+						move_to_staging: string
+						moved_to_staging: string
+					}
+					floor_plan: { drag_hint: string }
+					people: {
+						title: string
+						search_placeholder: string
+						empty: string
+						name: string
+						table: string
+						ordered: string
+						note: string
+					}
+					stats: {
+						title: string
+						popular_title: string
+						popular_empty: string
+						scope_event: string
+						scope_all: string
+						totals_title: string
+						totals_empty: string
+						outlier: string
+					}
+					feedback: {
+						title: string
+						select_event: string
+						reaction_count: string
+					}
+					settings: {
+						title: string
+						subtitle: string
+						saved: string
+						save_failed: string
+						invalid_json: string
+						empty: string
+						category_auth: string
+						category_event: string
+						category_tables: string
+						category_feedback: string
+						category_features: string
+					}
+				}
 			}
 		}
 	}

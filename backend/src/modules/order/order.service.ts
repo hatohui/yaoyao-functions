@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { prisma } from '../../libs/prisma';
 import { v4 as uuidv4 } from 'uuid';
+import { CacheService } from '@libs/redis';
+import { CacheSettings } from '@common/cache/constants';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { BatchCreateOrderDto } from './dto/batch-create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -21,6 +23,10 @@ type OrderWithLangInclude = Awaited<
 
 @Injectable()
 export class OrderService {
+  private bustPopular() {
+    return CacheService.delete(CacheSettings.food.popular.key);
+  }
+
   private toResponseDto(order: OrderWithLangInclude) {
     return {
       id: order.id,
@@ -29,9 +35,12 @@ export class OrderService {
       eventId: order.eventId,
       quantity: order.quantity,
       price: Number(order.price),
+      currency: order.variant.currency,
       splitAll: order.splitAll,
       foodName: order.variant.food.translations[0]?.name ?? '',
+      foodImageUrl: order.variant.food.imageUrl,
       variantLabel: order.variant.translations[0]?.label ?? '',
+      shouldCalculate: order.variant.food.shouldCalculate,
       splits: order.splits.map((s) => ({ personId: s.personId })),
       createdAt: order.createdAt,
       updatedAt: order.updatedAt,
@@ -97,6 +106,7 @@ export class OrderService {
       },
       include: orderIncludeWithLang(lang),
     });
+    await this.bustPopular();
     return this.toResponseDto(order);
   }
 
@@ -129,6 +139,7 @@ export class OrderService {
         ),
       ),
     );
+    await this.bustPopular();
     return orders.map((o) => this.toResponseDto(o));
   }
 
@@ -158,6 +169,7 @@ export class OrderService {
         include: orderIncludeWithLang(lang),
       });
     });
+    if (dto.quantity !== undefined) await this.bustPopular();
     return this.toResponseDto(updated);
   }
 
@@ -165,6 +177,7 @@ export class OrderService {
     const order = await prisma.order.findUnique({ where: { id } });
     if (!order) throw new NotFoundException('Order not found');
     await prisma.order.delete({ where: { id } });
+    await this.bustPopular();
     return { id };
   }
 }

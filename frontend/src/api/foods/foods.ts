@@ -25,11 +25,18 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  AddFoodVariantDto,
+  BulkToggleDto,
   CreateFoodDto,
   FoodDetailDto,
   GetFoodByIdParams,
+  GetFoodsForAdminParams,
+  GetFoodsForAdminResponseDto,
   GetFoodsParams,
-  GetFoodsResponseDto
+  GetFoodsResponseDto,
+  IdsDto,
+  UpdateFoodDto,
+  UpdateFoodVariantDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -181,7 +188,94 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getCreateFoodMutationOptions(options), queryClient);
     }
-    export const getFoodById = (
+    export const getFoodsForAdmin = (
+    params?: GetFoodsForAdminParams,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<GetFoodsForAdminResponseDto>(
+      {url: `/api/foods/admin`, method: 'GET',
+        params, signal
+    },
+      );
+    }
+
+
+
+
+export const getGetFoodsForAdminQueryKey = (params?: GetFoodsForAdminParams,) => {
+    return [
+    `/api/foods/admin`, ...(params ? [params] : [])
+    ] as const;
+    }
+
+
+export const getGetFoodsForAdminQueryOptions = <TData = Awaited<ReturnType<typeof getFoodsForAdmin>>, TError = unknown>(params?: GetFoodsForAdminParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodsForAdmin>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetFoodsForAdminQueryKey(params);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getFoodsForAdmin>>> = ({ signal }) => getFoodsForAdmin(params, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getFoodsForAdmin>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetFoodsForAdminQueryResult = NonNullable<Awaited<ReturnType<typeof getFoodsForAdmin>>>
+export type GetFoodsForAdminQueryError = unknown
+
+
+export function useGetFoodsForAdmin<TData = Awaited<ReturnType<typeof getFoodsForAdmin>>, TError = unknown>(
+ params: undefined |  GetFoodsForAdminParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodsForAdmin>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFoodsForAdmin>>,
+          TError,
+          Awaited<ReturnType<typeof getFoodsForAdmin>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoodsForAdmin<TData = Awaited<ReturnType<typeof getFoodsForAdmin>>, TError = unknown>(
+ params?: GetFoodsForAdminParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodsForAdmin>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getFoodsForAdmin>>,
+          TError,
+          Awaited<ReturnType<typeof getFoodsForAdmin>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetFoodsForAdmin<TData = Awaited<ReturnType<typeof getFoodsForAdmin>>, TError = unknown>(
+ params?: GetFoodsForAdminParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodsForAdmin>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetFoodsForAdmin<TData = Awaited<ReturnType<typeof getFoodsForAdmin>>, TError = unknown>(
+ params?: GetFoodsForAdminParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getFoodsForAdmin>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetFoodsForAdminQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+export const getFoodById = (
     id: string,
     params?: GetFoodByIdParams,
  signal?: AbortSignal
@@ -275,3 +369,401 @@ export function useGetFoodById<TData = Awaited<ReturnType<typeof getFoodById>>, 
 
 
 
+export const updateFood = (
+    id: string,
+    updateFoodDto: UpdateFoodDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateFoodDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdateFoodMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFood>>, TError,{id: string;data: UpdateFoodDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateFood>>, TError,{id: string;data: UpdateFoodDto}, TContext> => {
+
+const mutationKey = ['updateFood'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFood>>, {id: string;data: UpdateFoodDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateFood(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateFoodMutationResult = NonNullable<Awaited<ReturnType<typeof updateFood>>>
+    export type UpdateFoodMutationBody = UpdateFoodDto
+    export type UpdateFoodMutationError = unknown
+
+    export const useUpdateFood = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFood>>, TError,{id: string;data: UpdateFoodDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateFood>>,
+        TError,
+        {id: string;data: UpdateFoodDto},
+        TContext
+      > => {
+      return useMutation(getUpdateFoodMutationOptions(options), queryClient);
+    }
+    export const deleteFood = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/${id}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+export const getDeleteFoodMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFood>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFood>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['deleteFood'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFood>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  deleteFood(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFoodMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFood>>>
+
+    export type DeleteFoodMutationError = unknown
+
+    export const useDeleteFood = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFood>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFood>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getDeleteFoodMutationOptions(options), queryClient);
+    }
+    export const bulkToggleFoods = (
+    bulkToggleDto: BulkToggleDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/bulk-toggle`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: bulkToggleDto, signal
+    },
+      );
+    }
+
+
+
+export const getBulkToggleFoodsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkToggleFoods>>, TError,{data: BulkToggleDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof bulkToggleFoods>>, TError,{data: BulkToggleDto}, TContext> => {
+
+const mutationKey = ['bulkToggleFoods'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bulkToggleFoods>>, {data: BulkToggleDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bulkToggleFoods(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BulkToggleFoodsMutationResult = NonNullable<Awaited<ReturnType<typeof bulkToggleFoods>>>
+    export type BulkToggleFoodsMutationBody = BulkToggleDto
+    export type BulkToggleFoodsMutationError = unknown
+
+    export const useBulkToggleFoods = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkToggleFoods>>, TError,{data: BulkToggleDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof bulkToggleFoods>>,
+        TError,
+        {data: BulkToggleDto},
+        TContext
+      > => {
+      return useMutation(getBulkToggleFoodsMutationOptions(options), queryClient);
+    }
+    export const bulkDeleteFoods = (
+    idsDto: IdsDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/bulk-delete`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: idsDto, signal
+    },
+      );
+    }
+
+
+
+export const getBulkDeleteFoodsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkDeleteFoods>>, TError,{data: IdsDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof bulkDeleteFoods>>, TError,{data: IdsDto}, TContext> => {
+
+const mutationKey = ['bulkDeleteFoods'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof bulkDeleteFoods>>, {data: IdsDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  bulkDeleteFoods(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type BulkDeleteFoodsMutationResult = NonNullable<Awaited<ReturnType<typeof bulkDeleteFoods>>>
+    export type BulkDeleteFoodsMutationBody = IdsDto
+    export type BulkDeleteFoodsMutationError = unknown
+
+    export const useBulkDeleteFoods = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof bulkDeleteFoods>>, TError,{data: IdsDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof bulkDeleteFoods>>,
+        TError,
+        {data: IdsDto},
+        TContext
+      > => {
+      return useMutation(getBulkDeleteFoodsMutationOptions(options), queryClient);
+    }
+    export const addFoodVariant = (
+    id: string,
+    addFoodVariantDto: AddFoodVariantDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/${id}/variants`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: addFoodVariantDto, signal
+    },
+      );
+    }
+
+
+
+export const getAddFoodVariantMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addFoodVariant>>, TError,{id: string;data: AddFoodVariantDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof addFoodVariant>>, TError,{id: string;data: AddFoodVariantDto}, TContext> => {
+
+const mutationKey = ['addFoodVariant'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof addFoodVariant>>, {id: string;data: AddFoodVariantDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  addFoodVariant(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AddFoodVariantMutationResult = NonNullable<Awaited<ReturnType<typeof addFoodVariant>>>
+    export type AddFoodVariantMutationBody = AddFoodVariantDto
+    export type AddFoodVariantMutationError = unknown
+
+    export const useAddFoodVariant = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof addFoodVariant>>, TError,{id: string;data: AddFoodVariantDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof addFoodVariant>>,
+        TError,
+        {id: string;data: AddFoodVariantDto},
+        TContext
+      > => {
+      return useMutation(getAddFoodVariantMutationOptions(options), queryClient);
+    }
+    export const updateFoodVariant = (
+    variantId: string,
+    updateFoodVariantDto: UpdateFoodVariantDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/variants/${variantId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateFoodVariantDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdateFoodVariantMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFoodVariant>>, TError,{variantId: string;data: UpdateFoodVariantDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateFoodVariant>>, TError,{variantId: string;data: UpdateFoodVariantDto}, TContext> => {
+
+const mutationKey = ['updateFoodVariant'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateFoodVariant>>, {variantId: string;data: UpdateFoodVariantDto}> = (props) => {
+          const {variantId,data} = props ?? {};
+
+          return  updateFoodVariant(variantId,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateFoodVariantMutationResult = NonNullable<Awaited<ReturnType<typeof updateFoodVariant>>>
+    export type UpdateFoodVariantMutationBody = UpdateFoodVariantDto
+    export type UpdateFoodVariantMutationError = unknown
+
+    export const useUpdateFoodVariant = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateFoodVariant>>, TError,{variantId: string;data: UpdateFoodVariantDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateFoodVariant>>,
+        TError,
+        {variantId: string;data: UpdateFoodVariantDto},
+        TContext
+      > => {
+      return useMutation(getUpdateFoodVariantMutationOptions(options), queryClient);
+    }
+    export const deleteFoodVariant = (
+    variantId: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/api/foods/variants/${variantId}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+export const getDeleteFoodVariantMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFoodVariant>>, TError,{variantId: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof deleteFoodVariant>>, TError,{variantId: string}, TContext> => {
+
+const mutationKey = ['deleteFoodVariant'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteFoodVariant>>, {variantId: string}> = (props) => {
+          const {variantId} = props ?? {};
+
+          return  deleteFoodVariant(variantId,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type DeleteFoodVariantMutationResult = NonNullable<Awaited<ReturnType<typeof deleteFoodVariant>>>
+
+    export type DeleteFoodVariantMutationError = unknown
+
+    export const useDeleteFoodVariant = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof deleteFoodVariant>>, TError,{variantId: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof deleteFoodVariant>>,
+        TError,
+        {variantId: string},
+        TContext
+      > => {
+      return useMutation(getDeleteFoodVariantMutationOptions(options), queryClient);
+    }

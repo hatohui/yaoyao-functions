@@ -1,14 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { ArrowLeft, Lock } from 'lucide-react'
+import { ArrowLeft, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { PinInput } from '@/components/common/PinInput'
-import { PIN_LENGTH } from '@/common/constants'
-import { usePinUnlock } from './@usePinUnlock'
+import { Input } from '@/components/ui/input'
+import { useAdminUnlock } from '@/hooks/useAdminUnlock'
 
-export function PinUnlock() {
+export function AdminUnlock() {
 	const { t } = useTranslation()
-	const { pin, onChange, submit, invalid, isPending } = usePinUnlock()
+	const { passphrase, onChange, submit, invalid, isPending } = useAdminUnlock()
 
 	return (
 		<div className='mx-auto flex min-h-[calc(100vh-3.5rem)] max-w-md flex-col px-4 py-6'>
@@ -20,48 +19,50 @@ export function PinUnlock() {
 				{t('access.back')}
 			</Link>
 
-			<div className='flex flex-1 flex-col items-center justify-center gap-6 text-center'>
+			<form
+				onSubmit={e => {
+					e.preventDefault()
+					submit()
+				}}
+				className='flex flex-1 flex-col items-center justify-center gap-6 text-center'
+			>
 				<div className='flex size-14 items-center justify-center rounded-2xl bg-brand-muted text-primary'>
-					<Lock className='size-6' />
+					<ShieldCheck className='size-6' />
 				</div>
 
 				<div className='space-y-1.5'>
 					<h1 className='text-2xl font-bold text-foreground'>
-						{t('access.enter_pin')}
+						{t('admin.gate.title')}
 					</h1>
 					<p className='text-sm text-muted-foreground'>
-						{t('access.subtitle')}
+						{t('admin.gate.subtitle')}
 					</p>
 				</div>
 
-				<PinInput
-					value={pin}
-					onChange={onChange}
-					length={PIN_LENGTH}
-					invalid={invalid}
+				<Input
+					type='password'
+					value={passphrase}
+					onChange={e => onChange(e.target.value)}
+					placeholder={t('admin.gate.placeholder')}
 					autoFocus
-					onComplete={submit}
+					className='rounded-full text-center'
 				/>
 
 				{invalid && (
 					<p className='text-sm font-medium text-destructive'>
-						{t('access.invalid_pin')}
+						{t('admin.gate.invalid')}
 					</p>
 				)}
 
 				<Button
+					type='submit'
 					size='lg'
 					className='w-44 rounded-full'
-					disabled={pin.length < PIN_LENGTH || isPending}
-					onClick={() => submit(pin)}
+					disabled={!passphrase || isPending}
 				>
-					{isPending ? t('access.unlocking') : t('access.unlock')}
+					{isPending ? t('admin.gate.unlocking') : t('admin.gate.unlock')}
 				</Button>
-
-				<p className='text-xs text-muted-foreground'>
-					{t('access.saved_note')}
-				</p>
-			</div>
+			</form>
 		</div>
 	)
 }

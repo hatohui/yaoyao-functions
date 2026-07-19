@@ -9,7 +9,7 @@ import type { PersonDto } from '@/api/model'
 import { useGuest } from '@/hooks/useGuest'
 import { Roster } from './@Roster'
 import { OrdersTab } from './@OrdersTab'
-import { YourSplitTab } from './@YourSplitTab'
+import { SplitsTab } from './@SplitsTab'
 import { useTableDetail } from './@useTableDetail'
 
 export default function TableDetailPage() {
@@ -70,7 +70,7 @@ export default function TableDetailPage() {
 				<TabsList className='w-full'>
 					<TabsTrigger value='people'>{t('tabs.people')}</TabsTrigger>
 					<TabsTrigger value='orders'>{t('tabs.orders')}</TabsTrigger>
-					<TabsTrigger value='split'>{t('tabs.your_split')}</TabsTrigger>
+					<TabsTrigger value='split'>{t('tabs.splits')}</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value='people'>
@@ -80,7 +80,7 @@ export default function TableDetailPage() {
 					<OrdersTab table={table} people={people ?? []} />
 				</TabsContent>
 				<TabsContent value='split'>
-					<YourSplitTab table={table} people={people ?? []} />
+					<SplitsTab table={table} people={people ?? []} />
 				</TabsContent>
 			</Tabs>
 		</div>
