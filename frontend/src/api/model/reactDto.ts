@@ -9,4 +9,6 @@
 export interface ReactDto {
   /** Any emoji */
   emoji: string;
+  /** Number of reactions to add */
+  count?: number;
 }

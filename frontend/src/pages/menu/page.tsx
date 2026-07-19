@@ -5,6 +5,7 @@ import { useGetCategories } from '@/api/categories/categories'
 import { usePagination } from '@/hooks/usePagination'
 import { useMenuSearchParams } from '@/utils/searchParams'
 import { FilterBar } from './@FilterBar'
+import { PaginationBar } from '@/components/common/PaginationBar'
 import { FoodCard } from './@FoodCard'
 import { SelectionBar } from './@SelectionBar'
 import { TablePickerModal } from './@TablePickerModal'
@@ -13,15 +14,6 @@ import { useMenuSelection } from './@useMenuSelection'
 import { LoadingView, LoadingSpinner } from './@LoadingView'
 import { ErrorView } from './@ErrorView'
 import { EmptyView } from './@EmptyView'
-import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationLink,
-	PaginationNext,
-	PaginationPrevious,
-	PaginationEllipsis,
-} from '@/components/ui/pagination'
 import { cn } from '@/utils/shadcn'
 import { STALE_TIME_STATIC } from '@/common/constants'
 import type {
@@ -49,24 +41,15 @@ export default function MenuPage() {
 		resetParams,
 	} = useMenuSearchParams()
 
-	const {
-		page,
-		count,
-		setCount,
-		getPageNumbers,
-		handlePageChange,
-		goToNextPage,
-		goToPreviousPage,
-		canGoNext,
-		canGoPrevious,
-		totalPages,
-	} = usePagination({
+	const pagination = usePagination({
 		initialPage: urlPage,
 		initialCount: urlCount,
 		total,
 		onPageChange: setUrlPage,
 		onCountChange: setUrlCount,
 	})
+	
+	const { page, count, setCount } = pagination
 
 	const { data, isLoading, isError, error, refetch } =
 		useGetFoods<GetFoodsResponseDto>(
@@ -117,8 +100,8 @@ export default function MenuPage() {
 	const selection = useMenuSelection(filteredFoods)
 
 	return (
-		<div className='min-h-screen bg-background'>
-			<div className='mx-auto max-w-6xl px-4'>
+		<div className='min-h-screen'>
+			<div className='mx-auto max-w-[1400px] px-4'>
 				<FilterBar
 					search={search}
 					onSearchChange={setSearch}
@@ -144,7 +127,11 @@ export default function MenuPage() {
 						<EmptyView hasFilters={hasFilters} onReset={handleReset} />
 					) : (
 						<>
-							<div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+							<div className='mb-6 flex justify-center sm:hidden'>
+								<PaginationBar pagination={pagination} showPageSize />
+							</div>
+
+							<div className='grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
 								{filteredFoods.map((food: FoodItemDto) => (
 									<FoodCard
 										key={food.id}
@@ -155,66 +142,16 @@ export default function MenuPage() {
 								))}
 							</div>
 
-							{totalPages > 1 && (
-								<div className='mt-10 flex flex-col items-center gap-3'>
-									<Pagination>
-										<PaginationContent className='flex-wrap gap-1'>
-											<PaginationItem>
-												<PaginationPrevious
-													onClick={goToPreviousPage}
-													aria-disabled={!canGoPrevious}
-													className={cn(
-														'cursor-pointer rounded-full bg-muted/60 transition-colors hover:bg-muted',
-														!canGoPrevious && 'pointer-events-none opacity-40'
-													)}
-												/>
-											</PaginationItem>
-
-											{getPageNumbers().map((pageNum, idx) =>
-												pageNum === 'ellipsis' ? (
-													<PaginationItem key={`ellipsis-${idx}`}>
-														<PaginationEllipsis />
-													</PaginationItem>
-												) : (
-													<PaginationItem key={pageNum}>
-														<PaginationLink
-															onClick={() => handlePageChange(pageNum)}
-															isActive={page === pageNum}
-															className={cn(
-																'cursor-pointer rounded-full transition-colors',
-																page === pageNum
-																	? 'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
-																	: 'bg-muted/60 hover:bg-muted'
-															)}
-														>
-															{pageNum}
-														</PaginationLink>
-													</PaginationItem>
-												)
-											)}
-
-											<PaginationItem>
-												<PaginationNext
-													onClick={goToNextPage}
-													aria-disabled={!canGoNext}
-													className={cn(
-														'cursor-pointer rounded-full bg-muted/60 transition-colors hover:bg-muted',
-														!canGoNext && 'pointer-events-none opacity-40'
-													)}
-												/>
-											</PaginationItem>
-										</PaginationContent>
-									</Pagination>
-
-									<p className='text-xs text-muted-foreground'>
-										{t('menu.showing', {
-											from: (page - 1) * count + 1,
-											to: Math.min(page * count, data!.total),
-											total: data!.total,
-										})}
-									</p>
-								</div>
-							)}
+							<div className='mt-10 flex flex-col items-center gap-3'>
+								<PaginationBar pagination={pagination} showPageSize />
+								<p className='text-xs text-muted-foreground'>
+									{t('menu.showing', {
+										from: (page - 1) * count + 1,
+										to: Math.min(page * count, data!.total),
+										total: data!.total,
+									})}
+								</p>
+							</div>
 						</>
 					)}
 				</div>

@@ -30,7 +30,7 @@ export default function TablesPage() {
 	const { floorPlan } = useConfig()
 
 	return (
-		<div className='mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6'>
+		<div className='mx-auto flex max-w-[1400px] flex-col gap-4 px-4 py-6'>
 			<div className='flex items-center justify-between'>
 				<h1 className='text-xl font-bold text-foreground'>
 					{t('tables.find_title')}
@@ -86,9 +86,12 @@ export default function TablesPage() {
 				</p>
 			) : (
 				<>
+					<div className='mb-4 flex justify-center sm:hidden'>
+						<PaginationBar pagination={pagination} showPageSize />
+					</div>
 					<TableList tables={tables} />
-					<div className='mt-2 flex justify-center'>
-						<PaginationBar pagination={pagination} />
+					<div className='mt-4 flex justify-center'>
+						<PaginationBar pagination={pagination} showPageSize />
 					</div>
 				</>
 			)}

@@ -80,15 +80,16 @@ export class FeedbackService {
     return { ...feedback, reactionTotal: 0 };
   }
 
-  async react(feedbackId: string, emoji: string) {
+  async react(feedbackId: string, emoji: string, count = 1) {
     const value = emoji.trim();
     if (!value || value.length > 16) {
       throw new BadRequestException('Invalid reaction');
     }
+    const amount = Math.max(1, count);
     const reaction = await prisma.feedbackReaction.upsert({
       where: { feedbackId_emoji: { feedbackId, emoji: value } },
-      update: { count: { increment: 1 } },
-      create: { feedbackId, emoji: value, count: 1 },
+      update: { count: { increment: amount } },
+      create: { feedbackId, emoji: value, count: amount },
     });
     return reaction;
   }

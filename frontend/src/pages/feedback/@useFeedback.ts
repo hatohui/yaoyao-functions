@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import {
@@ -66,25 +66,9 @@ export function useFeedback() {
 
 	const reactMutation = useReactToFeedback({
 		mutation: {
-			onMutate: async ({ id, data: body }) => {
+			onMutate: async () => {
 				await qc.cancelQueries({ queryKey: feedbackKey })
 				const prev = qc.getQueryData<GetFeedbackResponseDto>(feedbackKey)
-				qc.setQueryData<GetFeedbackResponseDto>(feedbackKey, old => {
-					if (!old) return old
-					return {
-						...old,
-						feedback: old.feedback.map(f => {
-							if (f.id !== id) return f
-							const existing = f.reactions.find(r => r.emoji === body.emoji)
-							const reactions = existing
-								? f.reactions.map(r =>
-										r.emoji === body.emoji ? { ...r, count: r.count + 1 } : r
-									)
-								: [...f.reactions, { emoji: body.emoji, count: 1 }]
-							return { ...f, reactions, reactionTotal: f.reactionTotal + 1 }
-						}),
-					}
-				})
 				return { prev }
 			},
 			onError: (_e, _v, ctx) => qc.setQueryData(feedbackKey, ctx?.prev),
@@ -100,9 +84,43 @@ export function useFeedback() {
 		})
 	}
 
-	const react = useDebouncedCallback((id: string, emoji: string) => {
-		reactMutation.mutate({ id, data: { emoji } })
-	}, 300)
+	const pendingReactions = useRef<Record<string, Record<string, number>>>({})
+
+	const flushReactions = useDebouncedCallback(() => {
+		const current = pendingReactions.current
+		pendingReactions.current = {}
+
+		Object.entries(current).forEach(([id, emojis]) => {
+			Object.entries(emojis).forEach(([emoji, count]) => {
+				if (count > 0) {
+					reactMutation.mutate({ id, data: { emoji, count } })
+				}
+			})
+		})
+	}, 800)
+
+	const react = (id: string, emoji: string) => {
+		qc.setQueryData<GetFeedbackResponseDto>(feedbackKey, old => {
+			if (!old) return old
+			return {
+				...old,
+				feedback: old.feedback.map(f => {
+					if (f.id !== id) return f
+					const existing = f.reactions.find(r => r.emoji === emoji)
+					const reactions = existing
+						? f.reactions.map(r =>
+								r.emoji === emoji ? { ...r, count: r.count + 1 } : r
+						  )
+						: [...f.reactions, { emoji, count: 1 }]
+					return { ...f, reactions, reactionTotal: f.reactionTotal + 1 }
+				}),
+			}
+		})
+
+		if (!pendingReactions.current[id]) pendingReactions.current[id] = {}
+		pendingReactions.current[id][emoji] = (pendingReactions.current[id][emoji] || 0) + 1
+		flushReactions()
+	}
 
 	return {
 		feedback: data?.feedback ?? [],

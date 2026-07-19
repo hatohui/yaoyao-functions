@@ -9,7 +9,7 @@ interface FeedbackCardProps {
 }
 
 export function FeedbackCard({ item, onReact }: FeedbackCardProps) {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const { suggestedReactions } = useConfig()
 
 	return (
@@ -17,6 +17,12 @@ export function FeedbackCard({ item, onReact }: FeedbackCardProps) {
 			<div className='flex items-center justify-between'>
 				<span className='text-sm font-semibold text-foreground'>
 					{item.by || t('feedback.anonymous')}
+				</span>
+				<span className='text-xs text-muted-foreground'>
+					{new Intl.DateTimeFormat(i18n.language, {
+						dateStyle: 'medium',
+						timeStyle: 'short',
+					}).format(new Date(item.createdAt))}
 				</span>
 			</div>
 			{item.content && (

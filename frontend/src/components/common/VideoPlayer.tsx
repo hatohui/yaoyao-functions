@@ -22,18 +22,16 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 	const { t } = useTranslation()
 
 	return (
-		<div>
-			<video
-				muted={muted}
-				autoPlay={autoPlay}
-				loop={loop}
-				playsInline={playsInline}
-				className={cn(className, 'w-full h-full object-cover')}
-			>
-				<source src={src} type='video/mp4' />
-				{t('errors.browser_video_tag')}
-			</video>
-		</div>
+		<video
+			muted={muted}
+			autoPlay={autoPlay}
+			loop={loop}
+			playsInline={playsInline}
+			className={cn(className, 'w-full h-full object-cover')}
+		>
+			<source src={src} type='video/mp4' />
+			{t('errors.browser_video_tag')}
+		</video>
 	)
 }
 

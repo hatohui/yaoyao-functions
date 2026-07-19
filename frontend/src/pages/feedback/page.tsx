@@ -54,19 +54,24 @@ export default function FeedbackPage() {
 					{t('feedback.empty')}
 				</p>
 			) : (
-				<div className='flex flex-col gap-3'>
-					{feedback.map(item => (
-						<FeedbackCard
-							key={item.id}
-							item={item}
-							onReact={emoji => react(item.id, emoji)}
-						/>
-					))}
-				</div>
+				<>
+					<div className='flex justify-center sm:hidden'>
+						<PaginationBar pagination={pagination} showPageSize />
+					</div>
+					<div className='flex flex-col gap-3'>
+						{feedback.map(item => (
+							<FeedbackCard
+								key={item.id}
+								item={item}
+								onReact={emoji => react(item.id, emoji)}
+							/>
+						))}
+					</div>
+				</>
 			)}
 
 			<div className='flex justify-center pt-2'>
-				<PaginationBar pagination={pagination} />
+				<PaginationBar pagination={pagination} showPageSize />
 			</div>
 		</div>
 	)

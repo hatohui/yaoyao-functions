@@ -1,10 +1,9 @@
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { useLanguage } from '@/config/i18n'
 import { Globe } from 'lucide-react'
 
@@ -19,23 +18,27 @@ export const LanguageSelector = () => {
 	const { lang, setLanguage } = useLanguage()
 
 	return (
-		<Select value={lang} onValueChange={setLanguage}>
-			<SelectTrigger className='h-8 w-auto gap-1 border-none bg-transparent px-2 shadow-none transition-colors hover:bg-accent focus:ring-0'>
+		<DropdownMenu>
+			<DropdownMenuTrigger className='flex h-8 w-auto items-center gap-1.5 rounded-full border-none bg-transparent px-2.5 outline-none shadow-none transition-colors hover:bg-accent focus:ring-0 focus:outline-none'>
 				<Globe className='size-3.5 shrink-0 text-muted-foreground' />
-				<span className='hidden sm:contents'>
-					<SelectValue />
+				<span className='hidden sm:contents text-sm font-medium'>
+					{languages.find(l => l.code === lang)?.name || lang}
 				</span>
 				<span className='contents sm:hidden text-xs font-semibold uppercase'>
 					{lang}
 				</span>
-			</SelectTrigger>
-			<SelectContent align='end'>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent align='end' className='w-36 rounded-xl'>
 				{languages.map(l => (
-					<SelectItem key={l.code} value={l.code}>
+					<DropdownMenuItem 
+						key={l.code} 
+						onClick={() => setLanguage(l.code)}
+						className={`cursor-pointer rounded-lg ${l.code === lang ? 'bg-primary/10 text-primary font-semibold' : ''}`}
+					>
 						{l.name}
-					</SelectItem>
+					</DropdownMenuItem>
 				))}
-			</SelectContent>
-		</Select>
+			</DropdownMenuContent>
+		</DropdownMenu>
 	)
 }

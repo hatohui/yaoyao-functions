@@ -67,6 +67,32 @@ export function useOrderCart(tableId: string) {
 		})
 	}
 
+	const addConfigured = (
+		food: FoodItemDto,
+		variantId: string,
+		price: number,
+		quantity: number,
+		mode: SplitMode,
+		chosen: Set<string>
+	) => {
+		setLines(prev => {
+			const next = new Map(prev)
+			next.set(food.id, {
+				foodId: food.id,
+				variantId,
+				name: food.name,
+				imageUrl: food.imageUrl,
+				price,
+				currency: food.currency ?? '',
+				shouldCalculate: food.shouldCalculate,
+				quantity,
+				mode,
+				chosen,
+			})
+			return next
+		})
+	}
+
 	const setQuantity = (foodId: string, quantity: number) =>
 		mutate(foodId, line => (quantity < 1 ? null : { ...line, quantity }))
 
@@ -80,6 +106,9 @@ export function useOrderCart(tableId: string) {
 			else chosen.add(personId)
 			return { ...line, chosen }
 		})
+
+	const setVariant = (foodId: string, variantId: string, price: number) =>
+		mutate(foodId, line => ({ ...line, variantId, price }))
 
 	const remove = (foodId: string) => mutate(foodId, () => null)
 	const clear = () => setLines(new Map())
@@ -145,8 +174,10 @@ export function useOrderCart(tableId: string) {
 		lines: items,
 		quantityOf: (foodId: string) => lines.get(foodId)?.quantity ?? 0,
 		add,
+		addConfigured,
 		setQuantity,
 		setMode,
+		setVariant,
 		togglePerson,
 		remove,
 		clear,

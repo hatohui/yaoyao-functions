@@ -114,6 +114,7 @@
 		"showing": "แสดง {{from}}–{{to}} จาก {{total}} เมนู",
 		"unavailable": "ไม่พร้อมให้บริการ",
 		"popular": "ยอดนิยม",
+		"variant": "ตัวเลือก",
 		"sort_name": "ชื่อ (A–Z)",
 		"sort_price": "ราคา (ต่ำไปสูง)",
 		"sort_price_desc": "ราคา (สูงไปต่ำ)",

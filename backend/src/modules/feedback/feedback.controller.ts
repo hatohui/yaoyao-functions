@@ -76,6 +76,6 @@ export class FeedbackController {
   @ApiOperation({ operationId: 'reactToFeedback' })
   @ApiResponse({ status: 201, type: FeedbackReactionDto })
   react(@Param('id') id: string, @Body() dto: ReactDto) {
-    return this.feedback.react(id, dto.emoji);
+    return this.feedback.react(id, dto.emoji, dto.count);
   }
 }

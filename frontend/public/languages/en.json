@@ -114,6 +114,7 @@
 		"showing": "Showing {{from}}–{{to}} of {{total}} dishes",
 		"unavailable": "Unavailable",
 		"popular": "Popular",
+		"variant": "Variation",
 		"sort_name": "Name (A–Z)",
 		"sort_price": "Price (low to high)",
 		"sort_price_desc": "Price (high to low)",

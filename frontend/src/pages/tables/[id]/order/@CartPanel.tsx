@@ -16,6 +16,7 @@ interface CartPanelProps {
 	isPlacing: boolean
 	onQuantityChange: (foodId: string, quantity: number) => void
 	onModeChange: (foodId: string, mode: SplitMode) => void
+	onVariantChange: (foodId: string, variantId: string, price: number) => void
 	onTogglePerson: (foodId: string, personId: string) => void
 	onRemove: (foodId: string) => void
 	onClear: () => void
@@ -32,12 +33,17 @@ export function CartPanel({
 	isPlacing,
 	onQuantityChange,
 	onModeChange,
+	onVariantChange,
 	onTogglePerson,
 	onRemove,
 	onClear,
 	onCheckout,
 }: CartPanelProps) {
 	const { t } = useTranslation()
+
+	const hasInvalidSplit = lines.some(
+		l => l.mode === 'choose' && l.chosen.size === 0
+	)
 
 	return (
 		<div className='flex h-full flex-col gap-3'>
@@ -76,6 +82,7 @@ export function CartPanel({
 							myPersonId={myPersonId}
 							onQuantityChange={q => onQuantityChange(line.foodId, q)}
 							onModeChange={m => onModeChange(line.foodId, m)}
+							onVariantChange={(v, p) => onVariantChange(line.foodId, v, p)}
 							onTogglePerson={id => onTogglePerson(line.foodId, id)}
 							onRemove={() => onRemove(line.foodId)}
 						/>
@@ -93,7 +100,7 @@ export function CartPanel({
 					</div>
 					<Button
 						className='w-full rounded-full'
-						disabled={isPlacing}
+						disabled={isPlacing || hasInvalidSplit}
 						onClick={onCheckout}
 					>
 						{isPlacing ? t('orders.placing') : t('orders.place_order')}

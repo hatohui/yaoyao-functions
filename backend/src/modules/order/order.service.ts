@@ -96,7 +96,10 @@ export class OrderService {
   }
 
   private splitData(splitAll: boolean, personIds?: string[]) {
-    if (splitAll || !personIds || personIds.length === 0) return undefined;
+    if (splitAll) return undefined;
+    if (!personIds || personIds.length === 0) {
+      throw new BadRequestException('You must select at least one person to split with');
+    }
     return { create: personIds.map((personId) => ({ personId })) };
   }
 
@@ -167,7 +170,10 @@ export class OrderService {
     const updated = await prisma.$transaction(async (tx) => {
       if (resetSplits) {
         await tx.orderSplit.deleteMany({ where: { orderId: id } });
-        if (!splitAll && dto.personIds && dto.personIds.length > 0) {
+        if (!splitAll) {
+          if (!dto.personIds || dto.personIds.length === 0) {
+            throw new BadRequestException('You must select at least one person to split with');
+          }
           await tx.orderSplit.createMany({
             data: dto.personIds.map((personId) => ({ orderId: id, personId })),
           });

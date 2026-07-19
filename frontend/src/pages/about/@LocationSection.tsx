@@ -8,7 +8,7 @@ export function LocationSection() {
 	const encodedAddress = encodeURIComponent(address)
 
 	return (
-		<section className='mx-auto max-w-2xl px-4 py-10 sm:py-12'>
+		<div className='py-8 lg:py-12'>
 			<div className='flex items-center gap-2'>
 				<MapPin className='size-5 text-primary' />
 				<h2 className='text-xl font-bold text-foreground'>
@@ -20,7 +20,7 @@ export function LocationSection() {
 				<iframe
 					title={t('about.location_title')}
 					src={`https://www.google.com/maps?q=${encodedAddress}&output=embed`}
-					className='h-64 w-full sm:h-80'
+					className='h-64 w-full lg:h-72'
 					loading='lazy'
 					referrerPolicy='no-referrer-when-downgrade'
 				/>
@@ -35,7 +35,7 @@ export function LocationSection() {
 
 					<Button asChild size='sm' className='rounded-full gap-1.5'>
 						<a
-							href={`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`}
+							href='https://maps.app.goo.gl/FqCuu25uEUchCgZd7'
 							target='_blank'
 							rel='noopener noreferrer'
 						>
@@ -45,6 +45,6 @@ export function LocationSection() {
 					</Button>
 				</div>
 			</div>
-		</section>
+		</div>
 	)
 }

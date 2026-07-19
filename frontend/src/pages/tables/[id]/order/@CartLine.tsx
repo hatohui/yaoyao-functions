@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Minus, Plus, Trash2, ChevronDown } from 'lucide-react'
-import type { PersonDto } from '@/api/model'
+import { useGetFoodById } from '@/api/foods/foods'
+import type { FoodDetailDto, PersonDto } from '@/api/model'
 import type { SplitMode } from '@/components/common/SplitModeSelector'
 import { SplitModeSelector } from '@/components/common/SplitModeSelector'
 import { ASSET_URL } from '@/common/app'
+import { STALE_TIME_STATIC } from '@/common/constants'
 import { cn } from '@/utils/shadcn'
 import type { CartLine as CartLineData } from './@useOrderCart'
 
@@ -14,6 +16,7 @@ interface CartLineProps {
 	myPersonId: string | null
 	onQuantityChange: (quantity: number) => void
 	onModeChange: (mode: SplitMode) => void
+	onVariantChange: (variantId: string, price: number) => void
 	onTogglePerson: (personId: string) => void
 	onRemove: () => void
 }
@@ -24,11 +27,19 @@ export function CartLine({
 	myPersonId,
 	onQuantityChange,
 	onModeChange,
+	onVariantChange,
 	onTogglePerson,
 	onRemove,
 }: CartLineProps) {
-	const { t } = useTranslation()
+	const { t, i18n } = useTranslation()
 	const [open, setOpen] = useState(false)
+
+	const { data: detail } = useGetFoodById<FoodDetailDto>(
+		line.foodId,
+		{ lang: i18n.language },
+		{ query: { staleTime: STALE_TIME_STATIC, enabled: open } }
+	)
+	const variants = detail?.variants ?? []
 
 	const src = line.imageUrl
 		? line.imageUrl.startsWith('http')
@@ -119,7 +130,29 @@ export function CartLine({
 			</button>
 
 			{open && (
-				<div className='px-2 pb-1'>
+				<div className='flex flex-col gap-3 px-2 pb-1'>
+					{variants.length > 1 && (
+						<div className='flex flex-wrap gap-2'>
+							{variants
+								.filter(v => v.isAvailable)
+								.map(v => (
+									<button
+										key={v.id}
+										type='button'
+										onClick={() => onVariantChange(v.id, v.price ?? 0)}
+										className={cn(
+											'rounded-full border px-3 py-1.5 text-xs font-medium transition-colors',
+											line.variantId === v.id
+												? 'border-primary bg-primary text-primary-foreground'
+												: 'border-border/60 bg-card text-foreground hover:bg-muted'
+										)}
+									>
+										{v.label ? `${v.label} - ` : ''}
+										{v.price} {v.currency}
+									</button>
+								))}
+						</div>
+					)}
 					<SplitModeSelector
 						people={people}
 						mode={line.mode}

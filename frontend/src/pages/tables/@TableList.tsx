@@ -12,7 +12,7 @@ export function TableList({ tables }: TableListProps) {
 	const { t } = useTranslation()
 
 	return (
-		<ul className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+		<ul className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
 			{tables.map(table => {
 				const full = table.seated >= table.capacity
 				// the host is already named above, so don't repeat it as a match
