@@ -68,6 +68,7 @@ export function FilterBar({
 						<SelectContent>
 							<SelectItem value='name'>{t('menu.sort_name')}</SelectItem>
 							<SelectItem value='price'>{t('menu.sort_price')}</SelectItem>
+							<SelectItem value='price_desc'>{t('menu.sort_price_desc')}</SelectItem>
 							<SelectItem value='popular'>{t('menu.sort_popular')}</SelectItem>
 						</SelectContent>
 					</Select>
@@ -94,7 +95,7 @@ export function FilterBar({
 			</div>
 
 			<ScrollArea className='mt-3 w-full' type='scroll'>
-				<div className='flex gap-2 pb-1'>
+				<div className='flex w-max gap-2 pb-1'>
 					<CategoryPill
 						label={t('menu.popular')}
 						icon={Flame}

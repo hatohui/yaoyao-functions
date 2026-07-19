@@ -175,7 +175,7 @@ ALTER TABLE "food_variant" ADD CONSTRAINT "food_variant_food_id_fkey" FOREIGN KE
 ALTER TABLE "people" ADD CONSTRAINT "people_table_id_fkey" FOREIGN KEY ("table_id") REFERENCES "table"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "personal_note" ADD CONSTRAINT "personal_note_person_id_fkey" FOREIGN KEY ("person_id") REFERENCES "people"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "personal_note" ADD CONSTRAINT "personal_note_person_id_fkey" FOREIGN KEY ("person_id") REFERENCES "people"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "order" ADD CONSTRAINT "order_table_id_fkey" FOREIGN KEY ("table_id") REFERENCES "table"("id") ON DELETE CASCADE ON UPDATE CASCADE;

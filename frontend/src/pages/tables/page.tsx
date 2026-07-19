@@ -64,7 +64,6 @@ export default function TablesPage() {
 						<SelectItem value='all'>{t('tables.filter_all')}</SelectItem>
 						<SelectItem value='free'>{t('tables.filter_free')}</SelectItem>
 						<SelectItem value='full'>{t('tables.filter_full')}</SelectItem>
-						<SelectItem value='hosted'>{t('tables.filter_hosted')}</SelectItem>
 					</SelectContent>
 				</Select>
 			</div>

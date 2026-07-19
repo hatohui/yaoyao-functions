@@ -3,8 +3,8 @@ import { Link } from 'react-router'
 import { ArrowLeft, ShoppingCart, UserPlus } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import { Button } from '@/components/ui/button'
-import { SearchBar } from '@/components/common/SearchBar'
 import { PaginationBar } from '@/components/common/PaginationBar'
+import { FilterBar } from '@/pages/menu/@FilterBar'
 import {
 	Sheet,
 	SheetContent,
@@ -12,13 +12,6 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from '@/components/ui/sheet'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
 import { ProductCard } from './@ProductCard'
 import { CartPanel } from './@CartPanel'
 import { useTableOrdering } from './@useTableOrdering'
@@ -33,6 +26,10 @@ export default function TableOrderPage() {
 		setSearch,
 		category,
 		setCategory,
+		sort,
+		setSort,
+		popular,
+		setPopular,
 		categories,
 		foods,
 		isLoading,
@@ -93,28 +90,20 @@ export default function TableOrderPage() {
 							{t('orders.add_order')}
 						</h1>
 
-						<div className='flex flex-wrap items-center gap-2'>
-							<SearchBar
-								value={search}
-								onChange={setSearch}
-								placeholder={t('menu.search_placeholder')}
-								className='flex-1'
+						<div className='-mx-4 px-4 sm:mx-0 sm:px-0'>
+							<FilterBar
+								search={search}
+								onSearchChange={setSearch}
+								count={pagination.count}
+								onCountChange={pagination.setCount}
+								activeCategory={category}
+								onCategoryChange={setCategory}
+								categories={categories}
+								sort={sort}
+								onSortChange={setSort}
+								popular={popular}
+								onPopularChange={setPopular}
 							/>
-							<Select value={category} onValueChange={setCategory}>
-								<SelectTrigger className='rounded-full'>
-									<SelectValue />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectItem value='all'>
-										{t('menu.all_categories')}
-									</SelectItem>
-									{categories.map(c => (
-										<SelectItem key={c.id} value={c.id}>
-											{c.name}
-										</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
 						</div>
 
 						{isLoading ? (

@@ -78,8 +78,7 @@
 		"no_host": "ยังไม่มีเจ้าภาพ",
 		"filter_all": "ทุกโต๊ะ",
 		"filter_free": "ยังมีที่ว่าง",
-		"filter_full": "เต็ม",
-		"filter_hosted": "มีเจ้าภาพ"
+		"filter_full": "เต็ม"
 	},
 	"roster": {
 		"people_here": "คนที่โต๊ะนี้",
@@ -117,6 +116,7 @@
 		"popular": "ยอดนิยม",
 		"sort_name": "ชื่อ (A–Z)",
 		"sort_price": "ราคา (ต่ำไปสูง)",
+		"sort_price_desc": "ราคา (สูงไปต่ำ)",
 		"sort_popular": "ยอดนิยมที่สุด",
 		"count_all": "ทั้งหมด",
 		"select_item": "เลือกรายการนี้",
@@ -135,10 +135,10 @@
 		"address_label": "ที่อยู่",
 		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
 		"get_directions": "นำทาง",
-		"details_tag": "🐾 เกร็ดเล็กเกร็ดน้อย",
-		"details_title": "เกี่ยวกับ YaoYao Dinner",
-		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+		"details_tag": "🐾 เรื่องวงใน",
+		"details_title": "ทำความรู้จักกับ Chee Yao (Yao Yao)",
+		"details_body_1": "หรือที่รู้จักกันในกลุ่มแฟนคลับว่า Aster (归星) @AsterTheDragon โดย Chee Yao เป็นผู้ชวนทุกคนมางานพิเศษนี้!",
+		"details_body_2": "เขาเปรียบเสมือนพายบลูเบอร์รี่ที่ชื่นชอบมะม่วง เป็นผู้ต้อนรับเพื่อนๆ furry ให้มารวมตัวกันเพื่อทานอาหารและสังสรรค์ในมาเลเซีย"
 	},
 	"food_detail": {
 		"back_to_menu": "กลับไปที่เมนู",

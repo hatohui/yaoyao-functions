@@ -75,7 +75,8 @@ export default function MenuPage() {
 				page,
 				count,
 				category: category === 'all' ? undefined : category,
-				sortBy: sort,
+				sortBy: sort === 'price_desc' ? 'price' : sort,
+				sortOrder: sort === 'price_desc' ? 'desc' : 'asc',
 				popular: popular || undefined,
 			},
 			{ query: { staleTime: STALE_TIME_STATIC, refetchOnWindowFocus: false } }

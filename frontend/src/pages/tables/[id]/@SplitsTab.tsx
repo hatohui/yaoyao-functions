@@ -92,7 +92,7 @@ export function SplitsTab({ table, people }: SplitsTabProps) {
 							<button
 								type='button'
 								onClick={() => toggle(person.id)}
-								className='flex w-full items-center justify-between gap-2'
+								className='flex w-full cursor-pointer items-center justify-between gap-2'
 							>
 								<span className='font-medium text-foreground'>
 									{person.name}

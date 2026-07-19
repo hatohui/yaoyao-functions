@@ -29,8 +29,6 @@ export function useTableSearch() {
     if (data?.total !== undefined) setTotal(data.total)
   }, [data?.total])
 
-  // Occupancy compares a relation count against a column, which Prisma can't
-  // express in a where clause - so this narrows the fetched page, not the query.
   const tables = useMemo(() => {
     const rows = data?.tables ?? []
     switch (filter) {
@@ -38,8 +36,6 @@ export function useTableSearch() {
         return rows.filter(tb => tb.seated < tb.capacity)
       case 'full':
         return rows.filter(tb => tb.seated >= tb.capacity)
-      case 'hosted':
-        return rows.filter(tb => Boolean(tb.tableLeaderId))
       default:
         return rows
     }

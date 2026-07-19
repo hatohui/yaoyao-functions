@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useSearchParams } from 'react-router'
 
-export type MenuSort = 'name' | 'price' | 'popular'
+export type MenuSort = 'name' | 'price' | 'price_desc' | 'popular'
 
 export interface MenuSearchParams {
 	page?: number
@@ -13,7 +13,7 @@ export interface MenuSearchParams {
 }
 
 const isMenuSort = (value: string | null): value is MenuSort =>
-	value === 'name' || value === 'price' || value === 'popular'
+	value === 'name' || value === 'price' || value === 'price_desc' || value === 'popular'
 
 export function useMenuSearchParams() {
 	const [searchParams, setSearchParams] = useSearchParams()

@@ -13,6 +13,7 @@ import type {
 import { usePagination } from '@/hooks/usePagination'
 import { useDebounce } from '@/hooks/useDebounce'
 import { STALE_TIME_STATIC } from '@/common/constants'
+import type { MenuSort } from '@/utils/searchParams'
 
 export function useTableOrdering() {
 	const { id = '' } = useParams()
@@ -20,6 +21,8 @@ export function useTableOrdering() {
 
 	const [search, setSearch] = useState('')
 	const [category, setCategory] = useState('all')
+	const [sort, setSort] = useState<MenuSort>('name')
+	const [popular, setPopular] = useState(false)
 	const [total, setTotal] = useState(0)
 	const [selected, setSelected] = useState<Set<string>>(new Set())
 	const [configOpen, setConfigOpen] = useState(false)
@@ -30,7 +33,7 @@ export function useTableOrdering() {
 
 	useEffect(() => {
 		setPage(1)
-	}, [debouncedSearch, category, setPage])
+	}, [debouncedSearch, category, sort, popular, setPage])
 
 	const { data: table } = useGetTableById<TableDto>(id)
 
@@ -45,6 +48,9 @@ export function useTableOrdering() {
 			page,
 			count,
 			category: category === 'all' ? undefined : category,
+			sortBy: sort === 'price_desc' ? 'price' : sort,
+			sortOrder: sort === 'price_desc' ? 'desc' : 'asc',
+			popular: popular || undefined,
 		},
 		{ query: { staleTime: STALE_TIME_STATIC } }
 	)
@@ -84,6 +90,10 @@ export function useTableOrdering() {
 		setSearch,
 		category,
 		setCategory,
+		sort,
+		setSort,
+		popular,
+		setPopular,
 		categories,
 		foods,
 		isLoading,

@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { PartyPopper } from 'lucide-react'
-import { ASSET_URL } from '@/common/app'
 
 export function YaoYaoDetailsSection() {
 	const { t } = useTranslation()
@@ -8,11 +7,18 @@ export function YaoYaoDetailsSection() {
 	return (
 		<section className='mx-auto max-w-2xl px-4 pb-14 sm:pb-16'>
 			<div className='rounded-3xl border border-border/60 bg-card p-6 shadow-sm sm:p-8'>
-				<img 
-					src={`${ASSET_URL}/yaoyao.jpg`} 
-					className='mb-6 w-full max-h-72 object-cover rounded-2xl' 
-					alt='YaoYao' 
-				/>
+				<div className='mb-6 grid grid-cols-2 gap-4'>
+					<img
+						src={`/images/aster.jpg`}
+						className='w-full h-48 sm:h-72 object-cover rounded-2xl'
+						alt='Aster'
+					/>
+					<img
+						src={`/images/yaoyao.jpg`}
+						className='w-full h-48 sm:h-72 object-cover rounded-2xl'
+						alt='YaoYao'
+					/>
+				</div>
 				<span className='inline-flex items-center gap-1.5 rounded-full bg-accent/15 px-3 py-1 text-xs font-semibold text-accent'>
 					<PartyPopper className='size-3.5' />
 					{t('about.details_tag')}

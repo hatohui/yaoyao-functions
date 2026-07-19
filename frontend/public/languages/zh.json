@@ -78,8 +78,7 @@
 		"no_host": "暂无主人",
 		"filter_all": "全部餐桌",
 		"filter_free": "有空位",
-		"filter_full": "已满",
-		"filter_hosted": "有主人"
+		"filter_full": "已满"
 	},
 	"roster": {
 		"people_here": "这桌的人",
@@ -117,6 +116,7 @@
 		"popular": "热门",
 		"sort_name": "名称（A–Z）",
 		"sort_price": "价格（从低到高）",
+		"sort_price_desc": "价格（从高到低）",
 		"sort_popular": "最受欢迎",
 		"count_all": "全部",
 		"select_item": "选择此项",
@@ -136,9 +136,9 @@
 		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
 		"get_directions": "获取路线",
 		"details_tag": "🐾 内幕消息",
-		"details_title": "关于 YaoYao Dinner",
-		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+		"details_title": "认识一下 Chee Yao (Yao Yao)",
+		"details_body_1": "他在兽圈里也被称为 Aster（归星）@AsterTheDragon。正是 Chee Yao 邀请大家参加这次特别的聚会！",
+		"details_body_2": "他被称为喜欢芒果的蓝莓派，欢迎各位兽迷们齐聚马来西亚，共享美食，度过一个美好的夜晚。"
 	},
 	"food_detail": {
 		"back_to_menu": "返回菜单",

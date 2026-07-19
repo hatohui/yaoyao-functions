@@ -78,8 +78,7 @@
 		"no_host": "No host",
 		"filter_all": "All tables",
 		"filter_free": "Has space",
-		"filter_full": "Full",
-		"filter_hosted": "Has a host"
+		"filter_full": "Full"
 	},
 	"roster": {
 		"people_here": "People at this table",
@@ -117,6 +116,7 @@
 		"popular": "Popular",
 		"sort_name": "Name (A–Z)",
 		"sort_price": "Price (low to high)",
+		"sort_price_desc": "Price (high to low)",
 		"sort_popular": "Most popular",
 		"count_all": "All",
 		"select_item": "Select this item",
@@ -136,9 +136,9 @@
 		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
 		"get_directions": "Get directions",
 		"details_tag": "🐾 The tea",
-		"details_title": "About YaoYao Dinner",
-		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+		"details_title": "Meet Chee Yao (Yao Yao)",
+		"details_body_1": "Also known in the fandom as Aster (归星) @AsterTheDragon, Chee Yao is the one inviting everyone to this special event!",
+		"details_body_2": "Described as a Blueberry Pie who loves Mangos, he welcomes fellow furs to gather for a great night of food and hanging out in Malaysia."
 	},
 	"food_detail": {
 		"back_to_menu": "Back to menu",

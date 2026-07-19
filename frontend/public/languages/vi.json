@@ -78,8 +78,7 @@
 		"no_host": "Chưa có chủ bàn",
 		"filter_all": "Tất cả bàn",
 		"filter_free": "Còn chỗ",
-		"filter_full": "Đã đầy",
-		"filter_hosted": "Có chủ bàn"
+		"filter_full": "Đã đầy"
 	},
 	"roster": {
 		"people_here": "Mọi người tại bàn này",
@@ -117,6 +116,7 @@
 		"popular": "Phổ biến",
 		"sort_name": "Tên (A–Z)",
 		"sort_price": "Giá (thấp đến cao)",
+		"sort_price_desc": "Giá (cao đến thấp)",
 		"sort_popular": "Phổ biến nhất",
 		"count_all": "Tất cả",
 		"select_item": "Chọn món này",
@@ -136,9 +136,9 @@
 		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
 		"get_directions": "Chỉ đường",
 		"details_tag": "🐾 Chuyện hậu trường",
-		"details_title": "Về YaoYao Dinner",
-		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+		"details_title": "Gặp gỡ Chee Yao (Yao Yao)",
+		"details_body_1": "Còn được biết đến trong fandom với tên Aster (归星) @AsterTheDragon, Chee Yao là người mời mọi người đến sự kiện đặc biệt này!",
+		"details_body_2": "Được miêu tả như một chiếc bánh việt quất thích xoài, anh ấy chào đón những người bạn furry cùng tụ tập để có một đêm tuyệt vời với đồ ăn ngon và trò chuyện ở Malaysia."
 	},
 	"food_detail": {
 		"back_to_menu": "Về thực đơn",

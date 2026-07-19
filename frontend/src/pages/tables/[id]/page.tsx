@@ -17,7 +17,7 @@ import { useTableDetail } from './@useTableDetail'
 
 export default function TableDetailPage() {
 	const { t } = useTranslation()
-	const { id, table, isLoading, isError, shareLink, updateTable } =
+	const { id, table, isLoading, isError, shareLink, updateTable, updateTableAdmin } =
 		useTableDetail()
 	const setActiveTable = useGuest(s => s.setActiveTable)
 	const { tab, setTab } = useTableTab(id)
@@ -69,7 +69,7 @@ export default function TableDetailPage() {
 							value={String(table.capacity)}
 							onCommit={v => {
 								const capacity = Number(v)
-								if (capacity >= table.seated) updateTable({ capacity })
+								if (capacity >= table.seated) updateTableAdmin({ capacity })
 							}}
 							inputClassName='w-14 text-xs'
 						/>
@@ -78,7 +78,7 @@ export default function TableDetailPage() {
 				<button
 					type='button'
 					onClick={shareLink}
-					className='inline-flex items-center gap-1.5 rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
+					className='inline-flex items-center cursor-pointer gap-1.5 rounded-full border border-border/60 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
 				>
 					<Share2 className='size-4' />
 					{t('roster.share')}
