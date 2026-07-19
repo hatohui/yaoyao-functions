@@ -8,6 +8,7 @@ declare module 'react-i18next' {
 				config: { select_language: string }
 				errors: Record<string, string>
 				common: {
+					rename: string
 					back: string
 					confirm: string
 					cancel: string
@@ -16,10 +17,12 @@ declare module 'react-i18next' {
 				}
 				nav: {
 					menu: string
+					about: string
 					dev: string
 					tables: string
 					feedback: string
 					admin: string
+					open_menu: string
 				}
 				access: {
 					back: string
@@ -31,6 +34,11 @@ declare module 'react-i18next' {
 					saved_note: string
 				}
 				tables: {
+					no_host: string
+					filter_all: string
+					filter_free: string
+					filter_full: string
+					filter_hosted: string
 					find_title: string
 					search_placeholder: string
 					all_tables: string
@@ -51,12 +59,14 @@ declare module 'react-i18next' {
 					not_found: string
 					add_failed: string
 					remove_failed: string
+					update_failed: string
+					set_host: string
+					unset_host: string
 				}
 				menu: {
 					restaurant_name: string
 					restaurant_en: string
 					restaurant_location: string
-					dishes_available: string
 					search_placeholder: string
 					all_categories: string
 					no_dishes_title: string
@@ -70,6 +80,10 @@ declare module 'react-i18next' {
 					showing: string
 					unavailable: string
 					popular: string
+					sort_name: string
+					sort_price: string
+					sort_popular: string
+					count_all: string
 					select_item: string
 					selected_count: string
 					clear_selection: string
@@ -80,14 +94,44 @@ declare module 'react-i18next' {
 					added_to_order: string
 					add_failed: string
 				}
+				about: {
+					hero_tag: string
+					location_title: string
+					address_label: string
+					address: string
+					get_directions: string
+					details_tag: string
+					details_title: string
+					details_body_1: string
+					details_body_2: string
+				}
 				food_detail: {
 					back_to_menu: string
 					variants: string
 					add_to_order: string
 					not_found: string
+					description_placeholder: string
 				}
 				tabs: { people: string; orders: string; splits: string }
 				orders: {
+					add_order: string
+					cart: string
+					cart_empty: string
+					clear_cart: string
+					place_order: string
+					placing: string
+					placed: string
+					place_failed: string
+					add: string
+					remove_from_cart: string
+					increase: string
+					decrease: string
+					split_as: string
+					free: string
+					view_cart: string
+					needs_people_title: string
+					needs_people_body: string
+					seat_someone: string
 					shared: string
 					personal: string
 					unknown_person: string
@@ -102,6 +146,7 @@ declare module 'react-i18next' {
 					free_badge: string
 				}
 				split: {
+					people_count: string
 					title: string
 					just_me: string
 					whole_table: string
@@ -109,6 +154,8 @@ declare module 'react-i18next' {
 					empty: string
 					you: string
 					free_badge: string
+					your_share: string
+					quantity: string
 				}
 				notes: { title: string; placeholder: string; empty: string }
 				feedback: {
@@ -126,6 +173,30 @@ declare module 'react-i18next' {
 				health: Record<string, string>
 				dev: Record<string, unknown>
 				admin: {
+					event: {
+						context: string
+						viewing_past: string
+						action_failed: string
+						renamed: string
+						pin_rerolled: string
+						activated: string
+						untitled: string
+						pin_label: string
+						live: string
+						past: string
+						name_label: string
+						name_placeholder: string
+						reroll_pin: string
+						make_live: string
+						reroll_confirm_title: string
+						reroll_confirm_body: string
+						activate_confirm_title: string
+						activate_confirm_body: string
+					}
+					edit_mode: {
+						label: string
+						on: string
+					}
 					gate: {
 						title: string
 						subtitle: string
@@ -140,6 +211,8 @@ declare module 'react-i18next' {
 						exit: string
 						lock: string
 						toggle: string
+						collapse: string
+						expand: string
 						tables: string
 						food: string
 						presets: string
@@ -171,6 +244,7 @@ declare module 'react-i18next' {
 						stat_orders: string
 					}
 					tables: {
+						rename_failed: string
 						title: string
 						create: string
 						create_title: string
@@ -206,6 +280,9 @@ declare module 'react-i18next' {
 						table: string
 						ordered: string
 						note: string
+						note_placeholder: string
+						note_save_failed: string
+						update_failed: string
 					}
 					stats: {
 						title: string
@@ -219,7 +296,6 @@ declare module 'react-i18next' {
 					}
 					feedback: {
 						title: string
-						select_event: string
 						reaction_count: string
 					}
 					settings: {

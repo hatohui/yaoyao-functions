@@ -7,6 +7,7 @@
  */
 
 export interface TableTotalDto {
+  no: number;
   tableId: string;
   name: string;
   total: number;

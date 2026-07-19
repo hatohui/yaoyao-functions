@@ -5,8 +5,13 @@
  * Restaurant management API
  * OpenAPI spec version: 1.0
  */
+import type { GetFoodsSortBy } from './getFoodsSortBy';
+import type { GetFoodsSortOrder } from './getFoodsSortOrder';
 
 export type GetFoodsParams = {
+sortBy?: GetFoodsSortBy;
+sortOrder?: GetFoodsSortOrder;
+popular?: boolean;
 category?: string;
 count?: number;
 page?: number;

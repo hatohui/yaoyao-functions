@@ -42,6 +42,7 @@ export class CategoryController {
   @Post()
   @UseGuards(AdminGuard)
   @ApiOperation({ operationId: "createCategory" })
+  @ApiResponse({ status: 201, type: CategoryItemDto })
   create(@Body() dto: CreateCategoryDto) {
     return this.category.create(dto);
   }
@@ -49,6 +50,7 @@ export class CategoryController {
   @Patch(":id")
   @UseGuards(AdminGuard)
   @ApiOperation({ operationId: "updateCategory" })
+  @ApiResponse({ status: 200, type: CategoryItemDto })
   update(@Param("id") id: string, @Body() dto: UpdateCategoryDto) {
     return this.category.update(id, dto);
   }

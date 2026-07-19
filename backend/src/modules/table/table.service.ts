@@ -6,22 +6,31 @@ import {
 import { prisma } from '../../libs/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { EventService } from '@modules/event/event.service';
-import { ConfigService } from '@modules/config/config.service';
-import { CONFIG_KEYS } from '@common/config/registry';
+import { TableSlotService } from './table-slot.service';
 import { CreateTableDto } from './dto/create-table.dto';
 import { BulkCreateTableDto } from './dto/bulk-create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
+import { UpdateTableDetailsDto } from './dto/update-table-details.dto';
+
+const withSlot = {
+  slot: true,
+  _count: { select: { people: true } },
+} as const;
 
 type TableRow = {
   id: string;
-  name: string;
   capacity: number;
   isStaging: boolean;
-  no: number;
-  x: number | null;
-  y: number | null;
   tableLeaderId: string | null;
   eventId: string | null;
+  slotId: string | null;
+  slot: {
+    id: string;
+    no: number;
+    name: string;
+    x: number | null;
+    y: number | null;
+  } | null;
   _count: { people: number };
 };
 
@@ -29,105 +38,265 @@ type TableRow = {
 export class TableService {
   constructor(
     private events: EventService,
-    private config: ConfigService,
+    private slots: TableSlotService,
   ) {}
 
-  private toDto(t: TableRow) {
-    const { _count, ...rest } = t;
-    return { ...rest, seated: _count.people };
+  /** Flattens the slot onto the table so callers see one table-shaped object. */
+  private toDto(
+    t: TableRow,
+    leaderNames?: Map<string, string>,
+    matched?: Map<string, string[]>,
+  ) {
+    return {
+      id: t.id,
+      slotId: t.slotId,
+      no: t.slot?.no ?? -1,
+      name: t.slot?.name ?? '',
+      x: t.slot?.x ?? null,
+      y: t.slot?.y ?? null,
+      capacity: t.capacity,
+      seated: t._count.people,
+      isStaging: t.isStaging,
+      eventId: t.eventId,
+      tableLeaderId: t.tableLeaderId,
+      tableLeaderName: t.tableLeaderId
+        ? (leaderNames?.get(t.tableLeaderId) ?? null)
+        : null,
+      matchedPeople: matched?.get(t.id) ?? [],
+    };
   }
 
-  async findForActiveEvent(page = 1, count = 20, search?: string) {
-    const eventId = await this.events.getActiveId();
+  /** Names that caused each table to match, so the UI can show why it is a hit. */
+  private async matchedPeople(
+    rows: TableRow[],
+    search?: string,
+  ): Promise<Map<string, string[]>> {
+    if (!search || rows.length === 0) return new Map();
+
+    const people = await prisma.people.findMany({
+      where: {
+        tableId: { in: rows.map((r) => r.id) },
+        name: { contains: search, mode: 'insensitive' },
+      },
+      select: { tableId: true, name: true },
+    });
+
+    const map = new Map<string, string[]>();
+    for (const p of people) {
+      if (!p.tableId) continue;
+      map.set(p.tableId, [...(map.get(p.tableId) ?? []), p.name]);
+    }
+    return map;
+  }
+
+  /** One lookup for the whole page rather than a join per row. */
+  private async leaderNames(rows: TableRow[]): Promise<Map<string, string>> {
+    const ids = rows
+      .map((r) => r.tableLeaderId)
+      .filter((id): id is string => Boolean(id));
+    if (ids.length === 0) return new Map();
+
+    const people = await prisma.people.findMany({
+      where: { id: { in: ids } },
+      select: { id: true, name: true },
+    });
+    return new Map(people.map((p) => [p.id, p.name]));
+  }
+
+  async findForEvent(
+    page = 1,
+    count = 20,
+    search?: string,
+    forEventId?: string,
+  ) {
+    const eventId = await this.events.resolveEventId(forEventId);
     if (!eventId) return { tables: [], total: 0 };
 
+    // Guests look for "where am I sitting" as often as for a table number, so a
+    // search hits the slot name or anyone seated at it.
     const where = {
       eventId,
       isStaging: false,
       ...(search
-        ? { name: { contains: search, mode: 'insensitive' as const } }
+        ? {
+            OR: [
+              {
+                slot: {
+                  name: { contains: search, mode: 'insensitive' as const },
+                },
+              },
+              {
+                people: {
+                  some: {
+                    name: { contains: search, mode: 'insensitive' as const },
+                  },
+                },
+              },
+            ],
+          }
         : {}),
     };
 
     const [rows, total] = await Promise.all([
       prisma.table.findMany({
         where,
-        orderBy: { no: 'asc' },
+        orderBy: { slot: { no: 'asc' } },
         skip: (page - 1) * count,
         take: count,
-        include: { _count: { select: { people: true } } },
+        include: withSlot,
       }),
       prisma.table.count({ where }),
     ]);
 
-    return { tables: rows.map((r) => this.toDto(r)), total };
+    const [names, matched] = await Promise.all([
+      this.leaderNames(rows),
+      this.matchedPeople(rows, search),
+    ]);
+    return {
+      tables: rows.map((r) => this.toDto(r, names, matched)),
+      total,
+    };
   }
 
   async findStaged() {
     const rows = await prisma.table.findMany({
       where: { isStaging: true },
-      orderBy: { no: 'asc' },
-      include: { _count: { select: { people: true } } },
+      orderBy: { slot: { no: 'asc' } },
+      include: withSlot,
     });
-    return rows.map((r) => this.toDto(r));
+    const names = await this.leaderNames(rows);
+    return rows.map((r) => this.toDto(r, names));
   }
 
   async findOne(id: string) {
     const table = await prisma.table.findUnique({
       where: { id },
-      include: { _count: { select: { people: true } } },
+      include: withSlot,
     });
     if (!table) throw new NotFoundException('Table not found');
-    return this.toDto(table);
-  }
-
-  private async nextNo(tx = prisma): Promise<number> {
-    const max = await tx.table.aggregate({ _max: { no: true } });
-    return (max._max.no ?? 0) + 1;
+    return this.toDto(table, await this.leaderNames([table]));
   }
 
   async create(dto: CreateTableDto) {
     const isStaging = dto.isStaging ?? false;
     const eventId = isStaging ? null : await this.events.getActiveId();
-    const capacity =
-      dto.capacity ??
-      (await this.config.get<number>(CONFIG_KEYS.defaultTableCapacity));
-    return prisma.table.create({
+
+    const slot = dto.slotId
+      ? await this.slots.findOne(dto.slotId)
+      : await this.slots.create({
+          name: dto.name,
+          defaultCapacity: dto.capacity,
+        });
+
+    const table = await prisma.table.create({
       data: {
         id: uuidv4(),
-        name: dto.name,
-        capacity,
+        slotId: slot.id,
+        capacity: dto.capacity ?? slot.defaultCapacity,
         isStaging,
-        no: await this.nextNo(),
         eventId,
       },
+      include: withSlot,
     });
+    return this.toDto(table);
   }
 
+  /**
+   * Reuses existing slots before minting new ones — otherwise every event would
+   * invent fresh numbers for the same physical room.
+   */
   async bulkCreate(dto: BulkCreateTableDto) {
     const isStaging = dto.isStaging ?? true;
     const eventId = isStaging ? null : await this.events.getActiveId();
-    const start = await this.nextNo();
-    const data = Array.from({ length: dto.count }, (_, i) => ({
-      id: uuidv4(),
-      name: `Table ${start + i}`,
-      capacity: dto.capacity,
-      isStaging,
-      no: start + i,
-      eventId,
-    }));
-    await prisma.table.createMany({ data });
-    return { created: data.length };
+
+    const taken = await prisma.table.findMany({
+      where: isStaging ? { isStaging: true } : { eventId },
+      select: { slotId: true },
+    });
+    const takenIds = new Set(taken.map((t) => t.slotId));
+
+    const free = (await this.slots.findAll()).filter(
+      (s) => !takenIds.has(s.id),
+    );
+    const reuse = free.slice(0, dto.count);
+    const missing = dto.count - reuse.length;
+
+    if (missing > 0) {
+      const reuseIds = new Set(reuse.map((s) => s.id));
+      await this.slots.bulkCreate({
+        count: missing,
+        defaultCapacity: dto.capacity,
+      });
+      const fresh = (await this.slots.findAll()).filter(
+        (s) => !takenIds.has(s.id) && !reuseIds.has(s.id),
+      );
+      reuse.push(...fresh.slice(0, missing));
+    }
+
+    await prisma.table.createMany({
+      data: reuse.map((slot) => ({
+        id: uuidv4(),
+        slotId: slot.id,
+        capacity: dto.capacity ?? slot.defaultCapacity,
+        isStaging,
+        eventId,
+      })),
+    });
+
+    return { created: reuse.length, reused: reuse.length - Math.max(0, missing) };
   }
 
   async update(id: string, dto: UpdateTableDto) {
-    await this.findOne(id);
-    return prisma.table.update({ where: { id }, data: dto });
+    const table = await this.findOne(id);
+
+    // name belongs to the physical slot, capacity to this event's seating
+    if (dto.name !== undefined && table.slotId) {
+      await this.slots.update(table.slotId, { name: dto.name });
+    }
+
+    if (dto.capacity !== undefined) {
+      await prisma.table.update({
+        where: { id },
+        data: { capacity: dto.capacity },
+      });
+    }
+
+    return this.findOne(id);
   }
 
+  async updateDetails(id: string, dto: UpdateTableDetailsDto) {
+    const table = await this.findOne(id);
+
+    if (dto.tableLeaderId) {
+      const person = await prisma.people.findUnique({
+        where: { id: dto.tableLeaderId },
+        select: { tableId: true },
+      });
+      if (!person || person.tableId !== id) {
+        throw new BadRequestException('That person is not seated at this table');
+      }
+    }
+
+    if (dto.name !== undefined && table.slotId) {
+      await this.slots.update(table.slotId, { name: dto.name });
+    }
+
+    if (dto.tableLeaderId !== undefined) {
+      await prisma.table.update({
+        where: { id },
+        data: { tableLeaderId: dto.tableLeaderId },
+      });
+    }
+
+    return this.findOne(id);
+  }
+
+  /** Positions live on the slot, so the floor plan survives publishing. */
   async updatePosition(id: string, x: number, y: number) {
-    await this.findOne(id);
-    return prisma.table.update({ where: { id }, data: { x, y } });
+    const table = await this.findOne(id);
+    if (!table.slotId) throw new BadRequestException('Table has no slot');
+    await this.slots.updatePosition(table.slotId, x, y);
+    return this.findOne(id);
   }
 
   async remove(id: string) {

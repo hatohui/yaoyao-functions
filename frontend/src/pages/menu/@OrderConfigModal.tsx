@@ -214,7 +214,7 @@ export function OrderConfigModal({
 																: 'border-border/60 bg-card text-foreground hover:bg-muted'
 														)}
 													>
-														{v.label ? `${v.label} — ` : ''}
+														{v.label ? `${v.label} - ` : ''}
 														{v.price} {v.currency}
 													</button>
 												))}

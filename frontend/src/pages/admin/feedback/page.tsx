@@ -1,29 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import { Spinner } from '@/components/ui/spinner'
 import { PaginationBar } from '@/components/common/PaginationBar'
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
 import { cn } from '@/utils/shadcn'
 import { AdminFeedbackCard } from './@AdminFeedbackCard'
 import { useAdminFeedback } from './@useAdminFeedback'
 
 export default function AdminFeedbackPage() {
 	const { t } = useTranslation()
-	const {
-		events,
-		eventId,
-		setEventId,
-		sort,
-		setSort,
-		pagination,
-		feedback,
-		isLoading,
-	} = useAdminFeedback()
+	const { sort, setSort, pagination, feedback, isLoading } = useAdminFeedback()
 
 	return (
 		<div className='flex flex-col gap-4'>
@@ -31,20 +15,7 @@ export default function AdminFeedbackPage() {
 				{t('admin.feedback.title')}
 			</h1>
 
-			<div className='flex flex-wrap items-center justify-between gap-2'>
-				<Select value={eventId ?? undefined} onValueChange={setEventId}>
-					<SelectTrigger className='rounded-full'>
-						<SelectValue placeholder={t('admin.feedback.select_event')} />
-					</SelectTrigger>
-					<SelectContent>
-						{events.map(event => (
-							<SelectItem key={event.id} value={event.id}>
-								{event.name || t('admin.dashboard.unnamed_event')}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-
+			<div className='flex flex-wrap items-center justify-end gap-2'>
 				<div className='flex items-center gap-1 rounded-full border border-border/60 p-0.5'>
 					{(['recent', 'top'] as const).map(s => (
 						<button

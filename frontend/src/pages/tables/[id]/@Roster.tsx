@@ -1,17 +1,19 @@
 import { useRef, useState, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { X, NotebookText } from 'lucide-react'
+import { X, NotebookText, Crown } from 'lucide-react'
 import type { PersonDto, TableDto } from '@/api/model'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { useWhoAmI } from '@/hooks/useWhoAmI'
+import { cn } from '@/utils/shadcn'
 import { useRoster } from './@useRoster'
 import { PersonNoteDialog } from './@PersonNoteDialog'
 
 interface RosterProps {
 	table: TableDto
+	onSetHost: (personId: string | null) => void
 }
 
-export function Roster({ table }: RosterProps) {
+export function Roster({ table, onSetHost }: RosterProps) {
 	const { t } = useTranslation()
 	const { people, add, remove } = useRoster(table.id)
 	const { personId: myPersonId } = useWhoAmI(table.id)
@@ -53,6 +55,33 @@ export function Roster({ table }: RosterProps) {
 								)}
 							</span>
 							<div className='flex items-center gap-1'>
+								<button
+									type='button'
+									onClick={() =>
+										onSetHost(
+											person.id === table.tableLeaderId ? null : person.id
+										)
+									}
+									aria-pressed={person.id === table.tableLeaderId}
+									title={
+										person.id === table.tableLeaderId
+											? t('roster.unset_host')
+											: t('roster.set_host')
+									}
+									aria-label={
+										person.id === table.tableLeaderId
+											? t('roster.unset_host')
+											: t('roster.set_host')
+									}
+									className={cn(
+										'rounded-full p-1 transition-colors',
+										person.id === table.tableLeaderId
+											? 'text-primary hover:bg-accent'
+											: 'text-muted-foreground hover:bg-muted hover:text-foreground'
+									)}
+								>
+									<Crown className='size-4' />
+								</button>
 								<button
 									type='button'
 									onClick={() => setNoteFor(person)}

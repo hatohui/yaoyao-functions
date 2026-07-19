@@ -17,6 +17,7 @@ import { IdsDto } from '@common/dto/ids.dto';
 import { CreateTableDto } from './dto/create-table.dto';
 import { BulkCreateTableDto } from './dto/bulk-create-table.dto';
 import { UpdateTableDto } from './dto/update-table.dto';
+import { UpdateTableDetailsDto } from './dto/update-table-details.dto';
 import { TablePositionDto } from './dto/table-position.dto';
 import { ReassignTablesDto } from './dto/reassign-tables.dto';
 import { TableDto, TableListDto } from './dto/table-response.dto';
@@ -35,15 +36,17 @@ export class TableController {
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'count', required: false, type: Number })
   @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiQuery({ name: 'eventId', required: false, type: String })
   @ApiResponse({ status: 200, type: TableListDto })
   findAll(
     @Query('page') page = '1',
     @Query('count') count = '20',
     @Query('search') search?: string,
+    @Query('eventId') eventId?: string,
   ) {
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
     const countNum = Math.min(100, Math.max(1, parseInt(count, 10) || 20));
-    return this.table.findForActiveEvent(pageNum, countNum, search);
+    return this.table.findForEvent(pageNum, countNum, search, eventId);
   }
 
   @Get('staged')
@@ -103,6 +106,13 @@ export class TableController {
   @ApiResponse({ status: 200, type: TableDto })
   update(@Param('id') id: string, @Body() dto: UpdateTableDto) {
     return this.table.update(id, dto);
+  }
+
+  @Patch(':id/details')
+  @ApiOperation({ operationId: 'updateTableDetails' })
+  @ApiResponse({ status: 200, type: TableDto })
+  updateDetails(@Param('id') id: string, @Body() dto: UpdateTableDetailsDto) {
+    return this.table.updateDetails(id, dto);
   }
 
   @Patch(':id/position')

@@ -60,15 +60,26 @@ export function TablePickerModal({
 					<ul className='flex max-h-80 flex-col gap-2 overflow-y-auto'>
 						{tables.map(table => {
 							const full = table.seated >= table.capacity
+							// orders belong to whoever is seated, so an empty table can't take one
+							const empty = table.seated === 0
 							return (
 								<li key={table.id}>
 									<button
 										type='button'
+										disabled={empty}
 										onClick={() => onSelect(table.id)}
-										className='flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card px-4 py-3 text-left shadow-sm transition-colors hover:border-primary/40'
+										title={empty ? t('orders.needs_people_body') : undefined}
+										className='flex w-full items-center justify-between rounded-2xl border border-border/60 bg-card px-4 py-3 text-left shadow-sm transition-colors enabled:hover:border-primary/40 disabled:cursor-not-allowed disabled:opacity-50'
 									>
-										<span className='font-medium text-foreground'>
-											{table.name}
+										<span className='flex min-w-0 flex-col'>
+											<span className='truncate font-medium text-foreground'>
+												{table.name}
+											</span>
+											{empty && (
+												<span className='text-xs text-muted-foreground'>
+													{t('orders.needs_people_title')}
+												</span>
+											)}
 										</span>
 										<span
 											className={cn(

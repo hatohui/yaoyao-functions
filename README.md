@@ -4,10 +4,11 @@
 [![frontend-cd](https://github.com/hatohui/yaoyao-functions/actions/workflows/frontend-cd.yml/badge.svg)](https://github.com/hatohui/yaoyao-functions/actions/workflows/frontend-cd.yml)
 
 ## General Details
+
 - API docs: [Docs](https://api.yaoyaodinner.party/api/docs#tag/health)
 - API endpoint: [api.yaoyaodinner.party](https://api.yaoyaodinner.party)
 - Frontend: [yaoyaodinner.party](https://yaoyaodinner.party)
-- Runtime: AWS Lambda (serverless) — kept warm by a cron job pinging the health endpoint every 5 minutes
+- Runtime: AWS Lambda (serverless) - kept warm by a cron job pinging the health endpoint every 5 minutes
 - Region: `ap-southeast-1`
 
 ## Architecture
@@ -16,11 +17,11 @@ A serverless web app split into three layers: static frontend (SPA), API (edge +
 
 ### Components
 
-- **Frontend** — Static SPA on Cloudflare Pages; serves static assets and calls the API over HTTPS.
-- **API** — CloudFront (with AWS WAF) → AWS Lambda (NestJS + TypeScript) in `ap-southeast-1`.
-- **Datastores** — NeonDB (Postgres) for relational data; Upstash Redis for caching and fast KV.
-- **Media** — Cloudflare R2 for uploads; backend issues presigned URLs and clients upload directly.
-- **Warmup** — A cron job runs every 5 minutes to keep the Lambda warm and avoid cold starts.
+- **Frontend** - Static SPA on Cloudflare Pages; serves static assets and calls the API over HTTPS.
+- **API** - CloudFront (with AWS WAF) → AWS Lambda (NestJS + TypeScript) in `ap-southeast-1`.
+- **Datastores** - NeonDB (Postgres) for relational data; Upstash Redis for caching and fast KV.
+- **Media** - Cloudflare R2 for uploads; backend issues presigned URLs and clients upload directly.
+- **Warmup** - A cron job runs every 5 minutes to keep the Lambda warm and avoid cold starts.
 
 ### Design principles
 
@@ -73,7 +74,7 @@ A serverless web app split into three layers: static frontend (SPA), API (edge +
 
 - [Bun](https://bun.sh/) (package manager for both frontend and backend)
 - Docker (for local Postgres, Redis, and MinIO)
-- [Task](https://taskfile.dev/) — task runner (`task --list` to see all commands)
+- [Task](https://taskfile.dev/) - task runner (`task --list` to see all commands)
 
 Optional (production infra):
 
@@ -118,20 +119,20 @@ task frontend       # or: task f
 
 All schema changes are managed with Prisma.
 
-| Command | Description |
-| --- | --- |
-| `task db:apply` | Apply pending migrations and regenerate the client |
-| `task db:migrate NAME=<name>` | Create a new migration |
-| `task db:seed` | Seed with initial data (idempotent) |
-| `task db:reset` | Drop all tables and re-apply migrations |
-| `task db:fresh` | Reset + seed |
+| Command                       | Description                                        |
+| ----------------------------- | -------------------------------------------------- |
+| `task db:apply`               | Apply pending migrations and regenerate the client |
+| `task db:migrate NAME=<name>` | Create a new migration                             |
+| `task db:seed`                | Seed with initial data (idempotent)                |
+| `task db:reset`               | Drop all tables and re-apply migrations            |
+| `task db:fresh`               | Reset + seed                                       |
 
 ## Redis
 
-| Command | Description |
-| --- | --- |
+| Command            | Description          |
+| ------------------ | -------------------- |
 | `task redis:flush` | Flush all cache keys |
-| `task redis:keys` | List all keys |
+| `task redis:keys`  | List all keys        |
 
 ## Frontend
 
@@ -152,7 +153,7 @@ Use `VITE_`-prefixed env vars for runtime configuration (e.g. `VITE_API_URL`). P
 Terraform manages Lambda, CloudFront, ECR, and IAM. Secrets are injected at deploy time via Doppler.
 
 ```bash
-task infra:apply    # doppler run — terraform apply
+task infra:apply    # doppler run - terraform apply
 ```
 
 ## API Reference
@@ -161,15 +162,15 @@ See [docs/api.md](docs/api.md) for the full endpoint list. A live Swagger/Scalar
 
 ## Key Environment Variables
 
-| Variable | Description |
-| --- | --- |
-| `DATABASE_URL` | NeonDB (Postgres) connection string |
-| `REDIS_URL` | Upstash Redis connection string |
-| `CLOUDFLARE_API_TOKEN` | Cloudflare API token for R2 access |
-| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare account ID |
-| `CLOUDFLARE_ACCESS_KEY_ID` | R2 access key (MinIO root user locally) |
+| Variable                       | Description                                 |
+| ------------------------------ | ------------------------------------------- |
+| `DATABASE_URL`                 | NeonDB (Postgres) connection string         |
+| `REDIS_URL`                    | Upstash Redis connection string             |
+| `CLOUDFLARE_API_TOKEN`         | Cloudflare API token for R2 access          |
+| `CLOUDFLARE_ACCOUNT_ID`        | Cloudflare account ID                       |
+| `CLOUDFLARE_ACCESS_KEY_ID`     | R2 access key (MinIO root user locally)     |
 | `CLOUDFLARE_SECRET_ACCESS_KEY` | R2 secret key (MinIO root password locally) |
-| `BUCKET_NAME` | R2 / MinIO bucket name |
-| `S3_ENDPOINT` | Override endpoint for local MinIO dev |
-| `PORT` | API server port (default: `8080`) |
-| `NODE_ENV` | `development` or `production` |
+| `BUCKET_NAME`                  | R2 / MinIO bucket name                      |
+| `S3_ENDPOINT`                  | Override endpoint for local MinIO dev       |
+| `PORT`                         | API server port (default: `8080`)           |
+| `NODE_ENV`                     | `development` or `production`               |

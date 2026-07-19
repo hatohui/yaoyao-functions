@@ -2,9 +2,21 @@ import { IsString, IsInt, IsOptional, IsBoolean, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateTableDto {
-  @ApiProperty({ example: 'Table 1' })
+  @ApiPropertyOptional({
+    description:
+      'Seat an existing physical slot into the event. Omit to mint a new slot.',
+  })
   @IsString()
-  name: string;
+  @IsOptional()
+  slotId?: string;
+
+  @ApiPropertyOptional({
+    example: 'Table 1',
+    description: 'Name for a newly minted slot; ignored when slotId is given',
+  })
+  @IsString()
+  @IsOptional()
+  name?: string;
 
   @ApiPropertyOptional({ example: 8, default: 8 })
   @IsInt()

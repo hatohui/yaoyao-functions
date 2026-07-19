@@ -118,24 +118,42 @@ model Event {
   @@index([isActive])
 }
 
+/// A physical spot in the restaurant. Permanent across events: its number and
+/// floor-plan position are arranged once and reused every night.
+model TableSlot {
+  id              String  @id @db.VarChar(255)
+  no              Int     @unique
+  name            String  @db.VarChar(255)
+  x               Float?
+  y               Float?
+  defaultCapacity Int     @default(1) @map("default_capacity")
+  isActive        Boolean @default(true) @map("is_active")
+
+  tables Table[]
+
+  @@map("table_slot")
+  @@index([no])
+}
+
+/// One event's seating at a slot. Disposable: people, orders and the host live
+/// here, while the number/position/name come from the slot.
 model Table {
   id            String  @id @db.VarChar(255)
-  name          String  @db.VarChar(255)
+  slotId        String? @map("slot_id") @db.VarChar(255)
   capacity      Int     @default(1)
   tableLeaderId String? @unique @map("table_leader_id") @db.VarChar(255)
   isStaging     Boolean @default(false) @map("is_staging")
-  no            Int     @default(-1)
-  x             Float?
-  y             Float?
   eventId       String? @map("event_id") @db.VarChar(255)
 
-  event  Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  slot   TableSlot? @relation(fields: [slotId], references: [id], onDelete: SetNull)
+  event  Event?     @relation(fields: [eventId], references: [id], onDelete: Cascade)
   people People[]
   orders Order[]
 
+  @@unique([slotId, eventId])
   @@map("table")
-  @@index([no])
   @@index([eventId])
+  @@index([slotId])
 }
 
 model People {
@@ -159,7 +177,7 @@ model PersonalNote {
   personId String @map("person_id") @db.VarChar(255)
   content  String @db.Text
 
-  person People @relation(fields: [personId], references: [id])
+  person People @relation(fields: [personId], references: [id], onDelete: Cascade)
 
   @@map("personal_note")
   @@index([personId])

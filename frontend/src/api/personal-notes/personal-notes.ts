@@ -179,6 +179,63 @@ const {mutation: mutationOptions} = options ?
       > => {
       return useMutation(getCreateNoteMutationOptions(options), queryClient);
     }
+    export const upsertNote = (
+    createNoteDto: CreateNoteDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<NoteResponseDto>(
+      {url: `/api/personal-notes`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: createNoteDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpsertNoteMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof upsertNote>>, TError,{data: CreateNoteDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof upsertNote>>, TError,{data: CreateNoteDto}, TContext> => {
+
+const mutationKey = ['upsertNote'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof upsertNote>>, {data: CreateNoteDto}> = (props) => {
+          const {data} = props ?? {};
+
+          return  upsertNote(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpsertNoteMutationResult = NonNullable<Awaited<ReturnType<typeof upsertNote>>>
+    export type UpsertNoteMutationBody = CreateNoteDto
+    export type UpsertNoteMutationError = unknown
+
+    export const useUpsertNote = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof upsertNote>>, TError,{data: CreateNoteDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof upsertNote>>,
+        TError,
+        {data: CreateNoteDto},
+        TContext
+      > => {
+      return useMutation(getUpsertNoteMutationOptions(options), queryClient);
+    }
     export const deleteNote = (
     id: string,
  signal?: AbortSignal

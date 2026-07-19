@@ -7,28 +7,28 @@
 
 */
 -- DropForeignKey
-ALTER TABLE "feedback" DROP CONSTRAINT "feedback_by_fkey";
+ALTER TABLE "feedback" DROP CONSTRAINT IF EXISTS "feedback_by_fkey";
 
 -- DropForeignKey
-ALTER TABLE "people" DROP CONSTRAINT "people_account_id_fkey";
+ALTER TABLE "people" DROP CONSTRAINT IF EXISTS "people_account_id_fkey";
 
 -- DropForeignKey
-ALTER TABLE "people" DROP CONSTRAINT "people_table_id_fkey";
+ALTER TABLE "people" DROP CONSTRAINT IF EXISTS "people_table_id_fkey";
 
 -- DropIndex
-DROP INDEX "table_name_key";
+DROP INDEX IF EXISTS "table_name_key";
 
 -- AlterTable
 ALTER TABLE "feedback" ADD COLUMN     "event_id" VARCHAR(255);
 
 -- AlterTable
-ALTER TABLE "order" DROP COLUMN "ordered_by",
-ADD COLUMN     "event_id" VARCHAR(255),
+ALTER TABLE "order" DROP COLUMN IF EXISTS "ordered_by";
+ALTER TABLE "order" ADD COLUMN     "event_id" VARCHAR(255),
 ADD COLUMN     "split_all" BOOLEAN NOT NULL DEFAULT true;
 
 -- AlterTable
-ALTER TABLE "people" DROP COLUMN "account_id",
-ADD COLUMN     "event_id" VARCHAR(255);
+ALTER TABLE "people" DROP COLUMN IF EXISTS "account_id";
+ALTER TABLE "people" ADD COLUMN     "event_id" VARCHAR(255);
 
 -- AlterTable
 ALTER TABLE "table" ADD COLUMN     "event_id" VARCHAR(255),
@@ -36,7 +36,7 @@ ADD COLUMN     "x" DOUBLE PRECISION,
 ADD COLUMN     "y" DOUBLE PRECISION;
 
 -- DropTable
-DROP TABLE "account";
+DROP TABLE IF EXISTS "account";
 
 -- CreateTable
 CREATE TABLE "event" (

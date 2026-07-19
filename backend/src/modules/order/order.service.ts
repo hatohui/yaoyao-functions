@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { prisma } from '../../libs/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { CacheService } from '@libs/redis';
@@ -73,12 +77,21 @@ export class OrderService {
     return variant.price ? Number(variant.price) : 0;
   }
 
-  private async tableEventId(tableId: string): Promise<string | null> {
+  /**
+   * An order always belongs to whoever is sitting there, so ordering onto an
+   * empty table is rejected — seat someone first.
+   */
+  private async orderableTableEventId(tableId: string): Promise<string | null> {
     const table = await prisma.table.findUnique({
       where: { id: tableId },
-      select: { eventId: true },
+      select: { eventId: true, _count: { select: { people: true } } },
     });
     if (!table) throw new NotFoundException('Table not found');
+    if (table._count.people === 0) {
+      throw new BadRequestException(
+        'Add someone to this table before ordering',
+      );
+    }
     return table.eventId;
   }
 
@@ -90,7 +103,7 @@ export class OrderService {
   async create(dto: CreateOrderDto, lang = 'en') {
     const [price, eventId] = await Promise.all([
       this.resolvePrice(dto.variantId),
-      this.tableEventId(dto.tableId),
+      this.orderableTableEventId(dto.tableId),
     ]);
     const splitAll = dto.splitAll ?? true;
     const order = await prisma.order.create({
@@ -111,7 +124,7 @@ export class OrderService {
   }
 
   async createBatch(dto: BatchCreateOrderDto, lang = 'en') {
-    const eventId = await this.tableEventId(dto.tableId);
+    const eventId = await this.orderableTableEventId(dto.tableId);
     const splitAll = dto.splitAll ?? true;
     const priced = await Promise.all(
       dto.items.map(async (item) => ({

@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Delete, Body, Param, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Query,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiQuery, ApiResponse } from '@nestjs/swagger';
 import { PersonalNoteService } from './personal-note.service';
 import { CreateNoteDto } from './dto/create-note.dto';
@@ -22,6 +31,13 @@ export class PersonalNoteController {
   @ApiResponse({ status: 201, type: NoteResponseDto })
   create(@Body() dto: CreateNoteDto) {
     return this.notes.create(dto);
+  }
+
+  @Put()
+  @ApiOperation({ operationId: 'upsertNote' })
+  @ApiResponse({ status: 200, type: NoteResponseDto })
+  upsert(@Body() dto: CreateNoteDto) {
+    return this.notes.upsert(dto);
   }
 
   @Delete(':id')

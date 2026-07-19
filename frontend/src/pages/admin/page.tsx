@@ -4,6 +4,7 @@ import { PinCard } from './@PinCard'
 import { EventStatsCards } from './@EventStatsCards'
 import { PublishEventDialog } from './@PublishEventDialog'
 import { PastEventsList } from './@PastEventsList'
+import { EventSettingsCard } from './@EventSettingsCard'
 import { useAdminDashboard } from './@useAdminDashboard'
 
 export default function AdminDashboardPage() {
@@ -49,6 +50,8 @@ export default function AdminDashboardPage() {
 					{t('admin.dashboard.no_active_event')}
 				</p>
 			)}
+
+			<EventSettingsCard />
 
 			<div className='flex flex-col gap-3'>
 				<p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>

@@ -9,5 +9,6 @@ import type { GetPopularItemsScope } from './getPopularItemsScope';
 
 export type GetPopularItemsParams = {
 scope?: GetPopularItemsScope;
+eventId?: string;
 lang?: string;
 };

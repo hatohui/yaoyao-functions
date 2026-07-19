@@ -11,6 +11,7 @@ import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { EventService } from './event.service';
 import { PublishEventDto } from './dto/publish-event.dto';
 import { AssignPresetDto } from './dto/assign-preset.dto';
+import { UpdateEventDto } from './dto/update-event.dto';
 import {
   EventDto,
   EventSummaryDto,
@@ -56,5 +57,26 @@ export class EventController {
   @ApiResponse({ status: 200, type: EventDto })
   assignPreset(@Param('id') id: string, @Body() dto: AssignPresetDto) {
     return this.events.assignPreset(id, dto.presetMenuId ?? null);
+  }
+
+  @Patch(':id')
+  @ApiOperation({ operationId: 'updateEvent' })
+  @ApiResponse({ status: 200, type: EventDto })
+  update(@Param('id') id: string, @Body() dto: UpdateEventDto) {
+    return this.events.rename(id, dto.name ?? null);
+  }
+
+  @Post(':id/pin/reroll')
+  @ApiOperation({ operationId: 'rerollEventPin' })
+  @ApiResponse({ status: 201, type: EventDto })
+  rerollPin(@Param('id') id: string) {
+    return this.events.rerollPin(id);
+  }
+
+  @Post(':id/activate')
+  @ApiOperation({ operationId: 'activateEvent' })
+  @ApiResponse({ status: 201, type: EventDto })
+  activate(@Param('id') id: string) {
+    return this.events.activate(id);
   }
 }

@@ -1,24 +1,34 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Share } from 'lucide-react'
 import type { FoodDetailDto, FoodVariantDto } from '@/api/model'
 import { Button } from '@/components/ui/button'
 import { ASSET_URL } from '@/common/app'
+import { InlineEdit } from '@/components/common/InlineEdit'
+import { useToast } from '@/hooks/useToast'
 
 interface FoodDetailViewProps {
 	food: FoodDetailDto
 	availableVariants: FoodVariantDto[]
 	onAdd: () => void
+	onUpdateFood: (patch: { name?: string; description?: string }) => void
+	onUpdateVariant: (
+		variantId: string,
+		patch: { label?: string; price?: number }
+	) => void
 }
 
 export function FoodDetailView({
 	food,
 	availableVariants,
 	onAdd,
+	onUpdateFood,
+	onUpdateVariant,
 }: FoodDetailViewProps) {
 	const { t } = useTranslation()
 	const [imgError, setImgError] = useState(false)
+	const toast = useToast()
 
 	const imageSrc =
 		food.imageUrl && !imgError
@@ -29,13 +39,25 @@ export function FoodDetailView({
 
 	return (
 		<div className='mx-auto flex max-w-2xl flex-col gap-4 px-4 py-6'>
-			<Link
-				to='/menu'
-				className='inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
-			>
-				<ArrowLeft className='size-4' />
-				{t('food_detail.back_to_menu')}
-			</Link>
+			<div className='flex items-center justify-between'>
+				<Link
+					to='/menu'
+					className='inline-flex w-fit items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground'
+				>
+					<ArrowLeft className='size-4' />
+					{t('food_detail.back_to_menu')}
+				</Link>
+				<button
+					onClick={() => {
+						navigator.clipboard.writeText(window.location.href)
+						toast.success('Link copied to clipboard')
+					}}
+					className='inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground'
+				>
+					<Share className='size-4' />
+					Share
+				</button>
+			</div>
 
 			<div className='overflow-hidden rounded-2xl bg-muted'>
 				{imageSrc ? (
@@ -53,12 +75,21 @@ export function FoodDetailView({
 			</div>
 
 			<div className='space-y-1.5'>
-				<h1 className='text-2xl font-bold text-foreground'>{food.name}</h1>
-				{food.description && (
-					<p className='text-sm leading-relaxed text-muted-foreground'>
-						{food.description}
-					</p>
-				)}
+				<h1 className='text-2xl font-bold text-foreground'>
+					<InlineEdit
+						value={food.name}
+						onCommit={name =>
+							name.trim() && onUpdateFood({ name: name.trim() })
+						}
+					/>
+				</h1>
+				<p className='text-sm leading-relaxed text-muted-foreground'>
+					<InlineEdit
+						value={food.description ?? ''}
+						placeholder={t('food_detail.description_placeholder')}
+						onCommit={description => onUpdateFood({ description })}
+					/>
+				</p>
 				{!food.isAvailable && (
 					<p className='text-sm font-medium text-destructive'>
 						{t('menu.unavailable')}
@@ -75,10 +106,23 @@ export function FoodDetailView({
 						{availableVariants.map(v => (
 							<span
 								key={v.id}
-								className='rounded-full border border-border/60 bg-card px-4 py-2 text-sm font-medium text-foreground'
+								className='flex items-center gap-1 rounded-full border border-border/60 bg-card px-4 py-2 text-sm font-medium text-foreground'
 							>
-								{v.label ? `${v.label} — ` : ''}
-								{v.price} {v.currency}
+								<InlineEdit
+									value={v.label ?? ''}
+									onCommit={label => onUpdateVariant(v.id, { label })}
+									inputClassName='w-28'
+								/>
+								<span className='text-muted-foreground'>-</span>
+								<InlineEdit
+									type='number'
+									value={String(v.price ?? '')}
+									onCommit={price =>
+										onUpdateVariant(v.id, { price: Number(price) })
+									}
+									inputClassName='w-20'
+								/>
+								{v.currency}
 							</span>
 						))}
 					</div>

@@ -34,6 +34,7 @@ import type {
   TableDto,
   TableListDto,
   TablePositionDto,
+  UpdateTableDetailsDto,
   UpdateTableDto
 } from '../model';
 
@@ -727,6 +728,64 @@ const {mutation: mutationOptions} = options ?
         TContext
       > => {
       return useMutation(getReassignTablesMutationOptions(options), queryClient);
+    }
+    export const updateTableDetails = (
+    id: string,
+    updateTableDetailsDto: UpdateTableDetailsDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<TableDto>(
+      {url: `/api/tables/${id}/details`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateTableDetailsDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdateTableDetailsMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTableDetails>>, TError,{id: string;data: UpdateTableDetailsDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateTableDetails>>, TError,{id: string;data: UpdateTableDetailsDto}, TContext> => {
+
+const mutationKey = ['updateTableDetails'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateTableDetails>>, {id: string;data: UpdateTableDetailsDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateTableDetails(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateTableDetailsMutationResult = NonNullable<Awaited<ReturnType<typeof updateTableDetails>>>
+    export type UpdateTableDetailsMutationBody = UpdateTableDetailsDto
+    export type UpdateTableDetailsMutationError = unknown
+
+    export const useUpdateTableDetails = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateTableDetails>>, TError,{id: string;data: UpdateTableDetailsDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateTableDetails>>,
+        TError,
+        {id: string;data: UpdateTableDetailsDto},
+        TContext
+      > => {
+      return useMutation(getUpdateTableDetailsMutationOptions(options), queryClient);
     }
     export const updateTablePosition = (
     id: string,

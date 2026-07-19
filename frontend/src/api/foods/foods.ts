@@ -29,6 +29,7 @@ import type {
   BulkToggleDto,
   CreateFoodDto,
   FoodDetailDto,
+  FoodVariantDto,
   GetFoodByIdParams,
   GetFoodsForAdminParams,
   GetFoodsForAdminResponseDto,
@@ -137,7 +138,7 @@ export const createFood = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodDetailDto>(
       {url: `/api/foods`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createFoodDto, signal
@@ -376,7 +377,7 @@ export const updateFood = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodDetailDto>(
       {url: `/api/foods/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateFoodDto, signal
@@ -603,7 +604,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodVariantDto>(
       {url: `/api/foods/${id}/variants`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: addFoodVariantDto, signal
@@ -661,7 +662,7 @@ const {mutation: mutationOptions} = options ?
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodVariantDto>(
       {url: `/api/foods/variants/${variantId}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateFoodVariantDto, signal

@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next'
-import { Search, SlidersHorizontal } from 'lucide-react'
+import { ArrowUpDown, Flame, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import {
 	Select,
@@ -10,7 +10,9 @@ import {
 } from '@/components/ui/select'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/utils/shadcn'
+import { MENU_PAGE_SIZE_ALL, MENU_PAGE_SIZE_OPTIONS } from '@/common/constants'
 import type { CategoryItemDto } from '@/api/model'
+import type { MenuSort } from '@/utils/searchParams'
 
 interface FilterBarProps {
 	search: string
@@ -20,6 +22,10 @@ interface FilterBarProps {
 	activeCategory: string
 	onCategoryChange: (id: string) => void
 	categories: CategoryItemDto[]
+	sort: MenuSort
+	onSortChange: (value: MenuSort) => void
+	popular: boolean
+	onPopularChange: (value: boolean) => void
 }
 
 export function FilterBar({
@@ -30,6 +36,10 @@ export function FilterBar({
 	activeCategory,
 	onCategoryChange,
 	categories,
+	sort,
+	onSortChange,
+	popular,
+	onPopularChange,
 }: FilterBarProps) {
 	const { t } = useTranslation()
 
@@ -47,20 +57,37 @@ export function FilterBar({
 				</div>
 
 				<div className='flex shrink-0 items-center gap-2'>
-					<SlidersHorizontal className='h-4 w-4 text-muted-foreground' />
+					<ArrowUpDown className='h-4 w-4 text-muted-foreground' />
+					<Select
+						value={sort}
+						onValueChange={val => onSortChange(val as MenuSort)}
+					>
+						<SelectTrigger className='h-9 w-40 rounded-full border-transparent bg-muted/50 text-sm'>
+							<SelectValue />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value='name'>{t('menu.sort_name')}</SelectItem>
+							<SelectItem value='price'>{t('menu.sort_price')}</SelectItem>
+							<SelectItem value='popular'>{t('menu.sort_popular')}</SelectItem>
+						</SelectContent>
+					</Select>
+
 					<Select
 						value={count.toString()}
 						onValueChange={val => onCountChange(Number(val))}
 					>
-						<SelectTrigger className='h-9 w-24 rounded-full border-transparent bg-muted/50 text-sm'>
+						<SelectTrigger className='h-9 w-20 rounded-full border-transparent bg-muted/50 text-sm'>
 							<SelectValue />
 						</SelectTrigger>
 						<SelectContent>
-							{[10, 20, 50, 100].map(n => (
+							{MENU_PAGE_SIZE_OPTIONS.map(n => (
 								<SelectItem key={n} value={n.toString()}>
 									{n}
 								</SelectItem>
 							))}
+							<SelectItem value={MENU_PAGE_SIZE_ALL.toString()}>
+								{t('menu.count_all')}
+							</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>
@@ -68,6 +95,12 @@ export function FilterBar({
 
 			<ScrollArea className='mt-3 w-full' type='scroll'>
 				<div className='flex gap-2 pb-1'>
+					<CategoryPill
+						label={t('menu.popular')}
+						icon={Flame}
+						active={popular}
+						onClick={() => onPopularChange(!popular)}
+					/>
 					<CategoryPill
 						label={t('menu.all_categories')}
 						active={activeCategory === 'all'}
@@ -90,10 +123,12 @@ export function FilterBar({
 
 function CategoryPill({
 	label,
+	icon: Icon,
 	active,
 	onClick,
 }: {
 	label: string
+	icon?: typeof Flame
 	active: boolean
 	onClick: () => void
 }) {
@@ -101,12 +136,13 @@ function CategoryPill({
 		<button
 			onClick={onClick}
 			className={cn(
-				'shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200',
+				'flex shrink-0 items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition-all duration-200',
 				active
 					? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
 					: 'bg-muted/60 text-muted-foreground hover:bg-muted hover:text-foreground'
 			)}
 		>
+			{Icon && <Icon className='size-3.5' />}
 			{label}
 		</button>
 	)

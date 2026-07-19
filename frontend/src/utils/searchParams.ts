@@ -1,26 +1,37 @@
 import { useCallback } from 'react'
 import { useSearchParams } from 'react-router'
 
+export type MenuSort = 'name' | 'price' | 'popular'
+
 export interface MenuSearchParams {
 	page?: number
 	count?: number
 	category?: string
+	sort?: MenuSort
+	popular?: boolean
 	lang?: string
 }
+
+const isMenuSort = (value: string | null): value is MenuSort =>
+	value === 'name' || value === 'price' || value === 'popular'
 
 export function useMenuSearchParams() {
 	const [searchParams, setSearchParams] = useSearchParams()
 
 	const page = Number(searchParams.get('page')) || 1
-	const count = Number(searchParams.get('count')) || 20
+	const count = Number(searchParams.get('count')) || 16
 	const category = searchParams.get('category') || 'all'
+	const sort = isMenuSort(searchParams.get('sort'))
+		? (searchParams.get('sort') as MenuSort)
+		: 'name'
+	const popular = searchParams.get('popular') === 'true'
 	const lang = searchParams.get('lang') || undefined
 
 	const updateParams = useCallback(
 		(updates: Partial<MenuSearchParams>) => {
 			setSearchParams(params => {
 				Object.entries(updates).forEach(([key, value]) => {
-					if (value === undefined || value === null) {
+					if (value === undefined || value === null || value === false) {
 						params.delete(key)
 					} else {
 						params.set(key, String(value))
@@ -53,6 +64,20 @@ export function useMenuSearchParams() {
 		[updateParams]
 	)
 
+	const setSort = useCallback(
+		(newSort: MenuSort) => {
+			updateParams({ sort: newSort, page: 1 })
+		},
+		[updateParams]
+	)
+
+	const setPopular = useCallback(
+		(newPopular: boolean) => {
+			updateParams({ popular: newPopular, page: 1 })
+		},
+		[updateParams]
+	)
+
 	const setLang = useCallback(
 		(newLang: string | undefined) => {
 			updateParams({ lang: newLang })
@@ -68,10 +93,14 @@ export function useMenuSearchParams() {
 		page,
 		count,
 		category,
+		sort,
+		popular,
 		lang,
 		setPage,
 		setCount,
 		setCategory,
+		setSort,
+		setPopular,
 		setLang,
 		updateParams,
 		resetParams,
@@ -97,6 +126,10 @@ export function parseMenuSearchParams(
 		page: Number(searchParams.get('page')) || 1,
 		count: Number(searchParams.get('count')) || 20,
 		category: searchParams.get('category') || 'all',
+		sort: isMenuSort(searchParams.get('sort'))
+			? (searchParams.get('sort') as MenuSort)
+			: 'name',
+		popular: searchParams.get('popular') === 'true',
 		lang: searchParams.get('lang') || undefined,
 	}
 }

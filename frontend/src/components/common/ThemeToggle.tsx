@@ -6,14 +6,15 @@ export const ThemeToggle = () => {
 
 	return (
 		<button
+			type='button'
 			onClick={toggleTheme}
-			className='flex items-center justify-center rounded-md border border-border bg-card px-2 text-foreground transition-colors hover:bg-accent hover:text-accent-foreground'
+			className='flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground'
 			aria-label='Toggle theme'
 		>
 			{theme === 'dark' ? (
-				<Sun className='h-5 w-5' />
+				<Sun className='size-4' />
 			) : (
-				<Moon className='h-5 w-5' />
+				<Moon className='size-4' />
 			)}
 		</button>
 	)

@@ -8,6 +8,7 @@
 
 export type GetPeopleListParams = {
 search?: string;
+eventId?: string;
 lang?: string;
 count?: number;
 page?: number;

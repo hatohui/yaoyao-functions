@@ -3,24 +3,85 @@ import { prisma } from "./prisma";
 import { CacheService } from "./redis";
 
 const SUPPORTED_LOCALES = ["en", "vi", "zh", "th"];
+const MODEL = "gemini-2.5-flash";
+
+const SYSTEM_INSTRUCTION = [
+  "You translate restaurant menu content.",
+  "Return every requested field in every requested locale in one single JSON object.",
+  "Output JSON only - no prose, no explanation, no markdown fences.",
+  "Top-level keys are the target locale codes.",
+  "Copy any provided id value verbatim; never invent, drop, reorder, or merge array entries.",
+  "Translate naturally for a diner reading a menu; keep proper nouns and brand names untranslated.",
+].join(" ");
 
 let _ai: GoogleGenAI | null = null;
 let _initialized = false;
 
-function initializeAi() {
-  if (_initialized) return;
+function getAi(): GoogleGenAI | null {
+  if (_initialized) return _ai;
   _initialized = true;
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
     console.warn("[Gemini] GEMINI_API_KEY not set, AI features disabled");
-    return;
+    return null;
   }
   _ai = new GoogleGenAI({ apiKey });
+  return _ai;
 }
 
-function getTargetLocales(sourceLang: string): string[] {
-  return SUPPORTED_LOCALES.filter((l) => l !== sourceLang);
+/**
+ * One request per entity: the response schema nests every target locale under a
+ * single JSON object, so four locales cost one call instead of one call each.
+ */
+async function translateOnce<T>(
+  subject: string,
+  sourceLang: string,
+  payload: object,
+  localeFields: Record<string, Schema>,
+): Promise<Record<string, T> | null> {
+  const ai = getAi();
+  if (!ai) return null;
+
+  const targets = SUPPORTED_LOCALES.filter((l) => l !== sourceLang);
+  if (targets.length === 0) return null;
+
+  const schema: Schema = {
+    type: Type.OBJECT,
+    properties: Object.fromEntries(
+      targets.map((lang) => [
+        lang,
+        {
+          type: Type.OBJECT,
+          properties: localeFields,
+          required: Object.keys(localeFields),
+        },
+      ]),
+    ),
+    required: targets,
+  };
+
+  try {
+    const response = await ai.models.generateContent({
+      model: MODEL,
+      contents: `Translate this ${subject} from '${sourceLang}' into: ${targets.join(
+        ", ",
+      )}.\n\n${JSON.stringify(payload)}`,
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION,
+        responseMimeType: "application/json",
+        responseSchema: schema,
+        temperature: 0.3,
+      },
+    });
+
+    const text = response.text;
+    if (!text) return null;
+    return JSON.parse(text) as Record<string, T>;
+  } catch (err) {
+    console.error(`[Gemini] Failed to translate ${subject}`, err);
+    return null;
+  }
 }
 
 export const AiService = {
@@ -28,75 +89,37 @@ export const AiService = {
     categoryId: string,
     sourceLang: string,
     name: string,
-    description: string | null
+    description: string | null,
   ): Promise<boolean> {
-    initializeAi();
-    if (!_ai) return false;
-    if (!name && !description) return false;
+    if (!name) return false;
 
-    const targets = getTargetLocales(sourceLang);
-    const schema: Schema = {
-      type: Type.OBJECT,
-      properties: {},
-      required: targets,
-    };
+    const fields: Record<string, Schema> = { name: { type: Type.STRING } };
+    if (description) fields.description = { type: Type.STRING };
 
-    for (const lang of targets) {
-      schema.properties![lang] = {
-        type: Type.OBJECT,
-        properties: {},
-      };
-      if (name) schema.properties![lang].properties!["name"] = { type: Type.STRING };
-      if (description)
-        schema.properties![lang].properties!["description"] = { type: Type.STRING };
-    }
+    const result = await translateOnce<{ name?: string; description?: string }>(
+      "menu category",
+      sourceLang,
+      { name, description },
+      fields,
+    );
+    if (!result) return false;
 
-    try {
-      const prompt = `Translate the following category from '${sourceLang}' to: ${targets.join(
-        ", "
-      )}.\n\nJSON Data:\n${JSON.stringify({ name, description })}`;
-
-      const response = await _ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: schema,
-          temperature: 0.3,
+    for (const [language, data] of Object.entries(result)) {
+      if (!data?.name) continue;
+      await prisma.categoryTranslation.upsert({
+        where: { categoryId_language: { categoryId, language } },
+        create: {
+          categoryId,
+          language,
+          name: data.name,
+          description: data.description ?? null,
         },
+        update: { name: data.name, description: data.description ?? null },
       });
-
-      const text = response.text;
-      if (!text) return false;
-      const translations = JSON.parse(text) as Record<
-        string,
-        { name?: string; description?: string }
-      >;
-
-      for (const lang of targets) {
-        const data = translations[lang];
-        if (!data || !data.name) continue;
-
-        await prisma.categoryTranslation.upsert({
-          where: { categoryId_language: { categoryId, language: lang } },
-          create: {
-            categoryId,
-            language: lang,
-            name: data.name,
-            description: data.description ?? null,
-          },
-          update: {
-            name: data.name,
-            description: data.description ?? null,
-          },
-        });
-      }
-      await CacheService.deleteByPrefix("categories:");
-      return true;
-    } catch (err) {
-      console.error("[Gemini] Failed to translate category", err);
-      return false;
     }
+
+    await CacheService.deleteByPrefix("categories:");
+    return true;
   },
 
   async translateFood(
@@ -104,171 +127,91 @@ export const AiService = {
     sourceLang: string,
     name: string,
     description: string | null,
-    variants: { id: string; label: string }[]
+    variants: { id: string; label: string }[],
   ): Promise<boolean> {
-    initializeAi();
-    if (!_ai) return false;
+    if (!name && variants.length === 0) return false;
 
-    const targets = getTargetLocales(sourceLang);
-    const schema: Schema = {
-      type: Type.OBJECT,
-      properties: {},
-      required: targets,
-    };
-
-    for (const lang of targets) {
-      schema.properties![lang] = {
-        type: Type.OBJECT,
-        properties: {},
-      };
-      if (name) schema.properties![lang].properties!["name"] = { type: Type.STRING };
-      if (description)
-        schema.properties![lang].properties!["description"] = { type: Type.STRING };
-      if (variants && variants.length > 0) {
-        schema.properties![lang].properties!["variants"] = {
-          type: Type.ARRAY,
-          items: {
-            type: Type.OBJECT,
-            properties: {
-              id: { type: Type.STRING },
-              label: { type: Type.STRING },
-            },
+    const fields: Record<string, Schema> = {};
+    if (name) fields.name = { type: Type.STRING };
+    if (description) fields.description = { type: Type.STRING };
+    if (variants.length > 0) {
+      fields.variants = {
+        type: Type.ARRAY,
+        items: {
+          type: Type.OBJECT,
+          properties: {
+            id: { type: Type.STRING },
+            label: { type: Type.STRING },
           },
-        };
-      }
-    }
-
-    try {
-      const payload = { name, description, variants };
-      const prompt = `Translate the following food and its variants from '${sourceLang}' to: ${targets.join(
-        ", "
-      )}.\nPreserve the variant IDs exactly as provided.\n\nJSON Data:\n${JSON.stringify(
-        payload
-      )}`;
-
-      const response = await _ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: schema,
-          temperature: 0.3,
-        },
-      });
-
-      const text = response.text;
-      if (!text) return false;
-      const translations = JSON.parse(text) as Record<
-        string,
-        { name?: string; description?: string; variants?: { id: string; label: string }[] }
-      >;
-
-      for (const lang of targets) {
-        const data = translations[lang];
-        if (!data) continue;
-
-        if (data.name) {
-          await prisma.foodTranslation.upsert({
-            where: { foodId_language: { foodId, language: lang } },
-            create: {
-              foodId,
-              language: lang,
-              name: data.name,
-              description: data.description ?? null,
-            },
-            update: {
-              name: data.name,
-              description: data.description ?? null,
-            },
-          });
-        }
-
-        if (data.variants && Array.isArray(data.variants)) {
-          for (const v of data.variants) {
-            if (!v.id || !v.label) continue;
-            await prisma.foodVariantTranslation.upsert({
-              where: { variantId_language: { variantId: v.id, language: lang } },
-              create: {
-                variantId: v.id,
-                language: lang,
-                label: v.label,
-              },
-              update: {
-                label: v.label,
-              },
-            });
-          }
-        }
-      }
-      await CacheService.deleteByPrefix("foods:");
-      return true;
-    } catch (err) {
-      console.error("[Gemini] Failed to translate food", err);
-      return false;
-    }
-  },
-
-  async translateFoodVariant(variantId: string, sourceLang: string, label: string): Promise<boolean> {
-    initializeAi();
-    if (!_ai) return false;
-    if (!label) return false;
-
-    const targets = getTargetLocales(sourceLang);
-    const schema: Schema = {
-      type: Type.OBJECT,
-      properties: {},
-      required: targets,
-    };
-
-    for (const lang of targets) {
-      schema.properties![lang] = {
-        type: Type.OBJECT,
-        properties: {
-          label: { type: Type.STRING },
+          required: ["id", "label"],
         },
       };
     }
 
-    try {
-      const prompt = `Translate the following food variant label from '${sourceLang}' to: ${targets.join(
-        ", "
-      )}.\n\nJSON Data:\n${JSON.stringify({ label })}`;
+    const result = await translateOnce<{
+      name?: string;
+      description?: string;
+      variants?: { id: string; label: string }[];
+    }>("dish and its variants", sourceLang, { name, description, variants }, fields);
+    if (!result) return false;
 
-      const response = await _ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema: schema,
-          temperature: 0.3,
-        },
-      });
+    const knownVariantIds = new Set(variants.map((v) => v.id));
 
-      const text = response.text;
-      if (!text) return false;
-      const translations = JSON.parse(text) as Record<string, { label?: string }>;
+    for (const [language, data] of Object.entries(result)) {
+      if (!data) continue;
 
-      for (const lang of targets) {
-        const data = translations[lang];
-        if (!data || !data.label) continue;
-
-        await prisma.foodVariantTranslation.upsert({
-          where: { variantId_language: { variantId, language: lang } },
+      if (data.name) {
+        await prisma.foodTranslation.upsert({
+          where: { foodId_language: { foodId, language } },
           create: {
-            variantId,
-            language: lang,
-            label: data.label,
+            foodId,
+            language,
+            name: data.name,
+            description: data.description ?? null,
           },
-          update: {
-            label: data.label,
-          },
+          update: { name: data.name, description: data.description ?? null },
         });
       }
-      await CacheService.deleteByPrefix("foods:");
-      return true;
-    } catch (err) {
-      console.error("[Gemini] Failed to translate variant", err);
-      return false;
+
+      for (const v of data.variants ?? []) {
+        if (!v?.label || !knownVariantIds.has(v.id)) continue;
+        await prisma.foodVariantTranslation.upsert({
+          where: { variantId_language: { variantId: v.id, language } },
+          create: { variantId: v.id, language, label: v.label },
+          update: { label: v.label },
+        });
+      }
     }
+
+    await CacheService.deleteByPrefix("foods:");
+    return true;
+  },
+
+  async translateFoodVariant(
+    variantId: string,
+    sourceLang: string,
+    label: string,
+  ): Promise<boolean> {
+    if (!label) return false;
+
+    const result = await translateOnce<{ label?: string }>(
+      "dish variant label",
+      sourceLang,
+      { label },
+      { label: { type: Type.STRING } },
+    );
+    if (!result) return false;
+
+    for (const [language, data] of Object.entries(result)) {
+      if (!data?.label) continue;
+      await prisma.foodVariantTranslation.upsert({
+        where: { variantId_language: { variantId, language } },
+        create: { variantId, language, label: data.label },
+        update: { label: data.label },
+      });
+    }
+
+    await CacheService.deleteByPrefix("foods:");
+    return true;
   },
 };

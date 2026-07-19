@@ -116,16 +116,7 @@ export class CategoryService {
     });
     await CacheService.deleteByPrefix(CATEGORY_CACHE_PREFIX);
 
-    let aiTranslationFailed = false;
-    if (dto.name !== undefined || dto.description !== undefined) {
-      const updatedT = row.translations.find((t) => t.language === lang);
-      if (updatedT) {
-        const success = await AiService.translateCategory(id, lang, updatedT.name, updatedT.description ?? null);
-        if (!success) aiTranslationFailed = true;
-      }
-    }
-
-    return { ...row, aiTranslationFailed };
+    return row;
   }
 
   async remove(id: string) {

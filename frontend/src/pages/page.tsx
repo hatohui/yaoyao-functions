@@ -1,6 +1,6 @@
 import React from 'react'
-import VideoPlayer from '@/components/common/VideoPlayer'
 import { ASSET_URL } from '@/common/app'
+import VideoPlayer from '@/components/common/VideoPlayer'
 
 const LandingPage = (): React.JSX.Element => {
 	return (

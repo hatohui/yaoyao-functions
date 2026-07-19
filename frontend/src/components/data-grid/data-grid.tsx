@@ -111,7 +111,7 @@ export function DataGrid<TData>({
         data-slot="grid"
         tabIndex={0}
         ref={dataGridRef}
-        className="relative grid select-none overflow-auto rounded-md border focus:outline-none"
+        className="scrollbar-thin relative grid select-none overflow-auto rounded-md border focus:outline-none"
         style={{
           ...columnSizeVars,
           maxHeight: `${height}px`,
@@ -242,7 +242,7 @@ export function DataGrid<TData>({
             );
           })}
         </div>
-        {!readOnly && onRowAdd && (
+        {!readOnly && onRowAddProp && (
           <div
             role="rowgroup"
             data-slot="grid-footer"

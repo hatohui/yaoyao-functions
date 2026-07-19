@@ -23,6 +23,7 @@ import type {
 import type {
   GetPeopleListParams,
   GetPopularItemsParams,
+  GetTableTotalsParams,
   PeopleListDto,
   PopularItemDto,
   TableTotalDto
@@ -121,13 +122,14 @@ export function useGetPopularItems<TData = Awaited<ReturnType<typeof getPopularI
 
 
 export const getTableTotals = (
-
+    params?: GetTableTotalsParams,
  signal?: AbortSignal
 ) => {
 
 
       return customInstance<TableTotalDto[]>(
-      {url: `/api/stats/tables`, method: 'GET', signal
+      {url: `/api/stats/tables`, method: 'GET',
+        params, signal
     },
       );
     }
@@ -135,23 +137,23 @@ export const getTableTotals = (
 
 
 
-export const getGetTableTotalsQueryKey = () => {
+export const getGetTableTotalsQueryKey = (params?: GetTableTotalsParams,) => {
     return [
-    `/api/stats/tables`
+    `/api/stats/tables`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getGetTableTotalsQueryOptions = <TData = Awaited<ReturnType<typeof getTableTotals>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>>, }
+export const getGetTableTotalsQueryOptions = <TData = Awaited<ReturnType<typeof getTableTotals>>, TError = unknown>(params?: GetTableTotalsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>>, }
 ) => {
 
 const {query: queryOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getGetTableTotalsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getGetTableTotalsQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTableTotals>>> = ({ signal }) => getTableTotals(signal);
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getTableTotals>>> = ({ signal }) => getTableTotals(params, signal);
 
 
 
@@ -165,7 +167,7 @@ export type GetTableTotalsQueryError = unknown
 
 
 export function useGetTableTotals<TData = Awaited<ReturnType<typeof getTableTotals>>, TError = unknown>(
-  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>> & Pick<
+ params: undefined |  GetTableTotalsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>> & Pick<
         DefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTableTotals>>,
           TError,
@@ -175,7 +177,7 @@ export function useGetTableTotals<TData = Awaited<ReturnType<typeof getTableTota
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetTableTotals<TData = Awaited<ReturnType<typeof getTableTotals>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>> & Pick<
+ params?: GetTableTotalsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>> & Pick<
         UndefinedInitialDataOptions<
           Awaited<ReturnType<typeof getTableTotals>>,
           TError,
@@ -185,16 +187,16 @@ export function useGetTableTotals<TData = Awaited<ReturnType<typeof getTableTota
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGetTableTotals<TData = Awaited<ReturnType<typeof getTableTotals>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>>, }
+ params?: GetTableTotalsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>>, }
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
 export function useGetTableTotals<TData = Awaited<ReturnType<typeof getTableTotals>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>>, }
+ params?: GetTableTotalsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getTableTotals>>, TError, TData>>, }
  , queryClient?: QueryClient
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
-  const queryOptions = getGetTableTotalsQueryOptions(options)
+  const queryOptions = getGetTableTotalsQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

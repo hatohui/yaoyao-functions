@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Plus } from 'lucide-react'
 import type { ColumnDef } from '@tanstack/react-table'
-import type { FoodDetailDto, CategoryItemDto } from '@/api/model'
+import type { CategoryItemDto } from '@/api/model'
+import type { FoodGridRow } from './@useFoodCatalog'
 import { DataGrid } from '@/components/data-grid/data-grid'
 import { getDataGridSelectColumn } from '@/components/data-grid/data-grid-select-column'
 import { useDataGrid } from '@/hooks/use-data-grid'
@@ -10,14 +10,13 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 
 interface FoodTableProps {
-	foods: FoodDetailDto[]
+	foods: FoodGridRow[]
 	categories: CategoryItemDto[]
 	isLoading: boolean
-	onDataChange: (updated: FoodDetailDto[]) => void
+	onDataChange: (updated: FoodGridRow[]) => void
 	onDelete: (id: string) => void
 	onBulkToggle: (ids: string[], isAvailable: boolean) => void
 	onBulkDelete: (ids: string[]) => void
-	onAddVariant: (foodId: string, label: string, price: number) => void
 }
 
 export function FoodTable({
@@ -32,14 +31,13 @@ export function FoodTable({
 	const { t } = useTranslation()
 
 	const categoryOptions = React.useMemo(
-		() =>
-			categories.map(c => ({ label: c.name, value: c.id })),
+		() => categories.map(c => ({ label: c.name, value: c.id })),
 		[categories]
 	)
 
-	const columns = React.useMemo<ColumnDef<FoodDetailDto>[]>(
+	const columns = React.useMemo<ColumnDef<FoodGridRow>[]>(
 		() => [
-			getDataGridSelectColumn<FoodDetailDto>(),
+			getDataGridSelectColumn<FoodGridRow>(),
 			{
 				id: 'name',
 				accessorKey: 'name',
@@ -61,11 +59,41 @@ export function FoodTable({
 				},
 			},
 			{
+				id: 'description',
+				accessorKey: 'description',
+				header: t('admin.food.description'),
+				size: 240,
+				meta: {
+					label: t('admin.food.description'),
+					cell: { variant: 'long-text' },
+				},
+			},
+			{
+				id: 'price',
+				accessorKey: 'price',
+				header: t('admin.food.price'),
+				size: 110,
+				meta: { label: t('admin.food.price'), cell: { variant: 'number' } },
+			},
+			{
+				id: 'currency',
+				accessorKey: 'currency',
+				header: t('admin.food.currency'),
+				size: 110,
+				meta: {
+					label: t('admin.food.currency'),
+					cell: { variant: 'short-text' },
+				},
+			},
+			{
 				id: 'isAvailable',
 				accessorKey: 'isAvailable',
 				header: t('admin.food.available'),
 				size: 110,
-				meta: { label: t('admin.food.available'), cell: { variant: 'checkbox' } },
+				meta: {
+					label: t('admin.food.available'),
+					cell: { variant: 'checkbox' },
+				},
 			},
 			{
 				id: 'shouldCalculate',
@@ -82,7 +110,7 @@ export function FoodTable({
 	)
 
 	const onRowsDelete = React.useCallback(
-		(rows: FoodDetailDto[]) => {
+		(rows: FoodGridRow[]) => {
 			const ids = rows.map(r => r.id)
 			if (ids.length === 1) {
 				onDelete(ids[0])
@@ -155,6 +183,7 @@ export function FoodTable({
 			<DataGrid
 				table={table}
 				{...dataGridProps}
+				onRowAdd={undefined}
 				height={520}
 				stretchColumns
 			/>

@@ -1,27 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useGetActiveEvent, useGetPastEvents } from '@/api/events/events'
 import { useGetFeedbackByEvent } from '@/api/feedback/feedback'
 import type {
-	EventSummaryDto,
 	GetFeedbackResponseDto,
 	GetFeedbackByEventSort,
 } from '@/api/model'
 import { usePagination } from '@/hooks/usePagination'
+import { useAdminEvents } from '@/hooks/useAdminEvents'
 
 export function useAdminFeedback() {
-	const { data: activeEvent } = useGetActiveEvent<EventSummaryDto | null>()
-	const { data: pastEvents = [] } = useGetPastEvents<EventSummaryDto[]>()
+	const { selectedEvent } = useAdminEvents()
 
-	const [eventId, setEventId] = useState<string | null>(null)
 	const [sort, setSort] = useState<GetFeedbackByEventSort>('recent')
 	const [total, setTotal] = useState(0)
 	const pagination = usePagination({ total, initialCount: 20 })
 
-	useEffect(() => {
-		if (!eventId && activeEvent) setEventId(activeEvent.id)
-	}, [eventId, activeEvent])
-
-	const events = [...(activeEvent ? [activeEvent] : []), ...pastEvents]
+	const eventId = selectedEvent?.id ?? null
 
 	const { data, isLoading } = useGetFeedbackByEvent<GetFeedbackResponseDto>(
 		{
@@ -38,9 +31,6 @@ export function useAdminFeedback() {
 	}, [data?.total])
 
 	return {
-		events,
-		eventId,
-		setEventId,
 		sort,
 		setSort,
 		pagination,

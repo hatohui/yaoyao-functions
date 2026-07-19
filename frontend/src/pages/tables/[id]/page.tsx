@@ -7,6 +7,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { useGetTablePeople } from '@/api/tables/tables'
 import type { PersonDto } from '@/api/model'
 import { useGuest } from '@/hooks/useGuest'
+import { useTableTab } from '@/hooks/useTableTab'
+import { InlineEdit } from '@/components/common/InlineEdit'
+import { EditableName } from '@/components/common/EditableName'
 import { Roster } from './@Roster'
 import { OrdersTab } from './@OrdersTab'
 import { SplitsTab } from './@SplitsTab'
@@ -14,8 +17,10 @@ import { useTableDetail } from './@useTableDetail'
 
 export default function TableDetailPage() {
 	const { t } = useTranslation()
-	const { id, table, isLoading, isError, shareLink } = useTableDetail()
+	const { id, table, isLoading, isError, shareLink, updateTable } =
+		useTableDetail()
 	const setActiveTable = useGuest(s => s.setActiveTable)
+	const { tab, setTab } = useTableTab(id)
 	const { data: people } = useGetTablePeople<PersonDto[]>(id)
 
 	useEffect(() => {
@@ -50,10 +55,24 @@ export default function TableDetailPage() {
 
 			<div className='flex items-center justify-between'>
 				<div className='flex items-center gap-2'>
-					<h1 className='text-xl font-bold text-foreground'>{table.name}</h1>
+					<h1 className='text-xl font-bold text-foreground'>
+						<EditableName
+							value={table.name}
+							onSave={name => updateTable({ name })}
+						/>
+					</h1>
 					<span className='flex items-center gap-1 rounded-full bg-brand-muted px-2.5 py-1 text-xs font-medium text-primary'>
 						<Users className='size-3.5' />
-						{table.seated}/{table.capacity}
+						{table.seated}/
+						<InlineEdit
+							type='number'
+							value={String(table.capacity)}
+							onCommit={v => {
+								const capacity = Number(v)
+								if (capacity >= table.seated) updateTable({ capacity })
+							}}
+							inputClassName='w-14 text-xs'
+						/>
 					</span>
 				</div>
 				<button
@@ -66,7 +85,7 @@ export default function TableDetailPage() {
 				</button>
 			</div>
 
-			<Tabs defaultValue='orders'>
+			<Tabs value={tab} onValueChange={setTab}>
 				<TabsList className='w-full'>
 					<TabsTrigger value='people'>{t('tabs.people')}</TabsTrigger>
 					<TabsTrigger value='orders'>{t('tabs.orders')}</TabsTrigger>
@@ -74,7 +93,10 @@ export default function TableDetailPage() {
 				</TabsList>
 
 				<TabsContent value='people'>
-					<Roster table={table} />
+					<Roster
+						table={table}
+						onSetHost={personId => updateTable({ tableLeaderId: personId })}
+					/>
 				</TabsContent>
 				<TabsContent value='orders'>
 					<OrdersTab table={table} people={people ?? []} />

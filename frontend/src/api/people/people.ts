@@ -28,7 +28,8 @@ import type {
   CreatePersonDto,
   IdsDto,
   MovePeopleDto,
-  PersonDto
+  PersonDto,
+  UpdatePersonDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -292,6 +293,64 @@ const {mutation: mutationOptions} = options ?
         TContext
       > => {
       return useMutation(getBulkDeletePeopleMutationOptions(options), queryClient);
+    }
+    export const updatePerson = (
+    id: string,
+    updatePersonDto: UpdatePersonDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PersonDto>(
+      {url: `/api/people/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updatePersonDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdatePersonMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePerson>>, TError,{id: string;data: UpdatePersonDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updatePerson>>, TError,{id: string;data: UpdatePersonDto}, TContext> => {
+
+const mutationKey = ['updatePerson'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updatePerson>>, {id: string;data: UpdatePersonDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updatePerson(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdatePersonMutationResult = NonNullable<Awaited<ReturnType<typeof updatePerson>>>
+    export type UpdatePersonMutationBody = UpdatePersonDto
+    export type UpdatePersonMutationError = unknown
+
+    export const useUpdatePerson = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updatePerson>>, TError,{id: string;data: UpdatePersonDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updatePerson>>,
+        TError,
+        {id: string;data: UpdatePersonDto},
+        TContext
+      > => {
+      return useMutation(getUpdatePersonMutationOptions(options), queryClient);
     }
     export const deletePerson = (
     id: string,

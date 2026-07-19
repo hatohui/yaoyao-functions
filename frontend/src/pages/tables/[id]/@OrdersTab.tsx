@@ -1,5 +1,8 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router'
+import { Plus } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { OrderResponseDto, PersonDto, TableDto } from '@/api/model'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { useOrders } from './@useOrders'
@@ -31,6 +34,19 @@ export function OrdersTab({ table, people }: OrdersTabProps) {
 
 	return (
 		<div className='flex flex-col gap-3'>
+			{people.length === 0 ? (
+				<p className='rounded-2xl border border-dashed border-border/60 px-4 py-3 text-sm text-muted-foreground'>
+					{t('orders.needs_people_body')}
+				</p>
+			) : (
+				<Button asChild className='gap-1.5 self-start rounded-full'>
+					<Link to={`/tables/${table.id}/order`}>
+						<Plus className='size-4' />
+						{t('orders.add_order')}
+					</Link>
+				</Button>
+			)}
+
 			{orders.length === 0 ? (
 				<p className='py-6 text-center text-sm text-muted-foreground'>
 					{t('orders.empty')}

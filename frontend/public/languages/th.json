@@ -22,7 +22,8 @@
 		"confirm": "ยืนยัน",
 		"cancel": "ยกเลิก",
 		"save": "บันทึก",
-		"loading": "กำลังโหลด…"
+		"loading": "กำลังโหลด…",
+		"rename": "เปลี่ยนชื่อ"
 	},
 	"health": {
 		"title": "สุขภาพระบบ",
@@ -51,10 +52,12 @@
 	},
 	"nav": {
 		"menu": "เมนู",
+		"about": "เกี่ยวกับ",
 		"dev": "Dev",
 		"tables": "โต๊ะ",
 		"feedback": "ความคิดเห็น",
-		"admin": "ผู้ดูแล"
+		"admin": "ผู้ดูแล",
+		"open_menu": "เปิดเมนู"
 	},
 	"access": {
 		"back": "กลับ",
@@ -71,27 +74,34 @@
 		"all_tables": "โต๊ะทั้งหมด",
 		"full": "เต็ม",
 		"load_error": "โหลดโต๊ะไม่สำเร็จ กรุณารีเฟรช",
-		"none_found": "ไม่พบโต๊ะ"
+		"none_found": "ไม่พบโต๊ะ",
+		"no_host": "ยังไม่มีเจ้าภาพ",
+		"filter_all": "ทุกโต๊ะ",
+		"filter_free": "ยังมีที่ว่าง",
+		"filter_full": "เต็ม",
+		"filter_hosted": "มีเจ้าภาพ"
 	},
 	"roster": {
 		"people_here": "คนที่โต๊ะนี้",
-		"empty": "ยังไม่มีใคร — เพิ่มชื่อแรก",
+		"empty": "ยังไม่มีใคร - เพิ่มชื่อแรก",
 		"host": "เจ้าภาพ",
 		"remove": "ลบ",
 		"add_placeholder": "พิมพ์ชื่อ กด Enter…",
 		"remove_title": "ลบ {{name}} ออกจาก {{table}}?",
-		"remove_desc": "ไม่สามารถย้อนกลับได้ — พวกเขาจะไม่อยู่ในรายชื่อโต๊ะนี้อีก",
+		"remove_desc": "ไม่สามารถย้อนกลับได้ - พวกเขาจะไม่อยู่ในรายชื่อโต๊ะนี้อีก",
 		"link_copied": "คัดลอกลิงก์แล้ว",
 		"share": "แชร์",
 		"not_found": "ไม่พบโต๊ะ",
-		"add_failed": "เพิ่มไม่สำเร็จ — โต๊ะอาจเต็มแล้ว",
-		"remove_failed": "ลบไม่สำเร็จ กรุณาลองใหม่"
+		"add_failed": "เพิ่มไม่สำเร็จ - โต๊ะอาจเต็มแล้ว",
+		"remove_failed": "ลบไม่สำเร็จ กรุณาลองใหม่",
+		"update_failed": "อัปเดตโต๊ะไม่สำเร็จ",
+		"set_host": "ตั้งเป็นเจ้าภาพ",
+		"unset_host": "ยกเลิกเจ้าภาพ"
 	},
 	"menu": {
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
 		"restaurant_location": "Puchong Jaya",
-		"dishes_available": "มี {{count}} เมนู",
 		"search_placeholder": "ค้นหาเมนู…",
 		"all_categories": "ทั้งหมด",
 		"no_dishes_title": "ไม่พบเมนู",
@@ -105,6 +115,10 @@
 		"showing": "แสดง {{from}}–{{to}} จาก {{total}} เมนู",
 		"unavailable": "ไม่พร้อมให้บริการ",
 		"popular": "ยอดนิยม",
+		"sort_name": "ชื่อ (A–Z)",
+		"sort_price": "ราคา (ต่ำไปสูง)",
+		"sort_popular": "ยอดนิยมที่สุด",
+		"count_all": "ทั้งหมด",
 		"select_item": "เลือกรายการนี้",
 		"selected_count": "เลือกแล้ว {{count}} รายการ",
 		"clear_selection": "ล้างการเลือก",
@@ -115,11 +129,23 @@
 		"added_to_order": "เพิ่มลงออเดอร์แล้ว",
 		"add_failed": "เพิ่มไม่สำเร็จ โปรดลองอีกครั้ง"
 	},
+	"about": {
+		"hero_tag": "🐾 คืนดินเนอร์สายเฟอร์รี่",
+		"location_title": "หาเราเจอได้ที่นี่",
+		"address_label": "ที่อยู่",
+		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
+		"get_directions": "นำทาง",
+		"details_tag": "🐾 เกร็ดเล็กเกร็ดน้อย",
+		"details_title": "เกี่ยวกับ YaoYao Dinner",
+		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
 	"food_detail": {
 		"back_to_menu": "กลับไปที่เมนู",
 		"variants": "ตัวเลือก",
 		"add_to_order": "เพิ่มลงออเดอร์",
-		"not_found": "ไม่พบเมนูนี้"
+		"not_found": "ไม่พบเมนูนี้",
+		"description_placeholder": "เพิ่มคำอธิบาย"
 	},
 	"tabs": {
 		"people": "คนที่โต๊ะ",
@@ -133,12 +159,30 @@
 		"unknown_person": "บางคน",
 		"remove": "ลบ",
 		"remove_title": "ลบ {{name}}?",
-		"remove_desc": "ไม่สามารถย้อนกลับได้ — จะถูกลบออกจากออเดอร์ของโต๊ะ",
-		"empty": "ยังไม่มีออเดอร์ — เพิ่มเมนูได้เลย",
+		"remove_desc": "ไม่สามารถย้อนกลับได้ - จะถูกลบออกจากออเดอร์ของโต๊ะ",
+		"empty": "ยังไม่มีออเดอร์ - เพิ่มเมนูได้เลย",
 		"total": "ยอดรวมของโต๊ะ",
 		"quantity": "จำนวน",
 		"update_failed": "อัปเดตไม่สำเร็จ โปรดลองอีกครั้ง",
-		"remove_failed": "ลบไม่สำเร็จ โปรดลองอีกครั้ง"
+		"remove_failed": "ลบไม่สำเร็จ โปรดลองอีกครั้ง",
+		"add_order": "เพิ่มรายการสั่ง",
+		"cart": "ตะกร้า",
+		"cart_empty": "ยังไม่ได้เพิ่มอะไร",
+		"clear_cart": "ล้าง",
+		"place_order": "สั่งอาหาร",
+		"placing": "กำลังสั่ง…",
+		"placed": "เพิ่มไปที่โต๊ะแล้ว",
+		"place_failed": "เพิ่มไปที่โต๊ะไม่สำเร็จ",
+		"add": "เพิ่ม",
+		"remove_from_cart": "เอาออกจากตะกร้า",
+		"increase": "เพิ่มจำนวน",
+		"decrease": "ลดจำนวน",
+		"split_as": "แบ่ง:",
+		"free": "ฟรี",
+		"view_cart": "ตะกร้า ({{count}})",
+		"needs_people_title": "ยังไม่มีใครนั่งที่นี่",
+		"needs_people_body": "เพิ่มคนเข้าโต๊ะนี้ก่อนสั่งอาหาร — รายการสั่งเป็นของคนที่นั่งอยู่",
+		"seat_someone": "เพิ่มคน"
 	},
 	"split": {
 		"title": "แบ่งรายการนี้",
@@ -147,7 +191,10 @@
 		"choose_people": "เลือกคน",
 		"empty": "ยังไม่มีออเดอร์",
 		"you": "คุณ",
-		"free_badge": "ฟรี"
+		"free_badge": "ฟรี",
+		"your_share": "ส่วนของคุณ",
+		"quantity": "จำนวน",
+		"people_count": "{{count}} คน"
 	},
 	"notes": {
 		"title": "โน้ตของ {{name}}",
@@ -163,7 +210,7 @@
 		"anonymous": "ไม่ระบุชื่อ",
 		"sort_recent": "ล่าสุด",
 		"sort_top": "ยอดนิยม",
-		"empty": "ยังไม่มีความคิดเห็น — เป็นคนแรกเลย"
+		"empty": "ยังไม่มีความคิดเห็น - เป็นคนแรกเลย"
 	},
 	"floor_plan": {
 		"title": "ผังโต๊ะ",
@@ -242,7 +289,9 @@
 			"people": "คน",
 			"stats": "สถิติ",
 			"feedback": "ความคิดเห็น",
-			"settings": "ตั้งค่า"
+			"settings": "ตั้งค่า",
+			"collapse": "ย่อแถบด้านข้าง",
+			"expand": "ขยายแถบด้านข้าง"
 		},
 		"dashboard": {
 			"title": "แดชบอร์ด",
@@ -280,7 +329,7 @@
 			"selected_count": "เลือกแล้ว {{count}} รายการ",
 			"bulk_create": "สร้างจำนวนมาก",
 			"bulk_create_title": "สร้างโต๊ะจำนวนมาก",
-			"bulk_create_desc": "โต๊ะจะถูกกำหนดหมายเลขอัตโนมัติ (โต๊ะ 1, โต๊ะ 2, ...) — เปลี่ยนชื่อภายหลังได้",
+			"bulk_create_desc": "โต๊ะจะถูกกำหนดหมายเลขอัตโนมัติ (โต๊ะ 1, โต๊ะ 2, ...) - เปลี่ยนชื่อภายหลังได้",
 			"count": "จำนวน",
 			"created": "สร้างโต๊ะแล้ว",
 			"bulk_created": "สร้างโต๊ะแล้ว",
@@ -289,12 +338,13 @@
 			"delete_failed": "ลบไม่สำเร็จ โปรดลองอีกครั้ง",
 			"delete_selected": "ลบ",
 			"bulk_delete_title": "ลบ {{count}} โต๊ะ?",
-			"bulk_delete_desc": "ไม่สามารถย้อนกลับได้ — โต๊ะพร้อมรายชื่อ/ออเดอร์จะถูกลบ",
+			"bulk_delete_desc": "ไม่สามารถย้อนกลับได้ - โต๊ะพร้อมรายชื่อ/ออเดอร์จะถูกลบ",
 			"move_to_staging": "ย้ายกลับไปเตรียมไว้",
-			"moved_to_staging": "ย้ายกลับไปเตรียมไว้แล้ว"
+			"moved_to_staging": "ย้ายกลับไปเตรียมไว้แล้ว",
+			"rename_failed": "เปลี่ยนชื่อโต๊ะไม่สำเร็จ"
 		},
 		"floor_plan": {
-			"drag_hint": "ลากโต๊ะไปยังตำแหน่งบนผังพื้น — ตำแหน่งจะบันทึกอัตโนมัติเมื่อคุณปล่อย"
+			"drag_hint": "ลากโต๊ะไปยังตำแหน่งบนผังพื้น - ตำแหน่งจะบันทึกอัตโนมัติเมื่อคุณปล่อย"
 		},
 		"people": {
 			"title": "คน",
@@ -303,7 +353,10 @@
 			"name": "ชื่อ",
 			"table": "โต๊ะ",
 			"ordered": "สั่งแล้ว",
-			"note": "บันทึก"
+			"note": "บันทึก",
+			"note_placeholder": "เพิ่มบันทึก",
+			"note_save_failed": "บันทึกโน้ตไม่สำเร็จ",
+			"update_failed": "บันทึกไม่สำเร็จ กรุณาลองใหม่"
 		},
 		"stats": {
 			"title": "สถิติ",
@@ -317,7 +370,6 @@
 		},
 		"feedback": {
 			"title": "ความคิดเห็น",
-			"select_event": "เลือกงาน",
 			"reaction_count": "{{count}} รีแอกชัน"
 		},
 		"settings": {
@@ -348,14 +400,62 @@
 			"save_failed": "บันทึกไม่สำเร็จ โปรดลองอีกครั้ง",
 			"delete": "ลบ",
 			"delete_title": "ลบ {{name}}?",
-			"delete_desc": "ไม่สามารถย้อนกลับได้ เมนูที่มีประวัติออเดอร์จะลบไม่ได้ — ให้สลับสถานะพร้อมขายแทน",
+			"delete_desc": "ไม่สามารถย้อนกลับได้ เมนูที่มีประวัติออเดอร์จะลบไม่ได้ - ให้สลับสถานะพร้อมขายแทน",
 			"bulk_enable": "เปิดใช้งาน",
 			"bulk_disable": "ปิดใช้งาน",
-			"bulk_delete_desc": "ไม่สามารถย้อนกลับได้ — เมนูที่มีประวัติออเดอร์จะถูกข้าม",
+			"bulk_delete_desc": "ไม่สามารถย้อนกลับได้ - เมนูที่มีประวัติออเดอร์จะถูกข้าม",
 			"add_variant": "เพิ่มตัวเลือก",
 			"variant_label_placeholder": "ป้ายกำกับ",
 			"variant_price_placeholder": "ราคา",
-			"default_variant_label": "ปกติ"
+			"default_variant_label": "ปกติ",
+			"description": "คำอธิบาย",
+			"currency": "หน่วย"
+		},
+		"presets": {
+			"title": "เมนูชุดสำเร็จรูป",
+			"new": "สร้างเมนูชุดใหม่",
+			"empty": "ยังไม่มีเมนูชุดสำเร็จรูป - สร้างเมนูแรกเพื่อเริ่มต้น",
+			"menu_label": "เมนู {{idx}}",
+			"active": "ใช้งานอยู่",
+			"activate": "ตั้งเป็นใช้งาน",
+			"deactivate": "ปิดใช้งาน",
+			"price_label": "ราคาเหมา (ต่อคน)",
+			"save_failed": "บันทึกไม่สำเร็จ โปรดลองอีกครั้ง",
+			"delete_preset": "ลบเมนูชุด",
+			"items_empty": "ยังไม่มีรายการ - เพิ่มอาหารจากแคตตาล็อก",
+			"add_item": "เพิ่มรายการ",
+			"add_item_title": "เพิ่มอาหารลงในเมนูชุด",
+			"already_added": "เพิ่มแล้ว",
+			"col_food": "อาหาร",
+			"col_variant": "ตัวเลือก",
+			"col_price": "ราคา",
+			"col_qty": "จำนวน",
+			"remove_item": "ลบ",
+			"bulk_remove_desc": "รายการที่เลือกจะถูกลบออกจากเมนูชุดนี้"
+		},
+		"event": {
+			"context": "ขอบเขตอีเวนต์",
+			"viewing_past": "กำลังดูอีเวนต์ที่ผ่านมา",
+			"action_failed": "อัปเดตอีเวนต์ไม่สำเร็จ",
+			"renamed": "เปลี่ยนชื่ออีเวนต์แล้ว",
+			"pin_rerolled": "สร้าง PIN ใหม่แล้ว",
+			"activated": "\"{{name}}\" กำลังดำเนินอยู่แล้ว",
+			"untitled": "อีเวนต์ที่ยังไม่ตั้งชื่อ",
+			"pin_label": "PIN",
+			"live": "กำลังดำเนินอยู่",
+			"past": "ที่ผ่านมา",
+			"name_label": "ชื่ออีเวนต์",
+			"name_placeholder": "ตั้งชื่ออีเวนต์นี้",
+			"reroll_pin": "สร้าง PIN ใหม่",
+			"make_live": "ทำให้กำลังดำเนินอยู่",
+			"reroll_confirm_title": "สร้าง PIN ใหม่หรือไม่?",
+			"reroll_confirm_body": "PIN {{pin}} จะใช้ไม่ได้อีก แขกที่บันทึกไว้ต้องกรอก PIN ใหม่",
+			"activate_confirm_title": "ทำให้อีเวนต์นี้กำลังดำเนินอยู่หรือไม่?",
+			"activate_confirm_body": "แขกจะเห็นโต๊ะของ \"{{name}}\" และต้องใช้ PIN {{pin}} อีเวนต์ที่กำลังดำเนินอยู่ตอนนี้จะกลายเป็นอีเวนต์ที่ผ่านมา"
+		},
+		"edit_mode": {
+			"label": "โหมดแก้ไข",
+			"on": "กำลังแก้ไข"
 		}
 	}
 }

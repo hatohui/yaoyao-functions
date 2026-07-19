@@ -7,7 +7,10 @@
  */
 
 export interface CreateTableDto {
-  name: string;
+  /** Seat an existing physical slot into the event. Omit to mint a new slot. */
+  slotId?: string;
+  /** Name for a newly minted slot; ignored when slotId is given */
+  name?: string;
   capacity?: number;
   /** Create as a staged table for the next event */
   isStaging?: boolean;

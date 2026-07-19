@@ -42,6 +42,21 @@ export class EventService {
     return (await this.getActiveMeta())?.id ?? null;
   }
 
+  /**
+   * Admin views can pin themselves to a past event; everything else falls back
+   * to whatever is live right now.
+   */
+  async resolveEventId(eventId?: string): Promise<string | null> {
+    if (!eventId) return this.getActiveId();
+
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: { id: true },
+    });
+    if (!event) throw new NotFoundException('Event not found');
+    return event.id;
+  }
+
   async findPast() {
     const events = await prisma.event.findMany({
       where: { isActive: false },
@@ -88,7 +103,7 @@ export class EventService {
       return created;
     });
 
-    await CacheService.delete(CacheSettings.event.active.key);
+    await this.invalidateActive();
     return event;
   }
 
@@ -99,6 +114,51 @@ export class EventService {
       where: { id },
       data: { presetMenuId },
     });
+  }
+
+  async rename(id: string, name: string | null) {
+    const event = await prisma.event.findUnique({ where: { id } });
+    if (!event) throw new NotFoundException('Event not found');
+
+    const updated = await prisma.event.update({
+      where: { id },
+      data: { name: name?.trim() || null },
+    });
+    if (updated.isActive) await this.invalidateActive();
+    return updated;
+  }
+
+  async rerollPin(id: string) {
+    const event = await prisma.event.findUnique({ where: { id } });
+    if (!event) throw new NotFoundException('Event not found');
+
+    const pinLength = await this.config.get<number>(CONFIG_KEYS.pinLength);
+    const updated = await prisma.event.update({
+      where: { id },
+      data: { pin: generatePin(pinLength) },
+    });
+    if (updated.isActive) await this.invalidateActive();
+    return updated;
+  }
+
+  async activate(id: string) {
+    const event = await prisma.event.findUnique({ where: { id } });
+    if (!event) throw new NotFoundException('Event not found');
+
+    const updated = await prisma.$transaction(async (tx) => {
+      await tx.event.updateMany({
+        where: { isActive: true, id: { not: id } },
+        data: { isActive: false },
+      });
+      return tx.event.update({ where: { id }, data: { isActive: true } });
+    });
+
+    await this.invalidateActive();
+    return updated;
+  }
+
+  private invalidateActive() {
+    return CacheService.delete(CacheSettings.event.active.key);
   }
 
   private async withStats(event: {

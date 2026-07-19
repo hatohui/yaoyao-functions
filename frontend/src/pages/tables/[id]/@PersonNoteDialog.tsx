@@ -9,7 +9,7 @@ import {
 	DialogFooter,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { usePersonNote } from './@usePersonNote'
+import { usePersonNote } from '@/hooks/usePersonNote'
 
 interface PersonNoteDialogProps {
 	person: PersonDto | null

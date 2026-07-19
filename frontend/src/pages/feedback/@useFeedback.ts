@@ -14,6 +14,7 @@ import type {
 	GetFeedbackResponseDto,
 	GetFeedbackSort,
 } from '@/api/model'
+import { useDebouncedCallback } from '@/hooks/use-debounced-callback'
 
 export function useFeedback() {
 	const { t } = useTranslation()
@@ -99,9 +100,9 @@ export function useFeedback() {
 		})
 	}
 
-	const react = (id: string, emoji: string) => {
+	const react = useDebouncedCallback((id: string, emoji: string) => {
 		reactMutation.mutate({ id, data: { emoji } })
-	}
+	}, 300)
 
 	return {
 		feedback: data?.feedback ?? [],

@@ -25,6 +25,7 @@ export default function AdminTablesPage() {
 		bulkCreate,
 		bulkRemoveTables,
 		moveToStaging,
+		renameTable,
 	} = useAdminTables()
 
 	return (
@@ -62,6 +63,7 @@ export default function AdminTablesPage() {
 						tables={liveTables}
 						isLoading={liveLoading}
 						showMoveToStaging
+						onRename={renameTable}
 						onBulkDelete={bulkRemoveTables}
 						onMoveToStaging={moveToStaging}
 					/>
@@ -74,6 +76,7 @@ export default function AdminTablesPage() {
 					<TableListSection
 						tables={stagedTables}
 						isLoading={stagedLoading}
+						onRename={renameTable}
 						onBulkDelete={bulkRemoveTables}
 					/>
 				</TabsContent>

@@ -1,11 +1,7 @@
--- Add account_id column to people table
-ALTER TABLE "people" ADD COLUMN "account_id" VARCHAR(255);
-
--- Create unique index on account_id (allows multiple NULLs, enforces uniqueness for non-NULL values)
-CREATE UNIQUE INDEX "people_account_id_key" ON "people"("account_id") WHERE "account_id" IS NOT NULL;
-
--- Add foreign key constraint
-ALTER TABLE "people" ADD CONSTRAINT "people_account_id_fkey" FOREIGN KEY ("account_id") REFERENCES "account"("user_id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- NOTE: this migration originally re-added people.account_id with a foreign key
+-- to "account", but the previous migration drops that table and the Prisma
+-- schema has no Account model. Those statements are removed so the history
+-- replays from scratch; only the performance indexes remain.
 
 -- Create indexes for query performance
 CREATE INDEX "category_key_idx" ON "category"("key");

@@ -17,6 +17,7 @@ import { cn } from '@/utils/shadcn'
 
 interface AdminSidebarProps {
 	onNavigate?: () => void
+	collapsed?: boolean
 	className?: string
 }
 
@@ -39,15 +40,25 @@ const NAV_ITEMS = [
 	},
 ]
 
-export function AdminSidebar({ onNavigate, className }: AdminSidebarProps) {
+export function AdminSidebar({
+	onNavigate,
+	collapsed = false,
+	className,
+}: AdminSidebarProps) {
 	const { t } = useTranslation()
 	const { pathname } = useLocation()
 	const clear = useAdmin(s => s.clear)
+
+	const rowClass = cn(
+		'flex items-center gap-2.5 rounded-full text-sm font-medium transition-colors',
+		collapsed ? 'justify-center px-0 py-2.5' : 'px-4 py-2.5'
+	)
 
 	return (
 		<nav className={cn('flex flex-col gap-1', className)}>
 			{NAV_ITEMS.map(item => {
 				const Icon = item.icon
+				const label = t(item.labelKey)
 				const active =
 					item.to === '/admin'
 						? pathname === '/admin'
@@ -57,15 +68,17 @@ export function AdminSidebar({ onNavigate, className }: AdminSidebarProps) {
 						key={item.to}
 						to={item.to}
 						onClick={onNavigate}
+						title={collapsed ? label : undefined}
+						aria-label={collapsed ? label : undefined}
 						className={cn(
-							'flex items-center gap-2.5 rounded-full px-4 py-2.5 text-sm font-medium transition-colors',
+							rowClass,
 							active
 								? 'bg-primary text-primary-foreground shadow-sm'
 								: 'text-muted-foreground hover:bg-accent hover:text-foreground'
 						)}
 					>
-						<Icon className='size-4' />
-						{t(item.labelKey)}
+						<Icon className='size-4 shrink-0' />
+						{!collapsed && label}
 					</Link>
 				)
 			})}
@@ -75,10 +88,15 @@ export function AdminSidebar({ onNavigate, className }: AdminSidebarProps) {
 			<Link
 				to='/'
 				onClick={onNavigate}
-				className='flex items-center gap-2.5 rounded-full px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground'
+				title={collapsed ? t('admin.nav.exit') : undefined}
+				aria-label={collapsed ? t('admin.nav.exit') : undefined}
+				className={cn(
+					rowClass,
+					'text-muted-foreground hover:bg-accent hover:text-foreground'
+				)}
 			>
-				<ExternalLink className='size-4' />
-				{t('admin.nav.exit')}
+				<ExternalLink className='size-4 shrink-0' />
+				{!collapsed && t('admin.nav.exit')}
 			</Link>
 
 			<button
@@ -87,10 +105,15 @@ export function AdminSidebar({ onNavigate, className }: AdminSidebarProps) {
 					clear()
 					onNavigate?.()
 				}}
-				className='flex items-center gap-2.5 rounded-full px-4 py-2.5 text-left text-sm font-medium text-destructive transition-colors hover:bg-destructive/10'
+				title={collapsed ? t('admin.nav.lock') : undefined}
+				aria-label={collapsed ? t('admin.nav.lock') : undefined}
+				className={cn(
+					rowClass,
+					'text-left text-destructive hover:bg-destructive/10'
+				)}
 			>
-				<LogOut className='size-4' />
-				{t('admin.nav.lock')}
+				<LogOut className='size-4 shrink-0' />
+				{!collapsed && t('admin.nav.lock')}
 			</button>
 		</nav>
 	)

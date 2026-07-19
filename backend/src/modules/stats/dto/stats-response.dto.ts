@@ -7,6 +7,7 @@ export class PopularItemDto {
 }
 
 export class TableTotalDto {
+  @ApiProperty() no: number;
   @ApiProperty() tableId: string;
   @ApiProperty() name: string;
   @ApiProperty() total: number;
@@ -18,6 +19,8 @@ export class PersonRowDto {
   @ApiProperty() name: string;
   @ApiPropertyOptional({ nullable: true, type: String })
   tableName: string | null;
+  @ApiPropertyOptional({ nullable: true, type: String })
+  tableId: string | null;
   @ApiProperty({ type: [String] }) ordered: string[];
   @ApiPropertyOptional({ nullable: true, type: String }) note: string | null;
 }

@@ -22,7 +22,8 @@
 		"confirm": "确认",
 		"cancel": "取消",
 		"save": "保存",
-		"loading": "加载中…"
+		"loading": "加载中…",
+		"rename": "重命名"
 	},
 	"health": {
 		"title": "系统健康",
@@ -51,10 +52,12 @@
 	},
 	"nav": {
 		"menu": "菜单",
+		"about": "关于",
 		"dev": "Dev",
 		"tables": "餐桌",
 		"feedback": "反馈",
-		"admin": "管理"
+		"admin": "管理",
+		"open_menu": "打开菜单"
 	},
 	"access": {
 		"back": "返回",
@@ -71,27 +74,34 @@
 		"all_tables": "所有餐桌",
 		"full": "已满",
 		"load_error": "无法加载餐桌，请刷新。",
-		"none_found": "未找到餐桌"
+		"none_found": "未找到餐桌",
+		"no_host": "暂无主人",
+		"filter_all": "全部餐桌",
+		"filter_free": "有空位",
+		"filter_full": "已满",
+		"filter_hosted": "有主人"
 	},
 	"roster": {
 		"people_here": "这桌的人",
-		"empty": "还没有人 — 添加第一个名字",
+		"empty": "还没有人 - 添加第一个名字",
 		"host": "桌主",
 		"remove": "移除",
 		"add_placeholder": "输入名字，按回车…",
 		"remove_title": "将 {{name}} 从 {{table}} 移除？",
-		"remove_desc": "此操作无法撤销 — 他们将不再显示在此桌名单中。",
+		"remove_desc": "此操作无法撤销 - 他们将不再显示在此桌名单中。",
 		"link_copied": "链接已复制",
 		"share": "分享",
 		"not_found": "未找到餐桌",
-		"add_failed": "无法添加 — 此桌可能已满",
-		"remove_failed": "移除失败，请重试"
+		"add_failed": "无法添加 - 此桌可能已满",
+		"remove_failed": "移除失败，请重试",
+		"update_failed": "无法更新餐桌",
+		"set_host": "设为主人",
+		"unset_host": "取消主人"
 	},
 	"menu": {
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
 		"restaurant_location": "Puchong Jaya",
-		"dishes_available": "共 {{count}} 道菜",
 		"search_placeholder": "搜索菜肴…",
 		"all_categories": "全部",
 		"no_dishes_title": "未找到菜肴",
@@ -105,6 +115,10 @@
 		"showing": "显示第 {{from}}–{{to}} 项，共 {{total}} 道菜",
 		"unavailable": "暂不可用",
 		"popular": "热门",
+		"sort_name": "名称（A–Z）",
+		"sort_price": "价格（从低到高）",
+		"sort_popular": "最受欢迎",
+		"count_all": "全部",
 		"select_item": "选择此项",
 		"selected_count": "已选 {{count}} 项",
 		"clear_selection": "清除选择",
@@ -115,11 +129,23 @@
 		"added_to_order": "已加入订单",
 		"add_failed": "添加失败，请重试"
 	},
+	"about": {
+		"hero_tag": "🐾 一场兽迷聚餐之夜",
+		"location_title": "我们在这里",
+		"address_label": "地址",
+		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
+		"get_directions": "获取路线",
+		"details_tag": "🐾 内幕消息",
+		"details_title": "关于 YaoYao Dinner",
+		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
 	"food_detail": {
 		"back_to_menu": "返回菜单",
 		"variants": "选项",
 		"add_to_order": "加入订单",
-		"not_found": "未找到该菜品"
+		"not_found": "未找到该菜品",
+		"description_placeholder": "添加描述"
 	},
 	"tabs": {
 		"people": "人员",
@@ -133,12 +159,30 @@
 		"unknown_person": "某人",
 		"remove": "移除",
 		"remove_title": "移除 {{name}}？",
-		"remove_desc": "此操作无法撤销 — 将从餐桌订单中移除。",
-		"empty": "暂无订单 — 从菜单添加一些吧",
+		"remove_desc": "此操作无法撤销 - 将从餐桌订单中移除。",
+		"empty": "暂无订单 - 从菜单添加一些吧",
 		"total": "餐桌总额",
 		"quantity": "数量",
 		"update_failed": "更新失败，请重试",
-		"remove_failed": "移除失败，请重试"
+		"remove_failed": "移除失败，请重试",
+		"add_order": "添加点单",
+		"cart": "购物车",
+		"cart_empty": "还没有添加",
+		"clear_cart": "清空",
+		"place_order": "下单",
+		"placing": "下单中…",
+		"placed": "已添加到餐桌",
+		"place_failed": "无法添加到餐桌",
+		"add": "添加",
+		"remove_from_cart": "从购物车移除",
+		"increase": "增加数量",
+		"decrease": "减少数量",
+		"split_as": "分摊：",
+		"free": "免费",
+		"view_cart": "购物车（{{count}}）",
+		"needs_people_title": "这桌还没有人",
+		"needs_people_body": "点单前请先把人加到这桌 — 点单属于坐在那里的人。",
+		"seat_someone": "添加人员"
 	},
 	"split": {
 		"title": "分摊此项",
@@ -147,7 +191,10 @@
 		"choose_people": "选择人员",
 		"empty": "暂无订单",
 		"you": "你",
-		"free_badge": "免费"
+		"free_badge": "免费",
+		"your_share": "你的分摊",
+		"quantity": "数量",
+		"people_count": "{{count}} 人"
 	},
 	"notes": {
 		"title": "{{name}} 的备注",
@@ -163,7 +210,7 @@
 		"anonymous": "匿名",
 		"sort_recent": "最新",
 		"sort_top": "最热",
-		"empty": "还没有反馈 — 来做第一个吧"
+		"empty": "还没有反馈 - 来做第一个吧"
 	},
 	"floor_plan": {
 		"title": "平面图",
@@ -242,7 +289,9 @@
 			"people": "人员",
 			"stats": "统计",
 			"feedback": "反馈",
-			"settings": "设置"
+			"settings": "设置",
+			"collapse": "收起侧边栏",
+			"expand": "展开侧边栏"
 		},
 		"dashboard": {
 			"title": "仪表盘",
@@ -280,7 +329,7 @@
 			"selected_count": "已选 {{count}} 项",
 			"bulk_create": "批量创建",
 			"bulk_create_title": "批量创建餐桌",
-			"bulk_create_desc": "餐桌会自动编号（1号桌、2号桌……）— 之后可以重命名。",
+			"bulk_create_desc": "餐桌会自动编号（1号桌、2号桌……）- 之后可以重命名。",
 			"count": "数量",
 			"created": "餐桌已创建",
 			"bulk_created": "餐桌已批量创建",
@@ -289,12 +338,13 @@
 			"delete_failed": "删除失败，请重试",
 			"delete_selected": "删除",
 			"bulk_delete_title": "删除 {{count}} 张餐桌？",
-			"bulk_delete_desc": "此操作无法撤销 — 餐桌及其人员名单/订单都会被删除。",
+			"bulk_delete_desc": "此操作无法撤销 - 餐桌及其人员名单/订单都会被删除。",
 			"move_to_staging": "移回待发布",
-			"moved_to_staging": "已移回待发布"
+			"moved_to_staging": "已移回待发布",
+			"rename_failed": "无法重命名餐桌"
 		},
 		"floor_plan": {
-			"drag_hint": "将餐桌拖到平面图上的位置 — 松开即自动保存。"
+			"drag_hint": "将餐桌拖到平面图上的位置 - 松开即自动保存。"
 		},
 		"people": {
 			"title": "人员",
@@ -303,7 +353,10 @@
 			"name": "姓名",
 			"table": "餐桌",
 			"ordered": "已点菜品",
-			"note": "备注"
+			"note": "备注",
+			"note_placeholder": "添加备注",
+			"note_save_failed": "无法保存备注",
+			"update_failed": "保存失败，请重试"
 		},
 		"stats": {
 			"title": "统计",
@@ -317,7 +370,6 @@
 		},
 		"feedback": {
 			"title": "反馈",
-			"select_event": "选择活动",
 			"reaction_count": "{{count}} 个反应"
 		},
 		"settings": {
@@ -348,14 +400,62 @@
 			"save_failed": "保存失败，请重试",
 			"delete": "删除",
 			"delete_title": "删除 {{name}}？",
-			"delete_desc": "此操作无法撤销。有订单记录的菜品无法删除 — 请改为切换可购买状态。",
+			"delete_desc": "此操作无法撤销。有订单记录的菜品无法删除 - 请改为切换可购买状态。",
 			"bulk_enable": "启用",
 			"bulk_disable": "停用",
-			"bulk_delete_desc": "此操作无法撤销 — 有订单记录的菜品将被跳过。",
+			"bulk_delete_desc": "此操作无法撤销 - 有订单记录的菜品将被跳过。",
 			"add_variant": "添加规格",
 			"variant_label_placeholder": "规格名称",
 			"variant_price_placeholder": "价格",
-			"default_variant_label": "标准"
+			"default_variant_label": "标准",
+			"description": "描述",
+			"currency": "单位"
+		},
+		"presets": {
+			"title": "固定套餐",
+			"new": "新建套餐",
+			"empty": "暂无固定套餐 - 创建一个开始使用",
+			"menu_label": "套餐 {{idx}}",
+			"active": "已启用",
+			"activate": "设为启用",
+			"deactivate": "停用",
+			"price_label": "统一价格（每人）",
+			"save_failed": "保存失败，请重试",
+			"delete_preset": "删除套餐",
+			"items_empty": "暂无菜品 - 从菜单中添加",
+			"add_item": "添加菜品",
+			"add_item_title": "将菜品加入套餐",
+			"already_added": "已添加",
+			"col_food": "菜品",
+			"col_variant": "规格",
+			"col_price": "价格",
+			"col_qty": "数量",
+			"remove_item": "移除",
+			"bulk_remove_desc": "所选菜品将从此套餐中移除。"
+		},
+		"event": {
+			"context": "活动范围",
+			"viewing_past": "正在查看过往活动",
+			"action_failed": "无法更新活动",
+			"renamed": "活动已重命名",
+			"pin_rerolled": "已生成新的 PIN 码",
+			"activated": "“{{name}}”现已开始",
+			"untitled": "未命名活动",
+			"pin_label": "PIN 码",
+			"live": "进行中",
+			"past": "已结束",
+			"name_label": "活动名称",
+			"name_placeholder": "为这个活动命名",
+			"reroll_pin": "生成新的 PIN 码",
+			"make_live": "设为进行中",
+			"reroll_confirm_title": "生成新的 PIN 码？",
+			"reroll_confirm_body": "PIN 码 {{pin}} 将失效。已保存该码的客人需要输入新的 PIN 码。",
+			"activate_confirm_title": "将此活动设为进行中？",
+			"activate_confirm_body": "客人将看到“{{name}}”的餐桌，并需要 PIN 码 {{pin}}。当前进行中的活动将变为过往活动。"
+		},
+		"edit_mode": {
+			"label": "编辑模式",
+			"on": "编辑中"
 		}
 	}
 }

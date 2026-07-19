@@ -7,6 +7,8 @@
  */
 
 export interface TableDto {
+  /** @nullable */
+  slotId?: string | null;
   id: string;
   name: string;
   capacity: number;
@@ -19,6 +21,10 @@ export interface TableDto {
   y?: number | null;
   /** @nullable */
   tableLeaderId?: string | null;
+  /** @nullable */
+  tableLeaderName?: string | null;
+  /** Seated people whose name matched the current search */
+  matchedPeople?: string[];
   /** @nullable */
   eventId?: string | null;
 }

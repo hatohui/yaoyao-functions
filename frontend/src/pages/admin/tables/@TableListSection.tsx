@@ -6,12 +6,14 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
+import { EditableName } from '@/components/common/EditableName'
 import { cn } from '@/utils/shadcn'
 
 interface TableListSectionProps {
 	tables: TableDto[]
 	isLoading: boolean
 	showMoveToStaging?: boolean
+	onRename: (id: string, name: string) => void
 	onBulkDelete: (ids: string[]) => void
 	onMoveToStaging?: (ids: string[]) => void
 }
@@ -20,6 +22,7 @@ export function TableListSection({
 	tables,
 	isLoading,
 	showMoveToStaging,
+	onRename,
 	onBulkDelete,
 	onMoveToStaging,
 }: TableListSectionProps) {
@@ -90,8 +93,15 @@ export function TableListSection({
 								onCheckedChange={() => toggle(table.id)}
 							/>
 							<div className='flex flex-1 items-center justify-between gap-2'>
-								<span className='font-medium text-foreground'>
-									{table.name}
+								<span className='flex min-w-0 items-center gap-2'>
+									<span className='flex size-6 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-semibold text-muted-foreground'>
+										{table.no}
+									</span>
+									<EditableName
+										value={table.name}
+										onSave={name => onRename(table.id, name)}
+										className='font-medium text-foreground'
+									/>
 								</span>
 								<span
 									className={cn(

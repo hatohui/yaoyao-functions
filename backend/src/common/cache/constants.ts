@@ -1,8 +1,16 @@
 export const CacheSettings = {
   food: {
     all: {
-      key: (lang: string, page: number, count: number, categoryId: string) =>
-        `foods:${lang}:${page}:${count}:${categoryId}`,
+      key: (
+        lang: string,
+        page: number,
+        count: number,
+        categoryId: string,
+        sortBy: string,
+        sortOrder: string,
+        popular: string,
+      ) =>
+        `foods:${lang}:${page}:${count}:${categoryId}:${sortBy}:${sortOrder}:${popular}`,
       ttl: 1800,
     },
     popular: {

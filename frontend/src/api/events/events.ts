@@ -28,7 +28,8 @@ import type {
   AssignPresetDto,
   EventDto,
   EventSummaryDto,
-  PublishEventDto
+  PublishEventDto,
+  UpdateEventDto
 } from '../model';
 
 import { customInstance } from '../../common/axios';
@@ -294,7 +295,65 @@ export function useGetEventById<TData = Awaited<ReturnType<typeof getEventById>>
 
 
 
-export const publishEvent = (
+export const updateEvent = (
+    id: string,
+    updateEventDto: UpdateEventDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<EventDto>(
+      {url: `/api/events/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: updateEventDto, signal
+    },
+      );
+    }
+
+
+
+export const getUpdateEventMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError,{id: string;data: UpdateEventDto}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError,{id: string;data: UpdateEventDto}, TContext> => {
+
+const mutationKey = ['updateEvent'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateEvent>>, {id: string;data: UpdateEventDto}> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  updateEvent(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateEventMutationResult = NonNullable<Awaited<ReturnType<typeof updateEvent>>>
+    export type UpdateEventMutationBody = UpdateEventDto
+    export type UpdateEventMutationError = unknown
+
+    export const useUpdateEvent = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateEvent>>, TError,{id: string;data: UpdateEventDto}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof updateEvent>>,
+        TError,
+        {id: string;data: UpdateEventDto},
+        TContext
+      > => {
+      return useMutation(getUpdateEventMutationOptions(options), queryClient);
+    }
+    export const publishEvent = (
     publishEventDto: PublishEventDto,
  signal?: AbortSignal
 ) => {
@@ -408,4 +467,114 @@ const {mutation: mutationOptions} = options ?
         TContext
       > => {
       return useMutation(getAssignEventPresetMutationOptions(options), queryClient);
+    }
+    export const rerollEventPin = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<EventDto>(
+      {url: `/api/events/${id}/pin/reroll`, method: 'POST', signal
+    },
+      );
+    }
+
+
+
+export const getRerollEventPinMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rerollEventPin>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof rerollEventPin>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['rerollEventPin'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof rerollEventPin>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  rerollEventPin(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type RerollEventPinMutationResult = NonNullable<Awaited<ReturnType<typeof rerollEventPin>>>
+
+    export type RerollEventPinMutationError = unknown
+
+    export const useRerollEventPin = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof rerollEventPin>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof rerollEventPin>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getRerollEventPinMutationOptions(options), queryClient);
+    }
+    export const activateEvent = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<EventDto>(
+      {url: `/api/events/${id}/activate`, method: 'POST', signal
+    },
+      );
+    }
+
+
+
+export const getActivateEventMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateEvent>>, TError,{id: string}, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof activateEvent>>, TError,{id: string}, TContext> => {
+
+const mutationKey = ['activateEvent'];
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof activateEvent>>, {id: string}> = (props) => {
+          const {id} = props ?? {};
+
+          return  activateEvent(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ActivateEventMutationResult = NonNullable<Awaited<ReturnType<typeof activateEvent>>>
+
+    export type ActivateEventMutationError = unknown
+
+    export const useActivateEvent = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof activateEvent>>, TError,{id: string}, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof activateEvent>>,
+        TError,
+        {id: string},
+        TContext
+      > => {
+      return useMutation(getActivateEventMutationOptions(options), queryClient);
     }

@@ -4,18 +4,33 @@ import { Map } from 'lucide-react'
 import { Spinner } from '@/components/ui/spinner'
 import { SearchBar } from '@/components/common/SearchBar'
 import { PaginationBar } from '@/components/common/PaginationBar'
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select'
 import { TableList } from './@TableList'
 import { useTableSearch } from './@useTableSearch'
 import { useConfig } from '@/hooks/useConfig'
 
 export default function TablesPage() {
 	const { t } = useTranslation()
-	const { search, setSearch, tables, isLoading, isError, pagination } =
-		useTableSearch()
+	const {
+		search,
+		setSearch,
+		filter,
+		setFilter,
+		tables,
+		isLoading,
+		isError,
+		pagination,
+	} = useTableSearch()
 	const { floorPlan } = useConfig()
 
 	return (
-		<div className='mx-auto flex max-w-2xl flex-col gap-4 px-4 py-6'>
+		<div className='mx-auto flex max-w-5xl flex-col gap-4 px-4 py-6'>
 			<div className='flex items-center justify-between'>
 				<h1 className='text-xl font-bold text-foreground'>
 					{t('tables.find_title')}
@@ -31,11 +46,28 @@ export default function TablesPage() {
 				)}
 			</div>
 
-			<SearchBar
-				value={search}
-				onChange={setSearch}
-				placeholder={t('tables.search_placeholder')}
-			/>
+			<div className='flex flex-wrap items-center gap-2'>
+				<SearchBar
+					value={search}
+					onChange={setSearch}
+					placeholder={t('tables.search_placeholder')}
+					className='flex-1'
+				/>
+				<Select
+					value={filter}
+					onValueChange={v => setFilter(v as typeof filter)}
+				>
+					<SelectTrigger className='rounded-full'>
+						<SelectValue />
+					</SelectTrigger>
+					<SelectContent>
+						<SelectItem value='all'>{t('tables.filter_all')}</SelectItem>
+						<SelectItem value='free'>{t('tables.filter_free')}</SelectItem>
+						<SelectItem value='full'>{t('tables.filter_full')}</SelectItem>
+						<SelectItem value='hosted'>{t('tables.filter_hosted')}</SelectItem>
+					</SelectContent>
+				</Select>
+			</div>
 
 			<p className='text-xs font-medium uppercase tracking-wide text-muted-foreground'>
 				{t('tables.all_tables')}

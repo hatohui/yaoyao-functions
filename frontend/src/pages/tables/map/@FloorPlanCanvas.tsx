@@ -9,7 +9,7 @@ interface FloorPlanCanvasProps {
 }
 
 // x/y are treated as percentages (0-100) of the canvas, so the same layout
-// scales to any container size — the future admin floor-plan editor must save
+// scales to any container size - the future admin floor-plan editor must save
 // positions on this same convention.
 export function FloorPlanCanvas({ tables }: FloorPlanCanvasProps) {
 	const { t } = useTranslation()

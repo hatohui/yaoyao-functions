@@ -168,28 +168,38 @@ async function seedTables() {
     path.join(DATA_DIR, 'tables.json'),
   );
 
+  // Slots are the permanent floor plan; a Table is this event's seating at one.
   for (let i = 0; i < tables.length; i++) {
     const t = tables[i];
-    const id = `${SEED_EVENT_ID}-table-${i + 1}`;
+    const no = i + 1;
+    const slotId = `slot-${no}`;
+
+    await prisma.tableSlot.upsert({
+      where: { id: slotId },
+      update: { no, name: t.name, defaultCapacity: t.capacity },
+      create: { id: slotId, no, name: t.name, defaultCapacity: t.capacity },
+    });
+
+    const id = `${SEED_EVENT_ID}-table-${no}`;
     await prisma.table.upsert({
       where: { id },
-      update: { name: t.name, capacity: t.capacity, no: i + 1 },
+      update: { capacity: t.capacity, slotId },
       create: {
         id,
-        name: t.name,
+        slotId,
         capacity: t.capacity,
-        no: i + 1,
         eventId: SEED_EVENT_ID,
       },
     });
   }
 
-  console.log(`✓ Tables (${tables.length})`);
+  console.log(`✓ Table slots + tables (${tables.length})`);
 }
 
 async function seedFoods(categoryIds: Record<string, string>) {
   const foodFiles = readFoodFiles();
   let totalFoods = 0;
+  let skipped = 0;
 
   for (const file of foodFiles) {
     const categoryId = categoryIds[file.key];
@@ -199,6 +209,19 @@ async function seedFoods(categoryIds: Record<string, string>) {
     }
 
     for (const food of file.items) {
+
+      const englishName = food.translations?.en?.name;
+      if (englishName) {
+        const existing = await prisma.foodTranslation.findFirst({
+          where: { language: 'en', name: englishName },
+          select: { foodId: true },
+        });
+        if (existing) {
+          skipped++;
+          continue;
+        }
+      }
+
       const foodId = uuidv4();
 
       await prisma.food.create({
@@ -209,33 +232,33 @@ async function seedFoods(categoryIds: Record<string, string>) {
           isAvailable: true,
           variants: food.variants
             ? {
-                create: food.variants.map((v) => ({
-                  id: uuidv4(),
-                  price: v.price ?? null,
-                  currency: v.currency ?? 'RM',
-                  isSeasonal: v.isSeasonal ?? false,
-                  isAvailable: true,
-                  translations: v.translations
-                    ? {
-                        create: Object.entries(v.translations)
-                          .filter(([, t]) => t.label)
-                          .map(([lang, t]) => ({
-                            language: lang,
-                            label: t.label,
-                          })),
-                      }
-                    : undefined,
-                })),
-              }
+              create: food.variants.map((v) => ({
+                id: uuidv4(),
+                price: v.price ?? null,
+                currency: v.currency ?? 'RM',
+                isSeasonal: v.isSeasonal ?? false,
+                isAvailable: true,
+                translations: v.translations
+                  ? {
+                    create: Object.entries(v.translations)
+                      .filter(([, t]) => t.label)
+                      .map(([lang, t]) => ({
+                        language: lang,
+                        label: t.label,
+                      })),
+                  }
+                  : undefined,
+              })),
+            }
             : undefined,
           translations: food.translations
             ? {
-                create: Object.entries(food.translations).map(([lang, t]) => ({
-                  language: lang,
-                  name: t.name,
-                  description: t.description ?? null,
-                })),
-              }
+              create: Object.entries(food.translations).map(([lang, t]) => ({
+                language: lang,
+                name: t.name,
+                description: t.description ?? null,
+              })),
+            }
             : undefined,
         },
       });
@@ -244,7 +267,165 @@ async function seedFoods(categoryIds: Record<string, string>) {
     }
   }
 
-  console.log(`✓ Foods (${totalFoods} across ${foodFiles.length} categories)`);
+  console.log(
+    `✓ Foods (${totalFoods} new across ${foodFiles.length} categories${skipped > 0 ? `, ${skipped} already present` : ''
+    })`,
+  );
+}
+
+const SAMPLE_NAMES = [
+  'Wei Ling', 'Aaron', 'Siti', 'Kai', 'Mei Xin', 'Daniel', 'Priya', 'Hakim',
+  'Jia Hui', 'Farah', 'Ryan', 'Nadia', 'Chee Keong', 'Amira', 'Josh', 'Yun Er',
+  'Rahul', 'Bao Zhen', 'Lina', 'Marcus',
+];
+
+const SAMPLE_NOTES = [
+  "can't eat shrimp",
+  'no peanuts please',
+  'vegetarian tonight',
+  'extra spicy for me',
+];
+
+const SAMPLE_FEEDBACK = [
+  { by: 'Wei Ling', content: 'the la-la was unreal, please make it again' },
+  { by: 'Aaron', content: 'whoever ordered 3 plates of omelette - respect' },
+  { by: null, content: 'table 4 had the best seats, no notes' },
+  { by: 'Priya', content: 'came for the food, stayed for the arguing over splits' },
+  { by: 'Kai', content: 'the yam basket disappeared in 90 seconds' },
+];
+
+/** Seats people across the first several tables and marks a couple of hosts. */
+async function seedPeople() {
+  const tables = await prisma.table.findMany({
+    where: { eventId: SEED_EVENT_ID },
+    orderBy: { slot: { no: 'asc' } },
+    select: { id: true, capacity: true },
+  });
+  if (tables.length === 0) return [];
+
+  const created: { id: string; tableId: string }[] = [];
+  let cursor = 0;
+
+  for (let i = 0; i < Math.min(tables.length, 8); i++) {
+    const table = tables[i];
+    const seats = Math.min(table.capacity, 2 + (i % 3));
+
+    for (let s = 0; s < seats; s++) {
+      const name = SAMPLE_NAMES[cursor % SAMPLE_NAMES.length];
+      cursor++;
+      const id = `${SEED_EVENT_ID}-person-${cursor}`;
+      await prisma.people.upsert({
+        where: { id },
+        update: { name, tableId: table.id, eventId: SEED_EVENT_ID },
+        create: { id, name, tableId: table.id, eventId: SEED_EVENT_ID },
+      });
+      created.push({ id, tableId: table.id });
+    }
+
+    // every other table gets a host, so the badge/filter have something to show
+    if (i % 2 === 0) {
+      const first = created.find((p) => p.tableId === table.id);
+      if (first) {
+        await prisma.table.update({
+          where: { id: table.id },
+          data: { tableLeaderId: first.id },
+        });
+      }
+    }
+  }
+
+  console.log(`✓ People (${created.length})`);
+  return created;
+}
+
+async function seedNotes(people: { id: string }[]) {
+  for (let i = 0; i < Math.min(SAMPLE_NOTES.length, people.length); i++) {
+    const id = `${SEED_EVENT_ID}-note-${i + 1}`;
+    await prisma.personalNote.upsert({
+      where: { id },
+      update: { content: SAMPLE_NOTES[i], personId: people[i].id },
+      create: { id, content: SAMPLE_NOTES[i], personId: people[i].id },
+    });
+  }
+  console.log(`✓ Personal notes (${Math.min(SAMPLE_NOTES.length, people.length)})`);
+}
+
+/** Mixes whole-table orders with subset splits so cost-splitting views have data. */
+async function seedOrders(people: { id: string; tableId: string }[]) {
+  const variants = await prisma.foodVariant.findMany({
+    where: { isAvailable: true, price: { not: null } },
+    select: { id: true, price: true },
+    take: 40,
+  });
+  if (variants.length === 0) return;
+
+  const tableIds = [...new Set(people.map((p) => p.tableId))];
+  let n = 0;
+
+  for (let i = 0; i < tableIds.length; i++) {
+    const tableId = tableIds[i];
+    const seated = people.filter((p) => p.tableId === tableId);
+
+    for (let j = 0; j < 3; j++) {
+      const variant = variants[(i * 3 + j) % variants.length];
+      n++;
+      const id = `${SEED_EVENT_ID}-order-${n}`;
+      const splitAll = j !== 2;
+
+      await prisma.order.upsert({
+        where: { id },
+        update: {},
+        create: {
+          id,
+          tableId,
+          variantId: variant.id,
+          eventId: SEED_EVENT_ID,
+          quantity: 1 + (j % 3),
+          price: variant.price ?? 0,
+          splitAll,
+        },
+      });
+
+      // the non-shared one is split across a subset of the table
+      if (!splitAll && seated.length > 0) {
+        const subset = seated.slice(0, Math.max(1, Math.ceil(seated.length / 2)));
+        for (const person of subset) {
+          await prisma.orderSplit.upsert({
+            where: { orderId_personId: { orderId: id, personId: person.id } },
+            update: {},
+            create: { orderId: id, personId: person.id },
+          });
+        }
+      }
+    }
+  }
+
+  console.log(`✓ Orders (${n})`);
+}
+
+async function seedFeedback() {
+  for (let i = 0; i < SAMPLE_FEEDBACK.length; i++) {
+    const entry = SAMPLE_FEEDBACK[i];
+    const id = `${SEED_EVENT_ID}-feedback-${i + 1}`;
+    await prisma.feedback.upsert({
+      where: { id },
+      update: { by: entry.by, content: entry.content },
+      create: { id, by: entry.by, content: entry.content, eventId: SEED_EVENT_ID },
+    });
+
+    for (const [emoji, count] of [
+      ['👍', 3 - (i % 3)],
+      ['🔥', (i * 2) % 5],
+    ] as const) {
+      if (count <= 0) continue;
+      await prisma.feedbackReaction.upsert({
+        where: { feedbackId_emoji: { feedbackId: id, emoji } },
+        update: { count },
+        create: { feedbackId: id, emoji, count },
+      });
+    }
+  }
+  console.log(`✓ Feedback (${SAMPLE_FEEDBACK.length})`);
 }
 
 async function main() {
@@ -260,10 +441,14 @@ async function main() {
     console.log('\n🧪 Seeding sample data...\n');
     await seedEvent();
     await seedTables();
+    const people = await seedPeople();
+    await seedNotes(people);
+    await seedOrders(people);
+    await seedFeedback();
   }
 
   console.log(
-    `\n✅ Seed complete!${withSampleData ? '' : ' (core only — pass --with-sample-data for demo content)'}`,
+    `\n✅ Seed complete!${withSampleData ? '' : ' (core only - pass --with-sample-data for demo content)'}`,
   );
 }
 

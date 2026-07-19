@@ -20,6 +20,8 @@ export default function FoodDetailPage() {
 		tableId,
 		selectTable,
 		handleDone,
+		updateFood,
+		updateVariant,
 	} = useFoodDetail()
 
 	if (isLoading) {
@@ -44,6 +46,8 @@ export default function FoodDetailPage() {
 				food={food}
 				availableVariants={availableVariants}
 				onAdd={openPicker}
+				onUpdateFood={updateFood}
+				onUpdateVariant={updateVariant}
 			/>
 
 			<TablePickerModal

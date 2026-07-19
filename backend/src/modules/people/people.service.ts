@@ -6,6 +6,7 @@ import {
 import { prisma } from '../../libs/prisma';
 import { v4 as uuidv4 } from 'uuid';
 import { CreatePersonDto } from './dto/create-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
 
 @Injectable()
 export class PeopleService {
@@ -42,6 +43,12 @@ export class PeopleService {
         eventId: table.eventId,
       },
     });
+  }
+
+  async update(id: string, dto: UpdatePersonDto) {
+    const person = await prisma.people.findUnique({ where: { id } });
+    if (!person) throw new NotFoundException('Person not found');
+    return prisma.people.update({ where: { id }, data: dto });
   }
 
   async remove(id: string) {

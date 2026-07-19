@@ -26,9 +26,11 @@ export class StatsService {
     return names;
   }
 
-  async popular(scope: 'event' | 'all', lang = 'en') {
+  async popular(scope: 'event' | 'all', lang = 'en', forEventId?: string) {
     const eventId =
-      scope === 'event' ? await this.events.getActiveId() : undefined;
+      scope === 'event'
+        ? await this.events.resolveEventId(forEventId)
+        : undefined;
     if (scope === 'event' && !eventId) return [];
 
     const grouped = await prisma.order.groupBy({
@@ -51,14 +53,15 @@ export class StatsService {
     }));
   }
 
-  async tableTotals() {
-    const eventId = await this.events.getActiveId();
+  async tableTotals(forEventId?: string) {
+    const eventId = await this.events.resolveEventId(forEventId);
     if (!eventId) return [];
 
     const tables = await prisma.table.findMany({
       where: { eventId, isStaging: false },
-      orderBy: { no: 'asc' },
+      orderBy: { slot: { no: 'asc' } },
       include: {
+        slot: { select: { no: true, name: true } },
         orders: {
           select: {
             price: true,
@@ -71,7 +74,8 @@ export class StatsService {
 
     const rows = tables.map((t) => ({
       tableId: t.id,
-      name: t.name,
+      name: t.slot?.name ?? '',
+      no: t.slot?.no ?? -1,
       total: t.orders.reduce(
         (sum, o) =>
           o.variant.food.shouldCalculate
@@ -93,8 +97,14 @@ export class StatsService {
     }));
   }
 
-  async peopleList(page = 1, count = 20, search?: string, lang = 'en') {
-    const eventId = await this.events.getActiveId();
+  async peopleList(
+    page = 1,
+    count = 20,
+    search?: string,
+    lang = 'en',
+    forEventId?: string,
+  ) {
+    const eventId = await this.events.resolveEventId(forEventId);
     if (!eventId) return { people: [], total: 0 };
 
     const where = {
@@ -121,7 +131,8 @@ export class StatsService {
         include: {
           table: {
             select: {
-              name: true,
+              id: true,
+              slot: { select: { name: true } },
               orders: { where: { splitAll: true }, include: foodInclude },
             },
           },
@@ -145,7 +156,8 @@ export class StatsService {
       return {
         id: p.id,
         name: p.name,
-        tableName: p.table?.name ?? null,
+        tableName: p.table?.slot?.name ?? null,
+        tableId: p.table?.id ?? null,
         ordered,
         note: p.personalNotes[0]?.content ?? null,
       };

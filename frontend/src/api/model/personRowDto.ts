@@ -11,6 +11,8 @@ export interface PersonRowDto {
   name: string;
   /** @nullable */
   tableName?: string | null;
+  /** @nullable */
+  tableId?: string | null;
   ordered: string[];
   /** @nullable */
   note?: string | null;

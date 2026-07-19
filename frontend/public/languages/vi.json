@@ -22,7 +22,8 @@
 		"confirm": "Xác nhận",
 		"cancel": "Hủy",
 		"save": "Lưu",
-		"loading": "Đang tải…"
+		"loading": "Đang tải…",
+		"rename": "Đổi tên"
 	},
 	"health": {
 		"title": "Sức Khỏe Hệ Thống",
@@ -51,10 +52,12 @@
 	},
 	"nav": {
 		"menu": "Thực Đơn",
+		"about": "Giới thiệu",
 		"dev": "Dev",
 		"tables": "Bàn",
 		"feedback": "Góp ý",
-		"admin": "Quản trị"
+		"admin": "Quản trị",
+		"open_menu": "Mở menu"
 	},
 	"access": {
 		"back": "Quay lại",
@@ -71,27 +74,34 @@
 		"all_tables": "Tất cả bàn",
 		"full": "đầy",
 		"load_error": "Không tải được bàn. Hãy làm mới.",
-		"none_found": "Không tìm thấy bàn nào"
+		"none_found": "Không tìm thấy bàn nào",
+		"no_host": "Chưa có chủ bàn",
+		"filter_all": "Tất cả bàn",
+		"filter_free": "Còn chỗ",
+		"filter_full": "Đã đầy",
+		"filter_hosted": "Có chủ bàn"
 	},
 	"roster": {
 		"people_here": "Mọi người tại bàn này",
-		"empty": "Chưa có ai — thêm tên đầu tiên",
+		"empty": "Chưa có ai - thêm tên đầu tiên",
 		"host": "chủ bàn",
 		"remove": "Xóa",
 		"add_placeholder": "Nhập tên, nhấn Enter…",
 		"remove_title": "Xóa {{name}} khỏi {{table}}?",
-		"remove_desc": "Không thể hoàn tác — họ sẽ không còn trong danh sách bàn này.",
+		"remove_desc": "Không thể hoàn tác - họ sẽ không còn trong danh sách bàn này.",
 		"link_copied": "Đã sao chép liên kết",
 		"share": "Chia sẻ",
 		"not_found": "Không tìm thấy bàn",
-		"add_failed": "Không thêm được — bàn có thể đã đầy",
-		"remove_failed": "Không xóa được, vui lòng thử lại"
+		"add_failed": "Không thêm được - bàn có thể đã đầy",
+		"remove_failed": "Không xóa được, vui lòng thử lại",
+		"update_failed": "Không thể cập nhật bàn",
+		"set_host": "Đặt làm chủ bàn",
+		"unset_host": "Bỏ chủ bàn"
 	},
 	"menu": {
 		"restaurant_name": "高人馆",
 		"restaurant_en": "Gao Ren Guan",
 		"restaurant_location": "Puchong Jaya",
-		"dishes_available": "{{count}} món ăn có sẵn",
 		"search_placeholder": "Tìm món ăn…",
 		"all_categories": "Tất cả",
 		"no_dishes_title": "Không tìm thấy món ăn",
@@ -105,6 +115,10 @@
 		"showing": "Hiển thị {{from}}–{{to}} trong {{total}} món",
 		"unavailable": "Không có sẵn",
 		"popular": "Phổ biến",
+		"sort_name": "Tên (A–Z)",
+		"sort_price": "Giá (thấp đến cao)",
+		"sort_popular": "Phổ biến nhất",
+		"count_all": "Tất cả",
 		"select_item": "Chọn món này",
 		"selected_count": "Đã chọn {{count}}",
 		"clear_selection": "Bỏ chọn",
@@ -115,11 +129,23 @@
 		"added_to_order": "Đã thêm vào đơn",
 		"add_failed": "Không thêm được, vui lòng thử lại"
 	},
+	"about": {
+		"hero_tag": "🐾 Một đêm tiệc furry",
+		"location_title": "Tìm chúng tôi ở đâu",
+		"address_label": "Địa chỉ",
+		"address": "12 Jalan Furries 3/4, Puchong Jaya, 47100 Selangor, Malaysia",
+		"get_directions": "Chỉ đường",
+		"details_tag": "🐾 Chuyện hậu trường",
+		"details_title": "Về YaoYao Dinner",
+		"details_body_1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+		"details_body_2": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+	},
 	"food_detail": {
 		"back_to_menu": "Về thực đơn",
 		"variants": "Tùy chọn",
 		"add_to_order": "Thêm vào đơn",
-		"not_found": "Không tìm thấy món ăn"
+		"not_found": "Không tìm thấy món ăn",
+		"description_placeholder": "Thêm mô tả"
 	},
 	"tabs": {
 		"people": "Mọi người",
@@ -133,12 +159,30 @@
 		"unknown_person": "Ai đó",
 		"remove": "Xóa",
 		"remove_title": "Xóa {{name}}?",
-		"remove_desc": "Không thể hoàn tác — món này sẽ bị xóa khỏi đơn của bàn.",
-		"empty": "Chưa có đơn nào — hãy thêm món từ thực đơn",
+		"remove_desc": "Không thể hoàn tác - món này sẽ bị xóa khỏi đơn của bàn.",
+		"empty": "Chưa có đơn nào - hãy thêm món từ thực đơn",
 		"total": "Tổng của bàn",
 		"quantity": "Số lượng",
 		"update_failed": "Không cập nhật được, vui lòng thử lại",
-		"remove_failed": "Không xóa được, vui lòng thử lại"
+		"remove_failed": "Không xóa được, vui lòng thử lại",
+		"add_order": "Thêm món",
+		"cart": "Giỏ",
+		"cart_empty": "Chưa thêm gì",
+		"clear_cart": "Xoá hết",
+		"place_order": "Đặt món",
+		"placing": "Đang đặt…",
+		"placed": "Đã thêm vào bàn",
+		"place_failed": "Không thể thêm vào bàn",
+		"add": "Thêm",
+		"remove_from_cart": "Xoá khỏi giỏ",
+		"increase": "Tăng số lượng",
+		"decrease": "Giảm số lượng",
+		"split_as": "Chia:",
+		"free": "Miễn phí",
+		"view_cart": "Giỏ ({{count}})",
+		"needs_people_title": "Chưa có ai ngồi ở đây",
+		"needs_people_body": "Hãy thêm người vào bàn trước khi gọi món — món ăn thuộc về những người ngồi ở đó.",
+		"seat_someone": "Thêm người"
 	},
 	"split": {
 		"title": "Chia món này",
@@ -147,7 +191,10 @@
 		"choose_people": "Chọn người",
 		"empty": "Chưa có đơn nào",
 		"you": "Bạn",
-		"free_badge": "Miễn phí"
+		"free_badge": "Miễn phí",
+		"your_share": "Phần của bạn",
+		"quantity": "Số lượng",
+		"people_count": "{{count}} người"
 	},
 	"notes": {
 		"title": "Ghi chú của {{name}}",
@@ -163,7 +210,7 @@
 		"anonymous": "Ẩn danh",
 		"sort_recent": "Mới nhất",
 		"sort_top": "Nổi bật",
-		"empty": "Chưa có góp ý nào — hãy là người đầu tiên"
+		"empty": "Chưa có góp ý nào - hãy là người đầu tiên"
 	},
 	"floor_plan": {
 		"title": "Sơ đồ bàn",
@@ -242,7 +289,9 @@
 			"people": "Mọi người",
 			"stats": "Thống kê",
 			"feedback": "Phản hồi",
-			"settings": "Cài đặt"
+			"settings": "Cài đặt",
+			"collapse": "Thu gọn thanh bên",
+			"expand": "Mở rộng thanh bên"
 		},
 		"dashboard": {
 			"title": "Bảng điều khiển",
@@ -280,7 +329,7 @@
 			"selected_count": "Đã chọn {{count}}",
 			"bulk_create": "Tạo hàng loạt",
 			"bulk_create_title": "Tạo nhiều bàn cùng lúc",
-			"bulk_create_desc": "Bàn sẽ được tự động đánh số (Bàn 1, Bàn 2, ...) — bạn có thể đổi tên sau.",
+			"bulk_create_desc": "Bàn sẽ được tự động đánh số (Bàn 1, Bàn 2, ...) - bạn có thể đổi tên sau.",
 			"count": "Số lượng",
 			"created": "Đã tạo bàn",
 			"bulk_created": "Đã tạo các bàn",
@@ -289,12 +338,13 @@
 			"delete_failed": "Không xóa được, vui lòng thử lại",
 			"delete_selected": "Xóa",
 			"bulk_delete_title": "Xóa {{count}} bàn?",
-			"bulk_delete_desc": "Không thể hoàn tác — các bàn cùng danh sách người/đơn hàng sẽ bị xóa.",
+			"bulk_delete_desc": "Không thể hoàn tác - các bàn cùng danh sách người/đơn hàng sẽ bị xóa.",
 			"move_to_staging": "Chuyển về chuẩn bị",
-			"moved_to_staging": "Đã chuyển về chuẩn bị"
+			"moved_to_staging": "Đã chuyển về chuẩn bị",
+			"rename_failed": "Không thể đổi tên bàn"
 		},
 		"floor_plan": {
-			"drag_hint": "Kéo bàn vào đúng vị trí trên sơ đồ — vị trí sẽ tự lưu khi bạn thả."
+			"drag_hint": "Kéo bàn vào đúng vị trí trên sơ đồ - vị trí sẽ tự lưu khi bạn thả."
 		},
 		"people": {
 			"title": "Mọi người",
@@ -303,7 +353,10 @@
 			"name": "Tên",
 			"table": "Bàn",
 			"ordered": "Đã gọi món",
-			"note": "Ghi chú"
+			"note": "Ghi chú",
+			"note_placeholder": "Thêm ghi chú",
+			"note_save_failed": "Không thể lưu ghi chú",
+			"update_failed": "Không thể lưu, vui lòng thử lại"
 		},
 		"stats": {
 			"title": "Thống kê",
@@ -317,7 +370,6 @@
 		},
 		"feedback": {
 			"title": "Phản hồi",
-			"select_event": "Chọn một sự kiện",
 			"reaction_count": "{{count}} lượt thả cảm xúc"
 		},
 		"settings": {
@@ -348,14 +400,62 @@
 			"save_failed": "Không lưu được, vui lòng thử lại",
 			"delete": "Xóa",
 			"delete_title": "Xóa {{name}}?",
-			"delete_desc": "Không thể hoàn tác. Món đã có lịch sử đặt hàng không thể xóa — hãy tắt trạng thái có sẵn thay vào đó.",
+			"delete_desc": "Không thể hoàn tác. Món đã có lịch sử đặt hàng không thể xóa - hãy tắt trạng thái có sẵn thay vào đó.",
 			"bulk_enable": "Bật",
 			"bulk_disable": "Tắt",
-			"bulk_delete_desc": "Không thể hoàn tác — các món đã có lịch sử đặt hàng sẽ được bỏ qua.",
+			"bulk_delete_desc": "Không thể hoàn tác - các món đã có lịch sử đặt hàng sẽ được bỏ qua.",
 			"add_variant": "Thêm biến thể",
 			"variant_label_placeholder": "Nhãn",
 			"variant_price_placeholder": "Giá",
-			"default_variant_label": "Thường"
+			"default_variant_label": "Thường",
+			"description": "Mô tả",
+			"currency": "Đơn vị"
+		},
+		"presets": {
+			"title": "Thực đơn cố định",
+			"new": "Thực đơn mới",
+			"empty": "Chưa có thực đơn cố định nào - tạo một cái để bắt đầu",
+			"menu_label": "Thực đơn {{idx}}",
+			"active": "Đang dùng",
+			"activate": "Đặt làm đang dùng",
+			"deactivate": "Ngừng dùng",
+			"price_label": "Giá trọn gói (mỗi người)",
+			"save_failed": "Không lưu được, vui lòng thử lại",
+			"delete_preset": "Xóa thực đơn",
+			"items_empty": "Chưa có món - thêm món từ danh mục",
+			"add_item": "Thêm món",
+			"add_item_title": "Thêm món vào thực đơn",
+			"already_added": "Đã thêm",
+			"col_food": "Món ăn",
+			"col_variant": "Tùy chọn",
+			"col_price": "Giá",
+			"col_qty": "SL",
+			"remove_item": "Xóa",
+			"bulk_remove_desc": "Các món đã chọn sẽ bị xóa khỏi thực đơn này."
+		},
+		"event": {
+			"context": "Bối cảnh sự kiện",
+			"viewing_past": "Đang xem sự kiện đã qua",
+			"action_failed": "Không thể cập nhật sự kiện",
+			"renamed": "Đã đổi tên sự kiện",
+			"pin_rerolled": "Đã tạo mã PIN mới",
+			"activated": "\"{{name}}\" hiện đang diễn ra",
+			"untitled": "Sự kiện chưa đặt tên",
+			"pin_label": "Mã PIN",
+			"live": "Đang diễn ra",
+			"past": "Đã qua",
+			"name_label": "Tên sự kiện",
+			"name_placeholder": "Đặt tên cho sự kiện này",
+			"reroll_pin": "Tạo mã PIN mới",
+			"make_live": "Chuyển sang đang diễn ra",
+			"reroll_confirm_title": "Tạo mã PIN mới?",
+			"reroll_confirm_body": "Mã PIN {{pin}} sẽ ngừng hoạt động. Khách đã lưu mã cũ phải nhập mã mới.",
+			"activate_confirm_title": "Chuyển sự kiện này sang đang diễn ra?",
+			"activate_confirm_body": "Khách sẽ thấy các bàn của \"{{name}}\" và cần mã PIN {{pin}}. Sự kiện đang diễn ra hiện tại sẽ thành sự kiện đã qua."
+		},
+		"edit_mode": {
+			"label": "Chế độ chỉnh sửa",
+			"on": "Đang chỉnh sửa"
 		}
 	}
 }

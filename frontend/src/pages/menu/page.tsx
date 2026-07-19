@@ -4,7 +4,6 @@ import { useGetFoods } from '@/api/foods/foods'
 import { useGetCategories } from '@/api/categories/categories'
 import { usePagination } from '@/hooks/usePagination'
 import { useMenuSearchParams } from '@/utils/searchParams'
-import { HeroSection } from './@HeroSection'
 import { FilterBar } from './@FilterBar'
 import { FoodCard } from './@FoodCard'
 import { SelectionBar } from './@SelectionBar'
@@ -40,9 +39,13 @@ export default function MenuPage() {
 		page: urlPage,
 		count: urlCount,
 		category,
+		sort,
+		popular,
 		setPage: setUrlPage,
 		setCount: setUrlCount,
 		setCategory,
+		setSort,
+		setPopular,
 		resetParams,
 	} = useMenuSearchParams()
 
@@ -72,6 +75,8 @@ export default function MenuPage() {
 				page,
 				count,
 				category: category === 'all' ? undefined : category,
+				sortBy: sort,
+				popular: popular || undefined,
 			},
 			{ query: { staleTime: STALE_TIME_STATIC, refetchOnWindowFocus: false } }
 		)
@@ -101,7 +106,7 @@ export default function MenuPage() {
 		)
 	}, [data?.foods, search])
 
-	const hasFilters = category !== 'all' || search.trim() !== ''
+	const hasFilters = category !== 'all' || search.trim() !== '' || popular
 
 	const handleReset = () => {
 		resetParams()
@@ -112,8 +117,6 @@ export default function MenuPage() {
 
 	return (
 		<div className='min-h-screen bg-background'>
-			<HeroSection totalCount={data?.total} />
-
 			<div className='mx-auto max-w-6xl px-4'>
 				<FilterBar
 					search={search}
@@ -123,6 +126,10 @@ export default function MenuPage() {
 					activeCategory={category}
 					onCategoryChange={setCategory}
 					categories={categories}
+					sort={sort}
+					onSortChange={setSort}
+					popular={popular}
+					onPopularChange={setPopular}
 				/>
 
 				<div className='py-8'>

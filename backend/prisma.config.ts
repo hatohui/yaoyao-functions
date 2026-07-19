@@ -2,7 +2,7 @@ import path from "node:path";
 import { defineConfig } from "prisma/config";
 import { config } from "dotenv";
 
-// prisma.config.ts skips automatic .env loading — load it explicitly
+// prisma.config.ts skips automatic .env loading - load it explicitly
 config({ path: path.join(__dirname, ".env") });
 
 export default defineConfig({

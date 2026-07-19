@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { useAdmin } from '@/hooks/useAdmin'
 import { useIsAdmin } from '@/hooks/useIsAdmin'
+import { useSidebarCollapsed } from '@/hooks/useSidebarCollapsed'
+import { cn } from '@/utils/shadcn'
 import { AdminUnlock } from '@/components/common/AdminUnlock'
 import { Spinner } from '@/components/ui/spinner'
 import { AdminSidebar } from './@AdminSidebar'
+import { EventContextSwitcher } from './@EventContextSwitcher'
 
 const AdminLayout = ({
 	children,
@@ -16,6 +19,8 @@ const AdminLayout = ({
 	const passphrase = useAdmin(s => s.passphrase)
 	const { isAdmin, isVerifying } = useIsAdmin()
 	const [mobileNavOpen, setMobileNavOpen] = useState(false)
+	const collapsed = useSidebarCollapsed(s => s.collapsed)
+	const toggleCollapsed = useSidebarCollapsed(s => s.toggle)
 
 	if (!passphrase) return <AdminUnlock />
 	if (isVerifying) {
@@ -28,13 +33,49 @@ const AdminLayout = ({
 	if (!isAdmin) return <AdminUnlock />
 
 	return (
-		<div className='mx-auto flex max-w-6xl gap-6 px-4 py-6 lg:pl-0'>
-			<aside className='hidden w-56 shrink-0 lg:block'>
+		<div
+			className={cn(
+				'mx-auto flex gap-6 px-4 py-6 transition-[max-width] duration-200 lg:pl-0',
+				collapsed ? 'max-w-[90rem]' : 'max-w-6xl'
+			)}
+		>
+			<aside
+				className={cn(
+					'hidden shrink-0 transition-[width] duration-200 lg:block',
+					collapsed ? 'w-14' : 'w-56'
+				)}
+			>
 				<div className='sticky top-20 flex flex-col gap-4'>
-					<p className='px-4 text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
-						{t('admin.nav.title')}
-					</p>
-					<AdminSidebar />
+					<div
+						className={cn(
+							'flex items-center gap-1',
+							collapsed ? 'justify-center' : 'justify-between px-4'
+						)}
+					>
+						{!collapsed && (
+							<p className='text-xs font-semibold uppercase tracking-wide text-muted-foreground'>
+								{t('admin.nav.title')}
+							</p>
+						)}
+						<button
+							type='button'
+							onClick={toggleCollapsed}
+							title={t(collapsed ? 'admin.nav.expand' : 'admin.nav.collapse')}
+							aria-label={t(
+								collapsed ? 'admin.nav.expand' : 'admin.nav.collapse'
+							)}
+							aria-expanded={!collapsed}
+							className='flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground'
+						>
+							{collapsed ? (
+								<PanelLeftOpen className='size-4' />
+							) : (
+								<PanelLeftClose className='size-4' />
+							)}
+						</button>
+					</div>
+					{!collapsed && <EventContextSwitcher />}
+					<AdminSidebar collapsed={collapsed} />
 				</div>
 			</aside>
 
@@ -58,7 +99,8 @@ const AdminLayout = ({
 				</div>
 
 				{mobileNavOpen && (
-					<div className='mb-4 rounded-2xl border border-border/60 bg-card p-2 shadow-sm lg:hidden'>
+					<div className='mb-4 flex flex-col gap-3 rounded-2xl border border-border/60 bg-card p-2 shadow-sm lg:hidden'>
+						<EventContextSwitcher />
 						<AdminSidebar onNavigate={() => setMobileNavOpen(false)} />
 					</div>
 				)}

@@ -108,6 +108,7 @@ export function PresetItemsGrid({
 				<DataGrid
 					table={table}
 					{...dataGridProps}
+					onRowAdd={undefined}
 					height={480}
 					stretchColumns
 				/>

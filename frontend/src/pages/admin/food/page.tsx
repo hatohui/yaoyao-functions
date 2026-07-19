@@ -30,7 +30,6 @@ export default function AdminFoodPage() {
 		deleteFood,
 		bulkToggle,
 		bulkDelete,
-		addVariant,
 		failedTranslationFood,
 		setFailedTranslationFood,
 		handleSaveTranslations,
@@ -79,9 +78,6 @@ export default function AdminFoodPage() {
 				onDelete={deleteFood}
 				onBulkToggle={bulkToggle}
 				onBulkDelete={bulkDelete}
-				onAddVariant={(foodId, label, price) =>
-					addVariant(foodId, label, price)
-				}
 			/>
 
 			<div className='flex justify-center'>

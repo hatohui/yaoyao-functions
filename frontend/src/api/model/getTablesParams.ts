@@ -8,6 +8,7 @@
 
 export type GetTablesParams = {
 search?: string;
+eventId?: string;
 count?: number;
 page?: number;
 };

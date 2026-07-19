@@ -9,6 +9,7 @@ import {
 	useDeleteTable,
 	useBulkDeleteTables,
 	useReassignTables,
+	useUpdateTable,
 	getGetTablesQueryKey,
 	getGetStagedTablesQueryKey,
 } from '@/api/tables/tables'
@@ -16,6 +17,7 @@ import type { TableDto, TableListDto } from '@/api/model'
 import { usePagination } from '@/hooks/usePagination'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useToast } from '@/hooks/useToast'
+import { useAdminEvents } from '@/hooks/useAdminEvents'
 
 export function useAdminTables() {
 	const { t } = useTranslation()
@@ -26,11 +28,13 @@ export function useAdminTables() {
 	const [total, setTotal] = useState(0)
 	const debouncedSearch = useDebounce(search, 300)
 	const pagination = usePagination({ total, initialCount: 12 })
+	const { scopedEventId, isViewingPast } = useAdminEvents()
 
 	const { data, isLoading: liveLoading } = useGetTables<TableListDto>({
 		page: pagination.page,
 		count: pagination.count,
 		search: debouncedSearch || undefined,
+		eventId: scopedEventId,
 	})
 	const liveTables = data?.tables ?? []
 
@@ -86,6 +90,30 @@ export function useAdminTables() {
 		},
 	})
 
+	const tablesKey = getGetTablesQueryKey()
+
+	const { mutate: renameTable } = useUpdateTable({
+		mutation: {
+			onMutate: async ({ id, data: patch }) => {
+				await qc.cancelQueries({ queryKey: tablesKey })
+				const prev = qc.getQueryData<TableListDto>(tablesKey)
+				if (prev)
+					qc.setQueryData<TableListDto>(tablesKey, {
+						...prev,
+						tables: prev.tables.map(tb =>
+							tb.id === id ? { ...tb, ...patch } : tb
+						),
+					})
+				return { prev }
+			},
+			onError: (_e, _v, ctx) => {
+				qc.setQueryData(tablesKey, ctx?.prev)
+				toast.error(t('admin.tables.rename_failed'))
+			},
+			onSettled: invalidate,
+		},
+	})
+
 	const { mutate: reassign } = useReassignTables({
 		mutation: {
 			onSuccess: () => {
@@ -100,6 +128,7 @@ export function useAdminTables() {
 		search,
 		setSearch,
 		pagination,
+		isViewingPast,
 		liveTables,
 		liveLoading,
 		stagedTables,
@@ -111,6 +140,8 @@ export function useAdminTables() {
 		bulkCreate: (count: number, capacity: number, isStaging: boolean) =>
 			bulkCreate({ data: { count, capacity, isStaging } }),
 		removeTable: (id: string) => deleteTable({ id }),
+		renameTable: (id: string, name: string) =>
+			renameTable({ id, data: { name } }),
 		bulkRemoveTables: (ids: string[]) => bulkDelete({ data: { ids } }),
 		moveToStaging: (ids: string[]) =>
 			reassign({ data: { ids, eventId: null } }),

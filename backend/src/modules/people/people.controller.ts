@@ -11,6 +11,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
+import { UpdatePersonDto } from './dto/update-person.dto';
 import { MovePeopleDto } from './dto/move-people.dto';
 import { PersonDto } from './dto/person-response.dto';
 import { IdsDto } from '@common/dto/ids.dto';
@@ -46,6 +47,14 @@ export class PeopleController {
   @ApiOperation({ operationId: 'bulkDeletePeople' })
   bulkDelete(@Body() dto: IdsDto) {
     return this.people.bulkRemove(dto.ids);
+  }
+
+  @Patch(':id')
+  @UseGuards(AdminGuard)
+  @ApiOperation({ operationId: 'updatePerson' })
+  @ApiResponse({ status: 200, type: PersonDto })
+  update(@Param('id') id: string, @Body() dto: UpdatePersonDto) {
+    return this.people.update(id, dto);
   }
 
   @Delete(':id')

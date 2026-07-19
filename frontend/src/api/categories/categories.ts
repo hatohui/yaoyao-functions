@@ -132,7 +132,7 @@ export const createCategory = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<CategoryItemDto>(
       {url: `/api/categories`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createCategoryDto, signal
@@ -284,7 +284,7 @@ export const updateCategory = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<CategoryItemDto>(
       {url: `/api/categories/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateCategoryDto, signal

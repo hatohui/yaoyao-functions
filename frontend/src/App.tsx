@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import ThemeProvider from './config/theme'
 import { Toaster } from './components/ui/sonner'
+import { TooltipProvider } from './components/ui/tooltip'
 import tanstackConfig from './config/tanstack'
 import { useTranslation } from 'react-i18next'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
@@ -22,8 +23,10 @@ const AppContent = (): React.ReactNode => {
 	return (
 		<QueryClientProvider client={client}>
 			<ThemeProvider>
-				<RouterProvider router={router} />
-				<Toaster richColors position='top-center' />
+				<TooltipProvider>
+					<RouterProvider router={router} />
+					<Toaster richColors position='top-center' />
+				</TooltipProvider>
 			</ThemeProvider>
 			{import.meta.env.DEV && (
 				<TanStackDevtools

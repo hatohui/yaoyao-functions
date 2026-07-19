@@ -13,68 +13,87 @@ const FOOD_CACHE_PREFIX = "foods:";
 
 @Injectable()
 export class FoodService {
-  async getPopularFoodIds(limit = 8): Promise<string[]> {
+  private async getPopularityMap(): Promise<Map<string, number>> {
     const cacheKey = CacheSettings.food.popular.key;
-    const cached = await CacheService.get<string[]>(cacheKey);
-    if (cached) return cached;
+    const cached = await CacheService.get<[string, number][]>(cacheKey);
+    if (cached) return new Map(cached);
 
     const grouped = await prisma.order.groupBy({
       by: ["variantId"],
       _sum: { quantity: true },
     });
 
-    let popular: string[] = [];
+    const perFood = new Map<string, number>();
     if (grouped.length > 0) {
       const variants = await prisma.foodVariant.findMany({
         where: { id: { in: grouped.map((g) => g.variantId) } },
         select: { id: true, foodId: true },
       });
       const variantToFood = new Map(variants.map((v) => [v.id, v.foodId]));
-      const perFood = new Map<string, number>();
       for (const g of grouped) {
         const foodId = variantToFood.get(g.variantId);
         if (!foodId) continue;
         perFood.set(foodId, (perFood.get(foodId) ?? 0) + (g._sum.quantity ?? 0));
       }
-      popular = [...perFood.entries()]
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, limit)
-        .map(([foodId]) => foodId);
     }
 
-    await CacheService.set(cacheKey, popular, CacheSettings.food.popular.ttl);
-    return popular;
+    await CacheService.set(
+      cacheKey,
+      [...perFood.entries()],
+      CacheSettings.food.popular.ttl,
+    );
+    return perFood;
   }
 
-  async findAll(lang = "en", page = 1, count = 20, categoryId = "all") {
+  async getPopularFoodIds(limit = 8): Promise<string[]> {
+    const perFood = await this.getPopularityMap();
+    return [...perFood.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, limit)
+      .map(([foodId]) => foodId);
+  }
+
+  async findAll(
+    lang = "en",
+    page = 1,
+    count = 20,
+    categoryId = "all",
+    sortBy: "name" | "price" | "popular" = "name",
+    sortOrder: "asc" | "desc" = "asc",
+    popularOnly = false,
+  ) {
     const offset = (page - 1) * count;
 
-    const cacheKey = CacheSettings.food.all.key(lang, page, count, categoryId);
+    const cacheKey = CacheSettings.food.all.key(
+      lang,
+      page,
+      count,
+      categoryId,
+      sortBy,
+      sortOrder,
+      popularOnly ? "1" : "0",
+    );
 
     const cachedFoods = await CacheService.get(cacheKey);
     if (cachedFoods) return cachedFoods;
 
+    const popularityMap = await this.getPopularityMap();
+
     const where = {
       isAvailable: true,
       ...(categoryId !== "all" && categoryId !== "" ? { categoryId } : {}),
+      ...(popularOnly ? { id: { in: [...popularityMap.keys()] } } : {}),
     };
 
-    const [rawFoods, total, popularIds] = await Promise.all([
-      prisma.food.findMany({
-        where,
-        skip: offset,
-        take: count,
-        include: {
-          translations: { where: { language: lang } },
-          variants: { where: { isAvailable: true }, orderBy: { price: "asc" } },
-        },
-      }),
-      prisma.food.count({ where }),
-      this.getPopularFoodIds(),
-    ]);
+    const rawFoods = await prisma.food.findMany({
+      where,
+      include: {
+        translations: { where: { language: lang } },
+        variants: { where: { isAvailable: true }, orderBy: { price: "asc" } },
+      },
+    });
 
-    const popular = new Set(popularIds);
-    const foods = rawFoods.map((f) => {
+    const allFoods = rawFoods.map((f) => {
       const t = f.translations[0];
       const defaultVariant = f.variants[0] ?? null;
       return {
@@ -84,13 +103,31 @@ export class FoodService {
         imageUrl: f.imageUrl,
         categoryId: f.categoryId,
         isAvailable: f.isAvailable,
-        isPopular: popular.has(f.id),
+        isPopular: popularityMap.has(f.id),
         defaultVariantId: defaultVariant?.id ?? null,
         price: defaultVariant?.price ? Number(defaultVariant.price) : null,
         currency: defaultVariant?.currency ?? null,
         shouldCalculate: f.shouldCalculate,
       };
     });
+
+    const dir = sortOrder === "desc" ? -1 : 1;
+    allFoods.sort((a, b) => {
+      if (sortBy === "price") {
+        const av = a.price ?? Number.POSITIVE_INFINITY;
+        const bv = b.price ?? Number.POSITIVE_INFINITY;
+        return (av - bv) * dir;
+      }
+      if (sortBy === "popular") {
+        const av = popularityMap.get(a.id) ?? 0;
+        const bv = popularityMap.get(b.id) ?? 0;
+        return (bv - av) * dir;
+      }
+      return a.name.localeCompare(b.name) * dir;
+    });
+
+    const total = allFoods.length;
+    const foods = allFoods.slice(offset, offset + count);
 
     const result = { foods, page, count: foods.length, total };
 
@@ -133,14 +170,25 @@ export class FoodService {
       categoryId: food.categoryId,
       isAvailable: food.isAvailable,
       shouldCalculate: food.shouldCalculate,
-      variants: food.variants.map((v) => ({
-        id: v.id,
-        label: v.translations[0]?.label ?? "",
-        price: v.price ? Number(v.price) : null,
-        currency: v.currency,
-        isSeasonal: v.isSeasonal,
-        isAvailable: v.isAvailable,
-      })),
+      variants: food.variants.map((v) => this.toVariantDto(v)),
+    };
+  }
+
+  private toVariantDto(variant: {
+    id: string;
+    price: unknown;
+    currency: string;
+    isSeasonal: boolean;
+    isAvailable: boolean;
+    translations: { label: string }[];
+  }) {
+    return {
+      id: variant.id,
+      label: variant.translations[0]?.label ?? "",
+      price: variant.price ? Number(variant.price) : null,
+      currency: variant.currency,
+      isSeasonal: variant.isSeasonal,
+      isAvailable: variant.isAvailable,
     };
   }
 
@@ -165,10 +213,10 @@ export class FoodService {
       ...(categoryId !== "all" && categoryId !== "" ? { categoryId } : {}),
       ...(search
         ? {
-            translations: {
-              some: { name: { contains: search, mode: "insensitive" as const } },
-            },
-          }
+          translations: {
+            some: { name: { contains: search, mode: "insensitive" as const } },
+          },
+        }
         : {}),
     };
 
@@ -211,37 +259,36 @@ export class FoodService {
         },
         variants: dto.variants
           ? {
-              create: dto.variants.map((v) => ({
-                id: uuidv4(),
-                price: v.price,
-                currency: v.currency ?? "RM",
-                isSeasonal: v.isSeasonal ?? false,
-                isAvailable: true,
-                translations: {
-                  create: [{ language: lang, label: v.label }],
-                },
-              })),
-            }
+            create: dto.variants.map((v) => ({
+              id: uuidv4(),
+              price: v.price,
+              currency: v.currency ?? "RM",
+              isSeasonal: v.isSeasonal ?? false,
+              isAvailable: true,
+              translations: {
+                create: [{ language: lang, label: v.label }],
+              },
+            })),
+          }
           : undefined,
       },
-      include: {
-        variants: { include: { translations: true } },
-        translations: true,
-      },
+      include: this.foodDetailInclude(lang),
     });
     await CacheService.deleteByPrefix(FOOD_CACHE_PREFIX);
 
-    let aiTranslationFailed = false;
-    if (dto.name || (dto.variants && dto.variants.length > 0)) {
-      const vLabels = (dto.variants ?? [])
-        .map((v, idx) => ({ id: food.variants[idx]?.id, label: v.label }))
-        .filter((v) => v.id && v.label) as { id: string; label: string }[];
-        
-      const success = await AiService.translateFood(foodId, lang, dto.name, dto.description ?? null, vLabels);
-      if (!success) aiTranslationFailed = true;
-    }
+    const vLabels = (dto.variants ?? [])
+      .map((v, idx) => ({ id: food.variants[idx]?.id, label: v.label }))
+      .filter((v) => v.id && v.label) as { id: string; label: string }[];
 
-    return { ...food, aiTranslationFailed };
+    const translated = await AiService.translateFood(
+      foodId,
+      lang,
+      dto.name,
+      dto.description ?? null,
+      vLabels,
+    );
+
+    return { ...this.toDetailDto(food), aiTranslationFailed: !translated };
   }
 
   async update(id: string, dto: UpdateFoodDto) {
@@ -259,35 +306,26 @@ export class FoodService {
         translations:
           dto.name !== undefined || dto.description !== undefined
             ? {
-                upsert: {
-                  where: { foodId_language: { foodId: id, language: lang } },
-                  create: {
-                    language: lang,
-                    name: dto.name ?? "",
-                    description: dto.description ?? null,
-                  },
-                  update: {
-                    name: dto.name,
-                    description: dto.description,
-                  },
+              upsert: {
+                where: { foodId_language: { foodId: id, language: lang } },
+                create: {
+                  language: lang,
+                  name: dto.name ?? "",
+                  description: dto.description ?? null,
                 },
-              }
+                update: {
+                  name: dto.name,
+                  description: dto.description,
+                },
+              },
+            }
             : undefined,
       },
-      include: { variants: { include: { translations: true } }, translations: true },
+      include: this.foodDetailInclude(lang),
     });
     await CacheService.deleteByPrefix(FOOD_CACHE_PREFIX);
 
-    let aiTranslationFailed = false;
-    if (dto.name !== undefined || dto.description !== undefined) {
-      const updatedT = food.translations.find((t) => t.language === lang);
-      if (updatedT) {
-        const success = await AiService.translateFood(id, lang, updatedT.name, updatedT.description ?? null, []);
-        if (!success) aiTranslationFailed = true;
-      }
-    }
-
-    return { ...food, aiTranslationFailed };
+    return this.toDetailDto(food);
   }
 
   async remove(id: string) {
@@ -299,7 +337,7 @@ export class FoodService {
     });
     if (orderCount > 0) {
       throw new ConflictException(
-        "This food has order history and can't be deleted — toggle its availability instead",
+        "This food has order history and can't be deleted - toggle its availability instead",
       );
     }
 
@@ -346,17 +384,17 @@ export class FoodService {
         isAvailable: true,
         translations: { create: [{ language: lang, label: dto.label }] },
       },
-      include: { translations: true },
+      include: { translations: { where: { language: lang } } },
     });
     await CacheService.deleteByPrefix(FOOD_CACHE_PREFIX);
 
-    let aiTranslationFailed = false;
-    if (dto.label) {
-      const success = await AiService.translateFoodVariant(variant.id, lang, dto.label);
-      if (!success) aiTranslationFailed = true;
-    }
+    const translated = await AiService.translateFoodVariant(
+      variant.id,
+      lang,
+      dto.label,
+    );
 
-    return { ...variant, aiTranslationFailed };
+    return { ...this.toVariantDto(variant), aiTranslationFailed: !translated };
   }
 
   async updateVariant(variantId: string, dto: UpdateFoodVariantDto) {
@@ -374,28 +412,19 @@ export class FoodService {
         translations:
           dto.label !== undefined
             ? {
-                upsert: {
-                  where: { variantId_language: { variantId, language: lang } },
-                  create: { language: lang, label: dto.label },
-                  update: { label: dto.label },
-                },
-              }
+              upsert: {
+                where: { variantId_language: { variantId, language: lang } },
+                create: { language: lang, label: dto.label },
+                update: { label: dto.label },
+              },
+            }
             : undefined,
       },
-      include: { translations: true },
+      include: { translations: { where: { language: lang } } },
     });
     await CacheService.deleteByPrefix(FOOD_CACHE_PREFIX);
 
-    let aiTranslationFailed = false;
-    if (dto.label !== undefined) {
-      const updatedT = variant.translations.find((t) => t.language === lang);
-      if (updatedT) {
-        const success = await AiService.translateFoodVariant(variantId, lang, updatedT.label);
-        if (!success) aiTranslationFailed = true;
-      }
-    }
-
-    return { ...variant, aiTranslationFailed };
+    return this.toVariantDto(variant);
   }
 
   async removeVariant(variantId: string) {
@@ -405,7 +434,7 @@ export class FoodService {
     const orderCount = await prisma.order.count({ where: { variantId } });
     if (orderCount > 0) {
       throw new ConflictException(
-        "This variant has order history and can't be deleted — toggle its availability instead",
+        "This variant has order history and can't be deleted - toggle its availability instead",
       );
     }
 
