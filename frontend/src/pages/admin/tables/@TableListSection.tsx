@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Spinner } from '@/components/ui/spinner'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
 import { EditableName } from '@/components/common/EditableName'
+import { InlineEdit } from '@/components/common/InlineEdit'
 import { cn } from '@/utils/shadcn'
 
 interface TableListSectionProps {
@@ -14,6 +15,7 @@ interface TableListSectionProps {
 	isLoading: boolean
 	showMoveToStaging?: boolean
 	onRename: (id: string, name: string) => void
+	onCapacityChange: (id: string, capacity: number) => void
 	onBulkDelete: (ids: string[]) => void
 	onMoveToStaging?: (ids: string[]) => void
 }
@@ -23,6 +25,7 @@ export function TableListSection({
 	isLoading,
 	showMoveToStaging,
 	onRename,
+	onCapacityChange,
 	onBulkDelete,
 	onMoveToStaging,
 }: TableListSectionProps) {
@@ -112,7 +115,18 @@ export function TableListSection({
 									)}
 								>
 									<Users className='size-3.5' />
-									{table.seated}/{table.capacity}
+									{table.seated}/
+									<InlineEdit
+										alwaysEditable
+										type='number'
+										value={String(table.capacity)}
+										onCommit={v => {
+											const capacity = Number(v)
+											if (capacity >= table.seated)
+												onCapacityChange(table.id, capacity)
+										}}
+										inputClassName='w-14 text-xs'
+									/>
 								</span>
 							</div>
 						</li>

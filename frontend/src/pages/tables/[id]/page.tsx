@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { useGetTablePeople } from '@/api/tables/tables'
 import type { PersonDto } from '@/api/model'
 import { useGuest } from '@/hooks/useGuest'
+import { useIsAdmin } from '@/hooks/useIsAdmin'
 import { useTableTab } from '@/hooks/useTableTab'
 import { InlineEdit } from '@/components/common/InlineEdit'
 import { EditableName } from '@/components/common/EditableName'
@@ -17,10 +18,18 @@ import { useTableDetail } from './@useTableDetail'
 
 export default function TableDetailPage() {
 	const { t } = useTranslation()
-	const { id, table, isLoading, isError, shareLink, updateTable, updateTableAdmin } =
-		useTableDetail()
+	const {
+		id,
+		table,
+		isLoading,
+		isError,
+		shareLink,
+		updateTable,
+		updateTableAdmin,
+	} = useTableDetail()
 	const setActiveTable = useGuest(s => s.setActiveTable)
 	const { tab, setTab } = useTableTab(id)
+	const { isAdmin } = useIsAdmin()
 	const { data: people } = useGetTablePeople<PersonDto[]>(id)
 
 	useEffect(() => {
@@ -63,16 +72,20 @@ export default function TableDetailPage() {
 					</h1>
 					<span className='flex items-center gap-1 rounded-full bg-brand-muted px-2.5 py-1 text-xs font-medium text-primary'>
 						<Users className='size-3.5' />
-						{table.seated}/
-						<InlineEdit
-							type='number'
-							value={String(table.capacity)}
-							onCommit={v => {
-								const capacity = Number(v)
-								if (capacity >= table.seated) updateTable({ capacity })
-							}}
-							inputClassName='w-14 text-xs'
-						/>
+						{table.seated} /
+						{isAdmin ? (
+							<InlineEdit
+								type='number'
+								value={String(table.capacity)}
+								onCommit={v => {
+									const capacity = Number(v)
+									if (capacity >= table.seated) updateTableAdmin({ capacity })
+								}}
+								inputClassName='w-14 text-xs'
+							/>
+						) : (
+							table.capacity
+						)}
 					</span>
 				</div>
 				<button

@@ -18,15 +18,59 @@ export function usePersonNote(personId: string) {
 
 	const { mutate } = useUpsertNote({
 		mutation: {
+			onMutate: async ({ data: { personId, content } }) => {
+				const notesKey = getGetNotesByPersonQueryKey({ personId })
+				await qc.cancelQueries({ queryKey: notesKey })
+				const prevNotes = qc.getQueryData<NoteResponseDto[]>(notesKey)
+
+				const optimisticNote: NoteResponseDto = {
+					id: `temp-${Date.now()}`,
+					content,
+					personId,
+				}
+
+				qc.setQueryData<NoteResponseDto[]>(notesKey, () => [optimisticNote])
+
+				qc.setQueriesData<any[]>({
+					predicate: query => {
+						const key = query.queryKey[0]
+						return typeof key === 'string' && 
+							(key.startsWith('/api/tables') || key.startsWith('/api/stats'))
+					}
+				}, (old) => {
+					if (!Array.isArray(old)) return old
+					return old.map(p => 
+						p?.id === personId 
+							? { ...p, personalNotes: [optimisticNote] }
+							: p
+					)
+				})
+
+				return { prevNotes }
+			},
+			onError: (_err, _vars, context) => {
+				if (context?.prevNotes) {
+					qc.setQueryData(getGetNotesByPersonQueryKey({ personId }), context.prevNotes)
+				}
+				qc.invalidateQueries({
+					predicate: query => {
+						const key = query.queryKey[0]
+						return typeof key === 'string' && 
+							(key.startsWith('/api/tables') || key.startsWith('/api/stats'))
+					}
+				})
+			},
 			onSettled: () => {
 				qc.invalidateQueries({
 					queryKey: getGetNotesByPersonQueryKey({ personId }),
 				})
 				qc.invalidateQueries({ queryKey: getGetPeopleListQueryKey() })
 				qc.invalidateQueries({
-					predicate: query => 
-						typeof query.queryKey[0] === 'string' && 
-						query.queryKey[0].startsWith('/tables'),
+					predicate: query => {
+						const key = query.queryKey[0]
+						return typeof key === 'string' && 
+							key.startsWith('/api/tables')
+					}
 				})
 			},
 		},

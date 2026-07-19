@@ -92,7 +92,7 @@ export function useAdminTables() {
 
 	const tablesKey = getGetTablesQueryKey()
 
-	const { mutate: renameTable } = useUpdateTable({
+	const { mutate: updateTableMutate } = useUpdateTable({
 		mutation: {
 			onMutate: async ({ id, data: patch }) => {
 				await qc.cancelQueries({ queryKey: tablesKey })
@@ -141,7 +141,9 @@ export function useAdminTables() {
 			bulkCreate({ data: { count, capacity, isStaging } }),
 		removeTable: (id: string) => deleteTable({ id }),
 		renameTable: (id: string, name: string) =>
-			renameTable({ id, data: { name } }),
+			updateTableMutate({ id, data: { name } }),
+		updateCapacity: (id: string, capacity: number) =>
+			updateTableMutate({ id, data: { capacity } }),
 		bulkRemoveTables: (ids: string[]) => bulkDelete({ data: { ids } }),
 		moveToStaging: (ids: string[]) =>
 			reassign({ data: { ids, eventId: null } }),

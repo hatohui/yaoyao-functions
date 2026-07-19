@@ -10,6 +10,7 @@ interface InlineEditProps {
 	/** Applied to the read-only rendering so the field keeps the page's typography */
 	className?: string
 	inputClassName?: string
+	alwaysEditable?: boolean
 }
 
 export function InlineEdit({
@@ -19,10 +20,12 @@ export function InlineEdit({
 	placeholder,
 	className,
 	inputClassName,
+	alwaysEditable = false,
 }: InlineEditProps) {
 	const { editing } = useEditMode()
+	const isEditable = alwaysEditable || editing
 
-	if (!editing) return <span className={className}>{value}</span>
+	if (!isEditable) return <span className={className}>{value}</span>
 
 	return (
 		<DebouncedInput
@@ -31,7 +34,9 @@ export function InlineEdit({
 			type={type}
 			placeholder={placeholder}
 			className={cn(
-				'h-auto rounded-xl border-dashed border-primary/50 bg-primary/5 px-2 py-1',
+				'h-auto min-w-[2rem] rounded border-dashed border-primary/50 bg-primary/5 px-1 py-0.5 text-center',
+				type === 'number' &&
+					'[&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [appearance:textfield]',
 				className,
 				inputClassName
 			)}

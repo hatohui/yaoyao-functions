@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { Switch } from '@/components/ui/switch'
 import { Input } from '@/components/ui/input'
@@ -50,6 +51,7 @@ function TextEditor({
 }: ConfigRowProps & { invalidLabel: string }) {
 	const [draft, setDraft] = useState(item.value)
 	const [error, setError] = useState(false)
+	const [showSecret, setShowSecret] = useState(false)
 	const debounced = useDebounce(draft, 600)
 	const lastSaved = useRef(item.value)
 
@@ -89,13 +91,24 @@ function TextEditor({
 	}
 
 	return (
-		<Input
-			value={draft}
-			onChange={e => setDraft(e.target.value)}
-			type={
-				isSecret ? 'password' : item.type === 'number' ? 'number' : 'text'
-			}
-			className='max-w-xs'
-		/>
+		<div className='relative max-w-xs'>
+			<Input
+				value={draft}
+				onChange={e => setDraft(e.target.value)}
+				type={
+					isSecret && !showSecret ? 'password' : item.type === 'number' ? 'number' : 'text'
+				}
+				className={isSecret ? 'pr-9' : ''}
+			/>
+			{isSecret && (
+				<button
+					type='button'
+					onClick={() => setShowSecret(prev => !prev)}
+					className='absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground'
+				>
+					{showSecret ? <EyeOff className='size-4' /> : <Eye className='size-4' />}
+				</button>
+			)}
+		</div>
 	)
 }
