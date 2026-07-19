@@ -8,6 +8,7 @@
 
 export interface UpdateTableDetailsDto {
   name?: string;
+  capacity?: number;
   /**
      * Person id hosting this table, or null to clear
      * @nullable

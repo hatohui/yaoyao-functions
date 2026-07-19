@@ -8,7 +8,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { cn } from '@/utils/shadcn'
 import { MENU_PAGE_SIZE_ALL, MENU_PAGE_SIZE_OPTIONS } from '@/common/constants'
 import type { CategoryItemDto } from '@/api/model'
@@ -94,30 +93,27 @@ export function FilterBar({
 				</div>
 			</div>
 
-			<ScrollArea className='mt-3 w-full' type='scroll'>
-				<div className='flex w-max gap-2 pb-1'>
+			<div className='mt-3 flex flex-wrap gap-2 pt-1'>
+				<CategoryPill
+					label={t('menu.popular')}
+					icon={Flame}
+					active={popular}
+					onClick={() => onPopularChange(!popular)}
+				/>
+				<CategoryPill
+					label={t('menu.all_categories')}
+					active={activeCategory === 'all'}
+					onClick={() => onCategoryChange('all')}
+				/>
+				{categories.map(cat => (
 					<CategoryPill
-						label={t('menu.popular')}
-						icon={Flame}
-						active={popular}
-						onClick={() => onPopularChange(!popular)}
+						key={cat.id}
+						label={cat.name ?? cat.key}
+						active={activeCategory === cat.id}
+						onClick={() => onCategoryChange(cat.id)}
 					/>
-					<CategoryPill
-						label={t('menu.all_categories')}
-						active={activeCategory === 'all'}
-						onClick={() => onCategoryChange('all')}
-					/>
-					{categories.map(cat => (
-						<CategoryPill
-							key={cat.id}
-							label={cat.name ?? cat.key}
-							active={activeCategory === cat.id}
-							onClick={() => onCategoryChange(cat.id)}
-						/>
-					))}
-				</div>
-				<ScrollBar orientation='horizontal' className='h-1.5' />
-			</ScrollArea>
+				))}
+			</div>
 		</div>
 	)
 }

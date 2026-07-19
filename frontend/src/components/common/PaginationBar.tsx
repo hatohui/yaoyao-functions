@@ -109,6 +109,9 @@ export function PaginationBar({
 						value={count.toString()}
 						onValueChange={val => setCount(Number(val))}
 					>
+						<SelectTrigger className='h-8 w-[110px] bg-background'>
+							<SelectValue />
+						</SelectTrigger>
 						<SelectContent>
 							{MENU_PAGE_SIZE_OPTIONS.map(n => (
 								<SelectItem key={n} value={n.toString()}>

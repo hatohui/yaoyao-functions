@@ -69,7 +69,7 @@ export default function TableDetailPage() {
 							value={String(table.capacity)}
 							onCommit={v => {
 								const capacity = Number(v)
-								if (capacity >= table.seated) updateTableAdmin({ capacity })
+								if (capacity >= table.seated) updateTable({ capacity })
 							}}
 							inputClassName='w-14 text-xs'
 						/>

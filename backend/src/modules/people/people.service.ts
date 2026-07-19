@@ -17,6 +17,7 @@ export class PeopleService {
   findByTableId(tableId: string) {
     return prisma.people.findMany({
       where: { tableId },
+      include: { personalNotes: true },
       orderBy: { name: 'asc' },
     });
   }

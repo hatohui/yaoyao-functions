@@ -13,13 +13,11 @@ import { usePersonNote } from '@/hooks/usePersonNote'
 
 interface PersonNoteDialogProps {
 	person: PersonDto | null
-	isMe: boolean
 	onOpenChange: (open: boolean) => void
 }
 
 export function PersonNoteDialog({
 	person,
-	isMe,
 	onOpenChange,
 }: PersonNoteDialogProps) {
 	const { t } = useTranslation()
@@ -37,33 +35,25 @@ export function PersonNoteDialog({
 					<DialogTitle>{t('notes.title', { name: person?.name })}</DialogTitle>
 				</DialogHeader>
 
-				{isMe ? (
-					<textarea
-						value={draft}
-						onChange={e => setDraft(e.target.value)}
-						placeholder={t('notes.placeholder')}
-						rows={3}
-						className='rounded-2xl border border-border/60 bg-transparent px-4 py-3 text-sm text-foreground outline-none focus:border-primary'
-					/>
-				) : note ? (
-					<p className='text-sm text-foreground'>{note.content}</p>
-				) : (
-					<p className='text-sm text-muted-foreground'>{t('notes.empty')}</p>
-				)}
+				<textarea
+					value={draft}
+					onChange={e => setDraft(e.target.value)}
+					placeholder={t('notes.placeholder')}
+					rows={3}
+					className='w-full rounded-2xl border border-border/60 bg-transparent px-4 py-3 text-sm text-foreground outline-none focus:border-primary'
+				/>
 
-				{isMe && (
-					<DialogFooter>
-						<Button
-							className='rounded-full'
-							onClick={() => {
-								save(draft)
-								onOpenChange(false)
-							}}
-						>
-							{t('common.save')}
-						</Button>
-					</DialogFooter>
-				)}
+				<DialogFooter>
+					<Button
+						className='rounded-full'
+						onClick={() => {
+							save(draft)
+							onOpenChange(false)
+						}}
+					>
+						{t('common.save')}
+					</Button>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	)

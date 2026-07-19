@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { X, NotebookText, Crown } from 'lucide-react'
 import type { PersonDto, TableDto } from '@/api/model'
 import { ConfirmDialog } from '@/components/common/ConfirmDialog'
-import { useWhoAmI } from '@/hooks/useWhoAmI'
 import { cn } from '@/utils/shadcn'
+import { useWhoAmI } from '@/hooks/useWhoAmI'
 import { useRoster } from './@useRoster'
 import { PersonNoteDialog } from './@PersonNoteDialog'
 
@@ -42,64 +42,14 @@ export function Roster({ table, onSetHost }: RosterProps) {
 			) : (
 				<ul className='flex flex-col gap-2'>
 					{people.map(person => (
-						<li
+						<RosterItem
 							key={person.id}
-							className='flex items-center justify-between rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-sm'
-						>
-							<span className='font-medium text-foreground'>
-								{person.name}
-								{person.id === table.tableLeaderId && (
-									<span className='ml-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground'>
-										{t('roster.host')}
-									</span>
-								)}
-							</span>
-							<div className='flex items-center gap-1'>
-								<button
-									type='button'
-									onClick={() =>
-										onSetHost(
-											person.id === table.tableLeaderId ? null : person.id
-										)
-									}
-									aria-pressed={person.id === table.tableLeaderId}
-									title={
-										person.id === table.tableLeaderId
-											? t('roster.unset_host')
-											: t('roster.set_host')
-									}
-									aria-label={
-										person.id === table.tableLeaderId
-											? t('roster.unset_host')
-											: t('roster.set_host')
-									}
-									className={cn(
-										'rounded-full p-1 transition-colors',
-										person.id === table.tableLeaderId
-											? 'text-primary hover:bg-accent'
-											: 'text-muted-foreground hover:bg-muted hover:text-foreground'
-									)}
-								>
-									<Crown className='size-4' />
-								</button>
-								<button
-									type='button'
-									onClick={() => setNoteFor(person)}
-									aria-label={t('notes.title', { name: person.name })}
-									className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
-								>
-									<NotebookText className='size-4' />
-								</button>
-								<button
-									type='button'
-									onClick={() => setPending(person)}
-									aria-label={t('roster.remove')}
-									className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'
-								>
-									<X className='size-4' />
-								</button>
-							</div>
-						</li>
+							person={person}
+							table={table}
+							onSetHost={onSetHost}
+							onNote={() => setNoteFor(person)}
+							onRemove={() => setPending(person)}
+						/>
 					))}
 				</ul>
 			)}
@@ -128,9 +78,76 @@ export function Roster({ table, onSetHost }: RosterProps) {
 
 			<PersonNoteDialog
 				person={noteFor}
-				isMe={noteFor?.id === myPersonId}
 				onOpenChange={open => !open && setNoteFor(null)}
 			/>
 		</div>
+	)
+}
+
+function RosterItem({
+	person,
+	table,
+	onSetHost,
+	onNote,
+	onRemove,
+}: {
+	person: PersonDto
+	table: TableDto
+	onSetHost: (id: string | null) => void
+	onNote: () => void
+	onRemove: () => void
+}) {
+	const { t } = useTranslation()
+	const note = person.personalNotes?.[0]
+
+	return (
+		<li className='flex flex-col gap-3 rounded-2xl border border-border/60 bg-card px-4 py-3 shadow-sm'>
+			<div className='flex items-center justify-between'>
+				<span className='font-medium text-foreground'>
+					{person.name}
+					{person.id === table.tableLeaderId && (
+						<span className='ml-2 rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-primary-foreground'>
+							{t('roster.host')}
+						</span>
+					)}
+				</span>
+				<div className='flex items-center gap-1'>
+					<button
+						type='button'
+						onClick={() =>
+							onSetHost(person.id === table.tableLeaderId ? null : person.id)
+						}
+						className={cn(
+							'rounded-full p-1 transition-colors',
+							person.id === table.tableLeaderId
+								? 'text-primary hover:bg-accent'
+								: 'text-muted-foreground hover:bg-muted hover:text-foreground'
+						)}
+					>
+						<Crown className='size-4' />
+					</button>
+					<button
+						type='button'
+						onClick={onNote}
+						className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground'
+					>
+						<NotebookText className='size-4' />
+					</button>
+					<button
+						type='button'
+						onClick={onRemove}
+						className='rounded-full p-1 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive'
+					>
+						<X className='size-4' />
+					</button>
+				</div>
+			</div>
+			
+			{note?.content && (
+				<div className='rounded-xl bg-accent/5 px-3 py-2 text-sm italic text-muted-foreground'>
+					{note.content}
+				</div>
+			)}
+		</li>
 	)
 }

@@ -31,7 +31,7 @@ export function PersonNoteCell({ personId, note }: PersonNoteCellProps) {
 					mutate({ data: { personId, content } })
 			}}
 			placeholder={t('admin.people.note_placeholder')}
-			className='h-8 rounded-full border-transparent bg-transparent px-3 hover:border-border focus:border-primary'
+			className='h-8 w-full rounded-none border-0 bg-transparent px-2 shadow-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-inset'
 		/>
 	)
 }

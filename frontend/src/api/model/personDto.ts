@@ -5,6 +5,7 @@
  * Restaurant management API
  * OpenAPI spec version: 1.0
  */
+import type { NoteResponseDto } from './noteResponseDto';
 
 export interface PersonDto {
   id: string;
@@ -13,4 +14,5 @@ export interface PersonDto {
   tableId?: string | null;
   /** @nullable */
   eventId?: string | null;
+  personalNotes?: NoteResponseDto[];
 }

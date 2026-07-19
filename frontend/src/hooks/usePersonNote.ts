@@ -23,6 +23,11 @@ export function usePersonNote(personId: string) {
 					queryKey: getGetNotesByPersonQueryKey({ personId }),
 				})
 				qc.invalidateQueries({ queryKey: getGetPeopleListQueryKey() })
+				qc.invalidateQueries({
+					predicate: query => 
+						typeof query.queryKey[0] === 'string' && 
+						query.queryKey[0].startsWith('/tables'),
+				})
 			},
 		},
 	})

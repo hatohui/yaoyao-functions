@@ -5,7 +5,7 @@ export function YaoYaoDetailsSection() {
 	const { t } = useTranslation()
 
 	return (
-		<section className='mx-auto max-w-4xl px-4 pb-14 sm:pb-16'>
+		<section className='mx-auto max-w-2xl px-4 pb-14 sm:pb-16'>
 			<div className='rounded-3xl border border-border/60 bg-card p-6 shadow-sm sm:p-8'>
 				<div className='mb-6 grid grid-cols-2 gap-4'>
 					<img

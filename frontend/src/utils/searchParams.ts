@@ -18,8 +18,11 @@ const isMenuSort = (value: string | null): value is MenuSort =>
 export function useMenuSearchParams() {
 	const [searchParams, setSearchParams] = useSearchParams()
 
-	const page = Number(searchParams.get('page')) || 1
-	const count = Number(searchParams.get('count')) || 16
+	const pageParam = parseInt(searchParams.get('page') || '1', 10)
+	const page = Number.isFinite(pageParam) ? Math.max(1, pageParam) : 1
+	
+	const countParam = parseInt(searchParams.get('count') || '16', 10)
+	const count = Number.isFinite(countParam) && countParam > 0 ? countParam : 16
 	const category = searchParams.get('category') || 'all'
 	const sort = isMenuSort(searchParams.get('sort'))
 		? (searchParams.get('sort') as MenuSort)
@@ -122,9 +125,12 @@ export function buildSearchParams(params: MenuSearchParams): URLSearchParams {
 export function parseMenuSearchParams(
 	searchParams: URLSearchParams
 ): MenuSearchParams {
+	const pageParam = parseInt(searchParams.get('page') || '1', 10)
+	const countParam = parseInt(searchParams.get('count') || '20', 10)
+	
 	return {
-		page: Number(searchParams.get('page')) || 1,
-		count: Number(searchParams.get('count')) || 20,
+		page: Number.isFinite(pageParam) ? Math.max(1, pageParam) : 1,
+		count: Number.isFinite(countParam) && countParam > 0 ? countParam : 20,
 		category: searchParams.get('category') || 'all',
 		sort: isMenuSort(searchParams.get('sort'))
 			? (searchParams.get('sort') as MenuSort)
